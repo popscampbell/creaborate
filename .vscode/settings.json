@@ -1,5 +1,11 @@
 {
   "files.exclude": {
+    "**/.DS_Store": true,
+    "**/.git": true,
+    "**/.hg": true,
+    "**/.svn": true,
+    "**/node_modules": true,
+    "**/Thumbs.db": true,
     "amplify/.config": true,
     "amplify/**/*-parameters.json": true,
     "amplify/**/amplify.state": true,
@@ -7,5 +13,32 @@
     "amplify/#current-cloud-backend": true,
     "amplify/backend/amplify-meta.json": true,
     "amplify/backend/awscloudformation": true
+  },
+  "css.completion.completePropertyWithSemicolon": false,
+  "less.completion.completePropertyWithSemicolon": false,
+  "scss.completion.completePropertyWithSemicolon": false,
+  "typescript.format.semicolons": "remove",
+  "prettier.semi": false,
+  "javascript.format.semicolons": "remove",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
+  "editor.formatOnType": true,
+  "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis": true,
+  "javascript.format.insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces": true,
+  "scss.format.spaceAroundSelectorSeparator": true,
+  "less.format.spaceAroundSelectorSeparator": true,
+  "css.format.spaceAroundSelectorSeparator": true,
+  "css.lint.float": "error",
+  "files.insertFinalNewline": false,
+  "files.trimFinalNewlines": true,
+  "[bicep]": {
+    "files.insertFinalNewline": false
+  },
+  "editor.renderFinalNewline": false,
+  "cSpell.words": ["Creaborate"],
+  "search.exclude": {
+    "**/node_modules": false,
+    "**/node_modules_suspended": true
   }
 }
