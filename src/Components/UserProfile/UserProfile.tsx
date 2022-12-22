@@ -16,8 +16,8 @@ export default function UserProfile() {
     UserProfileVisibility.PRIVATE as UserProfileVisibility
   )
   const [tagLine, setTagLine] = useState("")
-  const [skills, setSkills] = useState<string[]>([])
-  const [interests, setInterests] = useState<string[]>([])
+  const [skills] = useState<string[]>([])
+  const [interests] = useState<string[]>([])
   const [about, setAbout] = useState("")
   const [location, setLocation] = useState("")
 
