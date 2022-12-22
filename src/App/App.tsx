@@ -6,7 +6,7 @@ import { BrowserRouter } from "react-router-dom"
 import theme from "Theme"
 import AppRoutes from "./App.routes"
 import useStyles from "./App.styles"
-import awsexports from "aws-exports"
+import awsexports from "./aws-exports"
 import { Amplify, Auth } from "aws-amplify"
 
 export default function App() {
