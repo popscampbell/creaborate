@@ -1,0 +1,57 @@
+enum TeamVisibility {
+  PRIVATE
+  PUBLIC
+  ARCHIVED
+}
+
+enum TeamMemberStatus {
+  INVITED
+  CONFIRMED
+  DECLINED
+  DEPARTED
+}
+
+enum TeamMemberRole {
+  ADMINISTRATOR
+  MEMBER
+}
+
+type TeamMember @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  Team: ID! @index(name: "byTeam")
+  UserProfile: ID! @index(name: "byUserProfile")
+  Role: TeamMemberRole!
+  Status: TeamMemberStatus!
+  InvitedDateTime: AWSDateTime!
+  InvitedByUserProfile: String!
+  ConfirmedDateTime: AWSDateTime
+  DeclinedDateTime: AWSDateTime
+  DepartedDateTime: AWSDateTime
+  DepartedComment: String
+}
+
+enum TeamType {
+  TEAM
+  BAND
+  GROUP
+}
+
+type Team @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  Name: String!
+  TeamType: TeamType
+  TeamMembers: [TeamMember] @hasMany(indexName: "byTeam", fields: ["id"])
+  Visibility: TeamVisibility
+}
+
+type UserProfile @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  Username: String!
+  Name: String!
+  Tagline: String
+  Skills: [String]!
+  Interests: [String]!
+  About: String
+  Location: String
+  TeamMembers: [TeamMember] @hasMany(indexName: "byUserProfile", fields: ["id"])
+}

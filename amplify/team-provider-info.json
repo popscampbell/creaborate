@@ -49,6 +49,11 @@
       "StackName": "amplify-creaborate-dev-120705",
       "StackId": "arn:aws:cloudformation:us-west-2:546014678210:stack/amplify-creaborate-dev-120705/0a657b20-816b-11ed-9d97-0a9cb66d2095",
       "AmplifyAppId": "d21bdgrb1tdkdd"
+    },
+    "categories": {
+      "auth": {
+        "creaborate": {}
+      }
     }
   }
 }
