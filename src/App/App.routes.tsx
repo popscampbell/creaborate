@@ -1,15 +1,15 @@
 import { useAuthenticator } from "@aws-amplify/ui-react"
 import { Skeleton } from "@mui/material"
-// import { useTeamAuthStatus } from "Hooks"
-// import {
-//   AboutPage,
-//   AdminPage,
-//   DashboardPage,
-//   HomePage,
-//   NotFoundPage,
-//   TeamPage,
-//   UserProfilePage,
-// } from "Pages"
+import TeamStore from "DataStores/TeamDataStore/TeamDataStore"
+import {
+  AboutPage,
+  AdminPage,
+  DashboardPage,
+  HomePage,
+  NotFoundPage,
+  TeamPage,
+  UserProfilePage
+} from "Pages"
 import { Navigate, Route, Routes, useSearchParams } from "react-router-dom"
 
 function AuthGuard(props: { children: any }) {
@@ -22,30 +22,29 @@ function AuthGuard(props: { children: any }) {
   )
 }
 
-// function TeamGuard(props: { children: any }) {
-//   const [params] = useSearchParams()
-//   const teamId = params.get("id")
+function TeamGuard(props: { children: any }) {
+  const [params] = useSearchParams()
+  const teamId = params.get("id")
 
-//   const { user } = useAuthenticator()
-//   const userId = user.username || ""
-//   const teamAuthStatus = useTeamAuthStatus(userId, teamId || "")
+  const { user } = useAuthenticator()
+  const userId = user.username || ""
+  const teamAuthStatus = TeamStore.useTeamAuthStatus(userId, teamId || "")
 
-//   switch (teamAuthStatus) {
-//     case "C":
-//       return <Skeleton variant="rectangular" />
-//     case "N":
-//       return <Navigate to="/dashboard" />
-//     default:
-//       return props.children
-//   }
-// }
+  switch (teamAuthStatus) {
+    case "C":
+      return <Skeleton variant="rectangular" />
+    case "N":
+      return <Navigate to="/dashboard" />
+    default:
+      return props.children
+  }
+}
 
 export default function AppRoutes() {
   return (
     <Routes>
-      <Route index element={<h1>Home</h1>} />
-      {/* <Route index element={<HomePage />} /> */}
-      {/* <Route path="about" element={<AboutPage />} />
+      <Route index element={<HomePage />} />
+      <Route path="about" element={<AboutPage />} />
       <Route
         path="admin"
         element={
@@ -72,9 +71,8 @@ export default function AppRoutes() {
             <UserProfilePage />
           </AuthGuard>
         }
-      /> */}
-      {/* <Route path="*" element={<NotFoundPage />} /> */}
-      <Route path="*" element={<h1>Not found</h1>} />
+      />
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   )
 }

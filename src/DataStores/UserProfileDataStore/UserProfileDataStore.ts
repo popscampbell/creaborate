@@ -1,0 +1,56 @@
+import useUserProfile from "./useUserProfile"
+import useUserProfiles from "./useUserProfiles"
+import { Auth, DataStore } from "aws-amplify"
+import { UserProfile, UserProfileVisibility } from "models"
+import useUserProfileById from "./useUserProfileById"
+
+export default class UserProfileDataStore {
+  static useUserProfile = useUserProfile
+  static useUserProfileById = useUserProfileById
+  static useUserProfiles = useUserProfiles
+
+  static createUserProfile(name: string, visibility: UserProfileVisibility = UserProfileVisibility.PRIVATE, skills: string[] = [], interests: string[] = [], tagLine?: string, about?: string, location?: string) {
+    return Auth.currentUserInfo().then(currentUserInfo =>
+      currentUserInfo.username ? DataStore.save(new UserProfile({
+        Username: currentUserInfo.username,
+        Name: name,
+        Visibility: visibility,
+        Skills: skills,
+        Interests: interests,
+        Tagline: tagLine,
+        About: about,
+        Location: location
+      })) : Promise.reject("Invalid username")
+    )
+  }
+
+  static updateUserProfile(userProfile: UserProfile, name?: string, visibility?: UserProfileVisibility, skills?: string[], interests?: string[], tagLine?: string, about?: string, location?: string) {
+    return DataStore.save(UserProfile.copyOf(userProfile, updated => {
+      if (name) updated.Name = name
+      if (visibility) updated.Visibility = visibility
+      if (skills) updated.Skills = skills
+      if (interests) updated.Interests = interests
+      if (tagLine) updated.Tagline = tagLine
+      if (about) updated.About = about
+      if (location) updated.Location = location
+    }))
+  }
+
+  static findUserProfiles(nameStart: string) {
+    return DataStore.query(UserProfile, userProfile =>
+      userProfile.and(userProfile => [
+        userProfile.Visibility.eq(UserProfileVisibility.PUBLIC),
+        userProfile.Name.beginsWith(nameStart),
+      ]))
+  }
+
+  static archiveUserProfile(userProfile: UserProfile) {
+    return DataStore.save(UserProfile.copyOf(userProfile, updated => {
+      updated.Visibility = UserProfileVisibility.ARCHIVED
+    }))
+  }
+
+  static deleteUserProfile(userProfile: UserProfile) {
+    return DataStore.delete(userProfile)
+  }
+}

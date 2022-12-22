@@ -1,3 +1,9 @@
+enum UserProfileVisibility {
+  PRIVATE
+  PUBLIC
+  ARCHIVED
+}
+
 enum TeamVisibility {
   PRIVATE
   PUBLIC
@@ -39,13 +45,14 @@ enum TeamType {
 type Team @model @auth(rules: [{allow: public}]) {
   id: ID!
   Name: String!
-  TeamType: TeamType
-  TeamMembers: [TeamMember] @hasMany(indexName: "byTeam", fields: ["id"])
-  Visibility: TeamVisibility
+  TeamType: TeamType!
+  TeamMembers: [TeamMember!] @hasMany(indexName: "byTeam", fields: ["id"])
+  Visibility: TeamVisibility!
+  Description: String!
 }
 
 type UserProfile @model @auth(rules: [{allow: public}]) {
-  id: ID!
+  Visibility: UserProfileVisibility!
   Username: String!
   Name: String!
   Tagline: String
@@ -53,5 +60,7 @@ type UserProfile @model @auth(rules: [{allow: public}]) {
   Interests: [String]!
   About: String
   Location: String
-  TeamMembers: [TeamMember] @hasMany(indexName: "byUserProfile", fields: ["id"])
+  TeamMembers: [TeamMember!] @hasMany(indexName: "byUserProfile", fields: ["id"])
+  id: ID!
 }
+ 
