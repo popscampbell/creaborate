@@ -1,6 +1,7 @@
 import { useAuthenticator } from "@aws-amplify/ui-react"
 import { Skeleton } from "@mui/material"
 import TeamStore from "DataStores/TeamDataStore/TeamDataStore"
+import UserProfileDataStore from "DataStores/UserProfileDataStore"
 import {
   AboutPage,
   AdminPage,
@@ -8,7 +9,7 @@ import {
   HomePage,
   NotFoundPage,
   TeamPage,
-  UserProfilePage
+  UserProfilePage,
 } from "Pages"
 import { Navigate, Route, Routes, useSearchParams } from "react-router-dom"
 
@@ -18,8 +19,24 @@ function AuthGuard(props: { children: any }) {
   return authenticator.authStatus === "authenticated" ? (
     props.children
   ) : (
-    <Navigate to="/" replace />
+    <Navigate to="/" />
   )
+}
+
+function UserProfileGuard(props: { children: any }) {
+  const { user } = useAuthenticator()
+  const hasUserProfile = UserProfileDataStore.useHasUserProfile(
+    user?.username || ""
+  )
+
+  switch (hasUserProfile) {
+    case "C":
+      return <Skeleton variant="rectangular" />
+    case "N":
+      return <Navigate to="/userProfile" />
+    default:
+      return props.children
+  }
 }
 
 function TeamGuard(props: { children: any }) {
@@ -43,24 +60,51 @@ function TeamGuard(props: { children: any }) {
 export default function AppRoutes() {
   return (
     <Routes>
-      <Route index element={<HomePage />} />
-      <Route path="about" element={<AboutPage />} />
+      <Route
+        index
+        element={
+          <UserProfileGuard>
+            <HomePage />
+          </UserProfileGuard>
+        }
+      />
+      <Route
+        path="about"
+        element={
+          <UserProfileGuard>
+            <AboutPage />
+          </UserProfileGuard>
+        }
+      />
       <Route
         path="admin"
         element={
           <AuthGuard>
-            <AdminPage />
+            <UserProfileGuard>
+              <AdminPage />
+            </UserProfileGuard>
           </AuthGuard>
         }
       />
-      <Route path="dashboard" element={<DashboardPage />} />
+      <Route
+        path="dashboard"
+        element={
+          <AuthGuard>
+            <UserProfileGuard>
+              <DashboardPage />
+            </UserProfileGuard>
+          </AuthGuard>
+        }
+      />
       <Route
         path="team"
         element={
           <AuthGuard>
-            <TeamGuard>
-              <TeamPage />
-            </TeamGuard>
+            <UserProfileGuard>
+              <TeamGuard>
+                <TeamPage />
+              </TeamGuard>
+            </UserProfileGuard>
           </AuthGuard>
         }
       />

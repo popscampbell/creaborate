@@ -1,3 +1,3 @@
 import DeleteButton from "./DeleteButton"
 
-export default DeleteButton
+export { DeleteButton }

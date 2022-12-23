@@ -3,7 +3,8 @@ import {
   FormLabel,
   Radio,
   RadioGroup,
-  FormControlLabel
+  FormControlLabel,
+  Typography,
 } from "@mui/material"
 import { UserProfileVisibility } from "models"
 import { ChangeEvent, useState } from "react"
@@ -19,7 +20,6 @@ export default function UserProfileVisibilityControl(props: {
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
     const newValue = event.target.value as UserProfileVisibility
-    console.log("newValue:", newValue)
     setValue(newValue)
     onChange(newValue)
   }
@@ -49,6 +49,7 @@ export default function UserProfileVisibilityControl(props: {
           )}
         />
       </RadioGroup>
+      <Typography children="You will be visible to other users on Creaborate if your profile is public." />
     </FormControl>
   )
 }

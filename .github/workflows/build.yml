@@ -1,8 +1,8 @@
-name: Build & Test
+name: Build
 
 on:
   pull_request:
-    branches: []
+    branches: ["main", "test"]
 
 jobs:
   build:
@@ -27,6 +27,3 @@ jobs:
 
       - name: Build
         run: yarn build build --if-present
-
-      - name: Test
-        run: yarn test

@@ -3,7 +3,7 @@ import {
   FormLabel,
   Radio,
   RadioGroup,
-  FormControlLabel
+  FormControlLabel,
 } from "@mui/material"
 import { TeamVisibility } from "models"
 import { ChangeEvent, useState } from "react"
@@ -19,7 +19,6 @@ export default function TeamVisibilityControl(props: {
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
     const newValue = event.target.value as TeamVisibility
-    console.log("newValue:", newValue)
     setValue(newValue)
     onChange(newValue)
   }

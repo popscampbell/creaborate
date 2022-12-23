@@ -1,6 +1,6 @@
 import { CreateTeamDialog } from "./Team"
 import Dashboard from "./Dashboard"
-import DeleteButton from "./DeleteButton"
+import { DeleteButton } from "./Controls"
 import Footer from "./Footer"
 import Header, { DefaultMenu, MobileMenu, UserMenu } from "./Header"
 import Link from "./Link"

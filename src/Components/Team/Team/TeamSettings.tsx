@@ -1,5 +1,5 @@
 import { Button, TextField, Box, Container } from "@mui/material"
-import DeleteButton from "Components/DeleteButton"
+import { DeleteButton } from "Components/Controls"
 import TeamDataStore from "DataStores/TeamDataStore/TeamDataStore"
 import { Team, TeamType } from "models"
 import { useState } from "react"

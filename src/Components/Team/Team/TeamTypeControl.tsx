@@ -3,7 +3,7 @@ import {
   FormLabel,
   Radio,
   RadioGroup,
-  FormControlLabel
+  FormControlLabel,
 } from "@mui/material"
 import { TeamType } from "models"
 import { ChangeEvent, useState } from "react"
@@ -19,7 +19,6 @@ export default function TeamTypeControl(props: {
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
     const newValue = event.target.value as TeamType
-    console.log("newValue:", newValue)
     setValue(newValue)
     onChange(newValue)
   }
