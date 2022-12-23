@@ -2,6 +2,12 @@
 import { initSchema } from '@aws-amplify/datastore';
 import { schema } from './schema';
 
+const UserProfileVisibility = {
+  "PRIVATE": "PRIVATE",
+  "PUBLIC": "PUBLIC",
+  "ARCHIVED": "ARCHIVED"
+};
+
 const TeamVisibility = {
   "PRIVATE": "PRIVATE",
   "PUBLIC": "PUBLIC",
@@ -32,6 +38,7 @@ export {
   TeamMember,
   Team,
   UserProfile,
+  UserProfileVisibility,
   TeamVisibility,
   TeamMemberStatus,
   TeamMemberRole,

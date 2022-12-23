@@ -1,15 +1,16 @@
 import { useAuthenticator } from "@aws-amplify/ui-react"
 import { Skeleton } from "@mui/material"
-// import { useTeamAuthStatus } from "Hooks"
-// import {
-//   AboutPage,
-//   AdminPage,
-//   DashboardPage,
-//   HomePage,
-//   NotFoundPage,
-//   TeamPage,
-//   UserProfilePage,
-// } from "Pages"
+import TeamStore from "DataStores/TeamDataStore/TeamDataStore"
+import UserProfileDataStore from "DataStores/UserProfileDataStore"
+import {
+  AboutPage,
+  AdminPage,
+  DashboardPage,
+  HomePage,
+  NotFoundPage,
+  TeamPage,
+  UserProfilePage,
+} from "Pages"
 import { Navigate, Route, Routes, useSearchParams } from "react-router-dom"
 
 function AuthGuard(props: { children: any }) {
@@ -18,50 +19,92 @@ function AuthGuard(props: { children: any }) {
   return authenticator.authStatus === "authenticated" ? (
     props.children
   ) : (
-    <Navigate to="/" replace />
+    <Navigate to="/" />
   )
 }
 
-// function TeamGuard(props: { children: any }) {
-//   const [params] = useSearchParams()
-//   const teamId = params.get("id")
+function UserProfileGuard(props: { children: any }) {
+  const { user } = useAuthenticator()
+  const hasUserProfile = UserProfileDataStore.useHasUserProfile(
+    user?.username || ""
+  )
 
-//   const { user } = useAuthenticator()
-//   const userId = user.username || ""
-//   const teamAuthStatus = useTeamAuthStatus(userId, teamId || "")
+  switch (hasUserProfile) {
+    case "C":
+      return <Skeleton variant="rectangular" />
+    case "N":
+      return <Navigate to="/userProfile" />
+    default:
+      return props.children
+  }
+}
 
-//   switch (teamAuthStatus) {
-//     case "C":
-//       return <Skeleton variant="rectangular" />
-//     case "N":
-//       return <Navigate to="/dashboard" />
-//     default:
-//       return props.children
-//   }
-// }
+function TeamGuard(props: { children: any }) {
+  const [params] = useSearchParams()
+  const teamId = params.get("id")
+
+  const { user } = useAuthenticator()
+  const userId = user.username || ""
+  const teamAuthStatus = TeamStore.useTeamAuthStatus(userId, teamId || "")
+
+  switch (teamAuthStatus) {
+    case "C":
+      return <Skeleton variant="rectangular" />
+    case "N":
+      return <Navigate to="/dashboard" />
+    default:
+      return props.children
+  }
+}
 
 export default function AppRoutes() {
   return (
     <Routes>
-      <Route index element={<h1>Home</h1>} />
-      {/* <Route index element={<HomePage />} /> */}
-      {/* <Route path="about" element={<AboutPage />} />
+      <Route
+        index
+        element={
+          <UserProfileGuard>
+            <HomePage />
+          </UserProfileGuard>
+        }
+      />
+      <Route
+        path="about"
+        element={
+          <UserProfileGuard>
+            <AboutPage />
+          </UserProfileGuard>
+        }
+      />
       <Route
         path="admin"
         element={
           <AuthGuard>
-            <AdminPage />
+            <UserProfileGuard>
+              <AdminPage />
+            </UserProfileGuard>
           </AuthGuard>
         }
       />
-      <Route path="dashboard" element={<DashboardPage />} />
+      <Route
+        path="dashboard"
+        element={
+          <AuthGuard>
+            <UserProfileGuard>
+              <DashboardPage />
+            </UserProfileGuard>
+          </AuthGuard>
+        }
+      />
       <Route
         path="team"
         element={
           <AuthGuard>
-            <TeamGuard>
-              <TeamPage />
-            </TeamGuard>
+            <UserProfileGuard>
+              <TeamGuard>
+                <TeamPage />
+              </TeamGuard>
+            </UserProfileGuard>
           </AuthGuard>
         }
       />
@@ -72,9 +115,8 @@ export default function AppRoutes() {
             <UserProfilePage />
           </AuthGuard>
         }
-      /> */}
-      {/* <Route path="*" element={<NotFoundPage />} /> */}
-      <Route path="*" element={<h1>Not found</h1>} />
+      />
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   )
 }

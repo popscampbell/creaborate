@@ -2,6 +2,12 @@ import { ModelInit, MutableModel, __modelMeta__, ManagedIdentifier } from "@aws-
 // @ts-ignore
 import { LazyLoading, LazyLoadingDisabled, AsyncCollection } from "@aws-amplify/datastore";
 
+export enum UserProfileVisibility {
+  PRIVATE = "PRIVATE",
+  PUBLIC = "PUBLIC",
+  ARCHIVED = "ARCHIVED"
+}
+
 export enum TeamVisibility {
   PRIVATE = "PRIVATE",
   PUBLIC = "PUBLIC",
@@ -81,9 +87,10 @@ type EagerTeam = {
   };
   readonly id: string;
   readonly Name: string;
-  readonly TeamType?: TeamType | keyof typeof TeamType | null;
-  readonly TeamMembers?: (TeamMember | null)[] | null;
-  readonly Visibility?: TeamVisibility | keyof typeof TeamVisibility | null;
+  readonly TeamType: TeamType | keyof typeof TeamType;
+  readonly TeamMembers?: TeamMember[] | null;
+  readonly Visibility: TeamVisibility | keyof typeof TeamVisibility;
+  readonly Description: string;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -95,9 +102,10 @@ type LazyTeam = {
   };
   readonly id: string;
   readonly Name: string;
-  readonly TeamType?: TeamType | keyof typeof TeamType | null;
+  readonly TeamType: TeamType | keyof typeof TeamType;
   readonly TeamMembers: AsyncCollection<TeamMember>;
-  readonly Visibility?: TeamVisibility | keyof typeof TeamVisibility | null;
+  readonly Visibility: TeamVisibility | keyof typeof TeamVisibility;
+  readonly Description: string;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -114,6 +122,7 @@ type EagerUserProfile = {
     readOnlyFields: 'createdAt' | 'updatedAt';
   };
   readonly id: string;
+  readonly Visibility: UserProfileVisibility | keyof typeof UserProfileVisibility;
   readonly Username: string;
   readonly Name: string;
   readonly Tagline?: string | null;
@@ -121,7 +130,7 @@ type EagerUserProfile = {
   readonly Interests: (string | null)[];
   readonly About?: string | null;
   readonly Location?: string | null;
-  readonly TeamMembers?: (TeamMember | null)[] | null;
+  readonly TeamMembers?: TeamMember[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -132,6 +141,7 @@ type LazyUserProfile = {
     readOnlyFields: 'createdAt' | 'updatedAt';
   };
   readonly id: string;
+  readonly Visibility: UserProfileVisibility | keyof typeof UserProfileVisibility;
   readonly Username: string;
   readonly Name: string;
   readonly Tagline?: string | null;
