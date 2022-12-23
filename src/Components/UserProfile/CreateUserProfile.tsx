@@ -16,23 +16,22 @@ import { useNavigate } from "react-router-dom"
 
 const defaultVisibility = UserProfileVisibility.PUBLIC
 
-export default function UserProfileEditor(props: { userProfile: UserProfile }) {
-  const { userProfile } = props
-
+export default function CreateUserProfile() {
   const navigate = useNavigate()
 
-  const [name, setName] = useState(userProfile.Name)
-  const [visibility, setVisibility] = useState(userProfile.Visibility)
-  const [tagLine, setTagLine] = useState(userProfile.Tagline)
-  const [skills, setSkills] = useState(userProfile.Skills as string[])
-  const [interests, setInterests] = useState(userProfile.Interests as string[])
-  const [about, setAbout] = useState(userProfile.About)
-  const [location, setLocation] = useState(userProfile.Location)
+  const [name, setName] = useState("")
+  const [visibility, setVisibility] = useState(defaultVisibility)
+  const [tagLine, setTagLine] = useState("")
+  const [skills, setSkills] = useState<string[]>([])
+  const [interests, setInterests] = useState<string[]>([])
+  const [about, setAbout] = useState("")
+  const [location, setLocation] = useState("")
+
+  const [errorMessage, setErrorMessage] = useState("")
 
   function handleSave() {
-    if (name)
-      UserProfileDataStore.updateUserProfile(
-        userProfile,
+    if (name && name.length > 2)
+      UserProfileDataStore.createUserProfile(
         name,
         visibility as UserProfileVisibility,
         skills,
@@ -41,26 +40,16 @@ export default function UserProfileEditor(props: { userProfile: UserProfile }) {
         about,
         location
       ).then(() => navigate("/dashboard"))
-  }
-
-  function handleDelete() {
-    userProfile &&
-      UserProfileDataStore.deleteUserProfile(userProfile).then(() =>
-        Auth.deleteUser().then(() => navigate("/"))
-      )
-  }
-
-  function handleArchive() {
-    userProfile &&
-      UserProfileDataStore.archiveUserProfile(userProfile).then(() =>
-        navigate("/")
+    else
+      setErrorMessage(
+        "You must provide a name that is at least three characters long."
       )
   }
 
   return (
     <Box>
       <Typography variant="subtitle1">
-        Manage your public profile information.
+        You must create your profile to use Creaborate.
       </Typography>
       <Box marginBottom={2}>
         <TextField
@@ -169,26 +158,15 @@ export default function UserProfileEditor(props: { userProfile: UserProfile }) {
           onChange={(event) => setLocation(event.target.value)}
         />
       </Box>
-      <Button
-        variant="contained"
-        color="primary"
-        children="Save"
-        onClick={handleSave}
-      />
-      {userProfile && (
-        <>
-          <Button
-            variant="outlined"
-            children="Archive"
-            onClick={handleArchive}
-          />
-          <DeleteButton
-            item={userProfile}
-            itemType="User profile"
-            onDelete={handleDelete}
-          />
-        </>
-      )}
+      <Box display="flex" columnGap={2}>
+        <Button
+          variant="contained"
+          color="primary"
+          children="Save"
+          onClick={handleSave}
+        />
+        <Typography flexGrow={1} color="red" children={errorMessage} />
+      </Box>
     </Box>
   )
 }
