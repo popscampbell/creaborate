@@ -1,9 +1,5 @@
 name: Build test branch
 
-on:
-  pull_request:
-    branches: ["test"]
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -25,8 +21,14 @@ jobs:
       - name: Install
         run: yarn install
 
-      - name: Pull Amplify
+      - name: Install Amplify CLI
+        run: curl -sL https://aws-amplify.github.io/amplify-cli/install | bash && $SHELL
+
+      - name: Pull Amplify project
         run: amplify pull --appId d21bdgrb1tdkdd --envName test
+
+      - name: Add graphql capabilities
+        run: amplify update api
 
       - name: Build
         run: yarn build build --if-present
