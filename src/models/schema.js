@@ -167,7 +167,7 @@ export const schema = {
                     "type": {
                         "enum": "TeamType"
                     },
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": []
                 },
                 "TeamMembers": {
@@ -176,7 +176,7 @@ export const schema = {
                     "type": {
                         "model": "TeamMember"
                     },
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": [],
                     "isArrayNullable": true,
                     "association": {
@@ -192,7 +192,14 @@ export const schema = {
                     "type": {
                         "enum": "TeamVisibility"
                     },
-                    "isRequired": false,
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "Description": {
+                    "name": "Description",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
                     "attributes": []
                 },
                 "createdAt": {
@@ -244,6 +251,15 @@ export const schema = {
                     "name": "id",
                     "isArray": false,
                     "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "Visibility": {
+                    "name": "Visibility",
+                    "isArray": false,
+                    "type": {
+                        "enum": "UserProfileVisibility"
+                    },
                     "isRequired": true,
                     "attributes": []
                 },
@@ -304,7 +320,7 @@ export const schema = {
                     "type": {
                         "model": "TeamMember"
                     },
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": [],
                     "isArrayNullable": true,
                     "association": {
@@ -358,6 +374,14 @@ export const schema = {
         }
     },
     "enums": {
+        "UserProfileVisibility": {
+            "name": "UserProfileVisibility",
+            "values": [
+                "PRIVATE",
+                "PUBLIC",
+                "ARCHIVED"
+            ]
+        },
         "TeamVisibility": {
             "name": "TeamVisibility",
             "values": [
@@ -393,5 +417,5 @@ export const schema = {
     },
     "nonModels": {},
     "codegenVersion": "3.3.2",
-    "version": "67184f81f50f0946214a5ee3caf76e08"
+    "version": "0b8e64d0b108c52f4bc2b3e1974038c0"
 };

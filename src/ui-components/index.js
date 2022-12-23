@@ -5,7 +5,3 @@
  **************************************************************************/
 
 export { default as studioTheme } from "./studioTheme";
-export { default as TeamCreateForm } from "./TeamCreateForm";
-export { default as TeamUpdateForm } from "./TeamUpdateForm";
-export { default as UserProfileCreateForm } from "./UserProfileCreateForm";
-export { default as UserProfileUpdateForm } from "./UserProfileUpdateForm";

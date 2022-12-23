@@ -1,9 +1,6 @@
-// import theme, { makeStyles, shorthands, tokens } from "Theme"
+import { makeStyles, shorthands } from "Theme"
 
-import { shorthands } from "@griffel/react"
-import { makeStyles } from "@mui/material/styles"
-
-makeStyles({
+const useStyles = makeStyles({
   root: {
     minHeight: "100vh",
     display: "flex",
@@ -15,3 +12,5 @@ makeStyles({
     flexDirection: "column",
   },
 })
+
+export default useStyles
