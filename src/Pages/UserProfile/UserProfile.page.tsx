@@ -1,7 +1,8 @@
 import { useAuthenticator } from "@aws-amplify/ui-react"
 import { Typography } from "@mui/material"
 import { Page, Section } from "Components"
-import UserProfile from "Components/UserProfile/UserProfileEditor"
+import CreateUserProfile from "Components/UserProfile/CreateUserProfile"
+import UserProfileEditor from "Components/UserProfile/UserProfileEditor"
 import UserProfileDataStore from "DataStores/UserProfileDataStore"
 
 export default function UserProfilePage() {
@@ -12,7 +13,8 @@ export default function UserProfilePage() {
     <Page title="User profile">
       <Section>
         <Typography variant="h1">Public profile</Typography>
-        {userProfile && <UserProfile userProfile={userProfile} />}
+        {userProfile && <UserProfileEditor userProfile={userProfile} />}
+        {!userProfile && <CreateUserProfile />}
       </Section>
     </Page>
   )
