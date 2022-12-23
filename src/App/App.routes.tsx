@@ -9,7 +9,7 @@ import {
   HomePage,
   NotFoundPage,
   TeamPage,
-  UserProfilePage,
+  UserProfilePage
 } from "Pages"
 import { Navigate, Route, Routes, useSearchParams } from "react-router-dom"
 
