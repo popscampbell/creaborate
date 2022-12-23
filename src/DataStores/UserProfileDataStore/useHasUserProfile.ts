@@ -1,4 +1,4 @@
-import { Auth, DataStore } from "aws-amplify"
+import { DataStore } from "aws-amplify"
 import AsyncGuardStatus from "DataStores/AsyncGuardStatus"
 import { UserProfile } from "models"
 import { useEffect, useState } from "react"
