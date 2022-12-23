@@ -14,20 +14,18 @@ import {
 import { Navigate, Route, Routes, useSearchParams } from "react-router-dom"
 
 function AuthGuard(props: { children: any }) {
-  const authenticator = useAuthenticator()
+  const { authStatus } = useAuthenticator()
 
-  return authenticator.authStatus === "authenticated" ? (
-    props.children
-  ) : (
-    <Navigate to="/" />
-  )
+  return authStatus === "authenticated" ? props.children : <Navigate to="/" />
 }
 
 function UserProfileGuard(props: { children: any }) {
-  const { user } = useAuthenticator()
+  const authenticator = useAuthenticator()
   const hasUserProfile = UserProfileDataStore.useHasUserProfile(
-    user?.username || ""
+    authenticator.user?.username || ""
   )
+
+  if (authenticator.authStatus !== "authenticated") return props.children
 
   switch (hasUserProfile) {
     case "C":
