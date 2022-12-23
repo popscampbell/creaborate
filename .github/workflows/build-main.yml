@@ -1,8 +1,8 @@
-name: Build
+name: Build main branch
 
 on:
   pull_request:
-    branches: ["main", "test"]
+    branches: ["main"]
 
 jobs:
   build:
@@ -24,6 +24,9 @@ jobs:
 
       - name: Install
         run: yarn install
+
+      - name: Pull Amplify
+        run: amplify pull --appId d21bdgrb1tdkdd --envName prod
 
       - name: Build
         run: yarn build build --if-present
