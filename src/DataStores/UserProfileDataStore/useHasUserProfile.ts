@@ -7,14 +7,20 @@ export function useHasUserProfile(username: string) {
   const [hasProfile, setHasProfile] = useState<AsyncGuardStatus>("C")
 
   useEffect(() => {
-    const subscription = DataStore.observeQuery(UserProfile, (userProfile) =>
-      userProfile.Username.eq(username)
-    ).subscribe((snapshot) =>
-      setHasProfile(snapshot.items.length > 0 ? "Y" : "N")
-    )
+    if (!username) {
+      setHasProfile("Y")
+    } else {
+      let subscription: any
 
-    return function cleanUp() {
-      subscription.unsubscribe()
+      subscription = DataStore.observeQuery(UserProfile, (userProfile) =>
+        userProfile.Username.eq(username)
+      ).subscribe((snapshot) =>
+        setHasProfile(snapshot.items.length > 0 ? "Y" : "N")
+      )
+
+      return function cleanUp() {
+        subscription.unsubscribe()
+      }
     }
   }, [username])
 
