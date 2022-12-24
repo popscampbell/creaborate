@@ -1,3 +1,4 @@
+import { useAuthenticator } from "@aws-amplify/ui-react"
 import {
   Box,
   Button,
@@ -5,9 +6,10 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  TextField
+  TextField,
 } from "@mui/material"
 import TeamDataStore from "DataStores/TeamDataStore/TeamDataStore"
+import UserProfileDataStore from "DataStores/UserProfileDataStore"
 import { TeamType } from "models"
 import { useState } from "react"
 import TeamTypeControl from "./TeamTypeControl"
@@ -26,8 +28,13 @@ export default function CreateTeamDialog(props: {
     buttonIcon,
     dialogTitle,
     onCancel,
-    onSuccess
+    onSuccess,
   } = props
+
+  const { user } = useAuthenticator()
+  const currentUserProfile = UserProfileDataStore.useUserProfile(
+    user?.username || ""
+  )
 
   const [open, setOpen] = useState(false)
   const [teamName, setTeamName] = useState("")
@@ -46,10 +53,13 @@ export default function CreateTeamDialog(props: {
   function handleAdd() {
     setOpen(false)
 
-    if (teamName && teamType) {
-      TeamDataStore.addTeam(teamName, description, teamType).then(
-        (team) => onSuccess && onSuccess(team.id)
-      )
+    if (teamName && teamType && currentUserProfile) {
+      TeamDataStore.addTeam(
+        currentUserProfile,
+        teamName,
+        description,
+        teamType
+      ).then((team) => onSuccess && onSuccess(team.id))
     }
   }
 

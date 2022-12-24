@@ -1,32 +1,22 @@
-import { useAuthenticator } from "@aws-amplify/ui-react"
 import { DataStore } from "aws-amplify"
-import { TeamMemberStatus, TeamMember } from "models"
+import { TeamMemberStatus, TeamMember, UserProfile } from "models"
 import { useEffect, useState } from "react"
 
-export default function useTeamInvitations() {
+export default function useTeamInvitations(userProfile: UserProfile) {
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([])
 
-  const authenticator = useAuthenticator()
-
   useEffect(() => {
-    const userId = authenticator.user?.username
+    const subscription = DataStore.observeQuery(TeamMember, (teamMember) =>
+      teamMember.and((teamMember) => [
+        teamMember.UserProfile.id.eq(userProfile.id),
+        teamMember.Status.eq(TeamMemberStatus.INVITED),
+      ])
+    ).subscribe((snapshot) => setTeamMembers(snapshot.items))
 
-    if (userId) {
-      const subscription = DataStore.observeQuery(TeamMember, (teamMember) =>
-        teamMember.and((teamMember) => [
-          teamMember.UserProfile.eq(userId),
-          teamMember.Status.eq(TeamMemberStatus.INVITED),
-        ])
-      ).subscribe((snapshot) => {
-        const { items } = snapshot
-        setTeamMembers(items)
-      })
-
-      return function cleanup() {
-        subscription && subscription.unsubscribe()
-      }
+    return function cleanup() {
+      subscription && subscription.unsubscribe()
     }
-  }, [authenticator.user])
+  }, [userProfile])
 
   return teamMembers
 }

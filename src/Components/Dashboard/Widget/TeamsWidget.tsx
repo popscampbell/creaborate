@@ -2,14 +2,14 @@ import { Add } from "@mui/icons-material"
 import { ListItemButton, ListItemText } from "@mui/material"
 import { CreateTeamDialog } from "Components/Team"
 import TeamDataStore from "DataStores/TeamDataStore/TeamDataStore"
-import { LazyTeam, TeamType } from "models"
+import { LazyTeam, TeamType, UserProfile } from "models"
 import { useNavigate } from "react-router-dom"
 import { TeamUtilities } from "Utilities"
 import ListWidget from "./ListWidget"
 
-export default function TeamsWidget() {
+export default function TeamsWidget(props: { userProfile: UserProfile }) {
   const navigate = useNavigate()
-  const teams = TeamDataStore.useTeams()
+  const teams = TeamDataStore.useTeams(props.userProfile)
 
   function handleClickTeam(id?: string) {
     navigate(`/team${id ? `?id=${id}` : ""}`)

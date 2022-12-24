@@ -1,6 +1,124 @@
-type TaskDiscussion @model @auth(rules: [{allow: public}]) {
+enum RecurrenceFrequency {
+  DAILY
+  WEEKLY
+  MONTHLY
+  ANNULLY
+}
+
+type Recurrence {
+  Frequency: RecurrenceFrequency!
+  PeriodCount: Int!
+  IsMonday: Boolean!
+  IsTuesday: Boolean!
+  IsWednesday: Boolean!
+  IsThursday: Boolean!
+  IsFriday: Boolean!
+  IsSaturday: Boolean!
+  IsSunday: Boolean!
+}
+
+type EventImage @model @auth(rules: [{allow: public}]) {
   id: ID!
-  T: ID! @index(name: "byTask")
+  Event: ID! @index(name: "byEvent")
+  Image: Image! @hasOne
+  IsPrimary: Boolean!
+}
+
+type AssetImage @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  Asset: ID! @index(name: "byAsset")
+  Image: Image! @hasOne
+  IsPrimary: Boolean!
+}
+
+type LocationImage @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  Image: Image! @hasOne
+  Location: ID! @index(name: "byLocation")
+  IsPrimary: Boolean!
+}
+
+type Image @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  File: String!
+  Caption: String
+  Detail: String
+}
+
+type Asset @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  Name: String!
+  AssetImages: [AssetImage] @hasMany(indexName: "byAsset", fields: ["id"])
+  Description: String
+}
+
+type Expense @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  Name: String!
+  Description: String
+  Amount: Float
+  IncurredDate: AWSDate
+  IsRecurring: Boolean!
+  Recurrence: Recurrence
+}
+
+type Location @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  Name: String!
+  Address: String
+  Website: AWSURL
+  Phone: AWSPhone
+  ContactEmail: AWSEmail
+  ContactName: String
+  LocationImages: [LocationImage] @hasMany(indexName: "byLocation", fields: ["id"])
+}
+
+type Event @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  Team: ID! @index(name: "byTeam")
+  Name: String!
+  Date: AWSDate
+  Time: AWSTime
+  Location: Location @hasOne
+  Description: String
+  Website: AWSURL
+  EventImages: [EventImage] @hasMany(indexName: "byEvent", fields: ["id"])
+}
+
+enum ProjectMilestoneStatus {
+  ACTIVE
+  CLOSED
+}
+
+type ProjectMilestone @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  Project: ID! @index(name: "byProject")
+  Name: String!
+  Status: ProjectMilestoneStatus!
+  Date: AWSDate
+}
+
+enum ProjectStatus {
+  DRAFT
+  ACTIVE
+  COMPLETED
+  CANCELED
+}
+
+type Project @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  Team: ID! @index(name: "byTeam")
+  Name: String!
+  Descript: String
+  Status: ProjectStatus!
+  ProjectMilestones: [ProjectMilestone] @hasMany(indexName: "byProject", fields: ["id"])
+  StartDate: AWSDate
+  EndDate: AWSDate
+}
+
+type TaskComment @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  Task: ID! @index(name: "byTask")
   Comment: String!
   CommentDateTime: AWSDateTime!
   CommentTeamMember: String!
@@ -23,13 +141,16 @@ type Task @model @auth(rules: [{allow: public}]) {
   Team: ID! @index(name: "byTeam")
   Name: String!
   Description: String
-  OwningTeamMembers: [String]!
-  DueDateTime: AWSDateTime
+  DueDate: AWSDate
   Status: TaskStatus!
   Priority: TaskPriority!
   CompletedByTeamMember: String
-  CompletedDateTime: AWSDateTime
-  TaskDiscussions: [TaskDiscussion] @hasMany(indexName: "byTask", fields: ["id"])
+  CompletedDate: AWSDate
+  Comments: [TaskComment] @hasMany(indexName: "byTask", fields: ["id"])
+  StartDate: AWSDate
+  Owner: TeamMember @hasOne
+  Project: Project @hasOne
+  ProjectMilestone: ProjectMilestone @hasOne
 }
 
 enum UserProfileVisibility {
@@ -59,7 +180,6 @@ enum TeamMemberRole {
 type TeamMember @model @auth(rules: [{allow: public}]) {
   id: ID!
   Team: ID! @index(name: "byTeam")
-  UserProfile: ID! @index(name: "byUserProfile")
   Role: TeamMemberRole!
   Status: TeamMemberStatus!
   InvitedDateTime: AWSDateTime!
@@ -68,6 +188,7 @@ type TeamMember @model @auth(rules: [{allow: public}]) {
   DeclinedDateTime: AWSDateTime
   DepartedDateTime: AWSDateTime
   DepartedComment: String
+  UserProfile: UserProfile @hasOne
 }
 
 enum TeamType {
@@ -84,6 +205,8 @@ type Team @model @auth(rules: [{allow: public}]) {
   Visibility: TeamVisibility!
   Description: String!
   Tasks: [Task] @hasMany(indexName: "byTeam", fields: ["id"])
+  Projects: [Project] @hasMany(indexName: "byTeam", fields: ["id"])
+  Events: [Event] @hasMany(indexName: "byTeam", fields: ["id"])
 }
 
 type UserProfile @model @auth(rules: [{allow: public}]) {
@@ -95,7 +218,6 @@ type UserProfile @model @auth(rules: [{allow: public}]) {
   Interests: [String]!
   About: String
   Location: String
-  TeamMembers: [TeamMember!] @hasMany(indexName: "byUserProfile", fields: ["id"])
   id: ID!
 }
  

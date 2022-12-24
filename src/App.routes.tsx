@@ -9,7 +9,7 @@ import {
   HomePage,
   NotFoundPage,
   TeamPage,
-  UserProfilePage
+  UserProfilePage,
 } from "Pages"
 import { Navigate, Route, Routes, useSearchParams } from "react-router-dom"
 
@@ -42,8 +42,11 @@ function TeamGuard(props: { children: any }) {
   const teamId = params.get("id")
 
   const { user } = useAuthenticator()
-  const userId = user.username || ""
-  const teamAuthStatus = TeamStore.useTeamAuthStatus(userId, teamId || "")
+  const userProfile = UserProfileDataStore.useUserProfile(user?.username || "")
+  const teamAuthStatus = TeamStore.useTeamAuthStatus(
+    userProfile?.id || "",
+    teamId || ""
+  )
 
   switch (teamAuthStatus) {
     case "C":

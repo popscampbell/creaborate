@@ -17,6 +17,7 @@ import {
   Grid,
   Icon,
   ScrollView,
+  SelectField,
   Text,
   TextField,
   useTheme,
@@ -167,6 +168,7 @@ export default function UserProfileUpdateForm(props) {
     ...rest
   } = props;
   const initialValues = {
+    Visibility: undefined,
     Username: undefined,
     Name: undefined,
     Tagline: undefined,
@@ -175,6 +177,7 @@ export default function UserProfileUpdateForm(props) {
     About: undefined,
     Location: undefined,
   };
+  const [Visibility, setVisibility] = React.useState(initialValues.Visibility);
   const [Username, setUsername] = React.useState(initialValues.Username);
   const [Name, setName] = React.useState(initialValues.Name);
   const [Tagline, setTagline] = React.useState(initialValues.Tagline);
@@ -185,6 +188,7 @@ export default function UserProfileUpdateForm(props) {
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = { ...initialValues, ...userProfileRecord };
+    setVisibility(cleanValues.Visibility);
     setUsername(cleanValues.Username);
     setName(cleanValues.Name);
     setTagline(cleanValues.Tagline);
@@ -211,6 +215,7 @@ export default function UserProfileUpdateForm(props) {
     React.useState(undefined);
   const InterestsRef = React.createRef();
   const validations = {
+    Visibility: [{ type: "Required" }],
     Username: [{ type: "Required" }],
     Name: [{ type: "Required" }],
     Tagline: [],
@@ -237,6 +242,7 @@ export default function UserProfileUpdateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
+          Visibility,
           Username,
           Name,
           Tagline,
@@ -285,6 +291,53 @@ export default function UserProfileUpdateForm(props) {
       {...rest}
       {...getOverrideProps(overrides, "UserProfileUpdateForm")}
     >
+      <SelectField
+        label="Visibility"
+        placeholder="Please select an option"
+        isDisabled={false}
+        value={Visibility}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              Visibility: value,
+              Username,
+              Name,
+              Tagline,
+              Skills,
+              Interests,
+              About,
+              Location,
+            };
+            const result = onChange(modelFields);
+            value = result?.Visibility ?? value;
+          }
+          if (errors.Visibility?.hasError) {
+            runValidationTasks("Visibility", value);
+          }
+          setVisibility(value);
+        }}
+        onBlur={() => runValidationTasks("Visibility", Visibility)}
+        errorMessage={errors.Visibility?.errorMessage}
+        hasError={errors.Visibility?.hasError}
+        {...getOverrideProps(overrides, "Visibility")}
+      >
+        <option
+          children="Private"
+          value="PRIVATE"
+          {...getOverrideProps(overrides, "Visibilityoption0")}
+        ></option>
+        <option
+          children="Public"
+          value="PUBLIC"
+          {...getOverrideProps(overrides, "Visibilityoption1")}
+        ></option>
+        <option
+          children="Archived"
+          value="ARCHIVED"
+          {...getOverrideProps(overrides, "Visibilityoption2")}
+        ></option>
+      </SelectField>
       <TextField
         label="Username"
         isRequired={true}
@@ -294,6 +347,7 @@ export default function UserProfileUpdateForm(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
+              Visibility,
               Username: value,
               Name,
               Tagline,
@@ -324,6 +378,7 @@ export default function UserProfileUpdateForm(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
+              Visibility,
               Username,
               Name: value,
               Tagline,
@@ -354,6 +409,7 @@ export default function UserProfileUpdateForm(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
+              Visibility,
               Username,
               Name,
               Tagline: value,
@@ -380,6 +436,7 @@ export default function UserProfileUpdateForm(props) {
           let values = items;
           if (onChange) {
             const modelFields = {
+              Visibility,
               Username,
               Name,
               Tagline,
@@ -426,6 +483,7 @@ export default function UserProfileUpdateForm(props) {
           let values = items;
           if (onChange) {
             const modelFields = {
+              Visibility,
               Username,
               Name,
               Tagline,
@@ -476,6 +534,7 @@ export default function UserProfileUpdateForm(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
+              Visibility,
               Username,
               Name,
               Tagline,
@@ -506,6 +565,7 @@ export default function UserProfileUpdateForm(props) {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
+              Visibility,
               Username,
               Name,
               Tagline,

@@ -1,8 +1,8 @@
 import { Chip } from "@mui/material"
 import TeamDataStore from "DataStores/TeamDataStore/TeamDataStore"
 import UserProfileDataStore from "DataStores/UserProfileDataStore"
-import { TeamMember, TeamMemberRole } from "models"
-import { useState } from "react"
+import { TeamMember, TeamMemberRole, UserProfile } from "models"
+import { useEffect, useState } from "react"
 import { TeamMemberUtilities, UserProfileUtilities } from "Utilities"
 import EditTeamMemberDialog from "./EditTeamMemberDialog"
 
@@ -14,9 +14,8 @@ export function TeamMemberChip(props: {
 }) {
   const { teamMember, onChanged, onDelete, short } = props
 
-  const userProfile = UserProfileDataStore.useUserProfileById(
-    teamMember.UserProfile
-  )
+  const userProfile = TeamDataStore.useUserProfileByTeamMember(teamMember)
+
   const [open, setOpen] = useState(false)
 
   function handleSave(changed: TeamMember) {
@@ -34,9 +33,8 @@ export function TeamMemberChip(props: {
     true
   )
 
-  const shortName = userProfile
-    ? UserProfileUtilities.getShortName(userProfile)
-    : ""
+  const shortName =
+    userProfile && UserProfileUtilities.getShortName(userProfile)
 
   return (
     <>

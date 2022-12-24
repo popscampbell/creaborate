@@ -4,12 +4,14 @@ import { Auth, DataStore } from "aws-amplify"
 import { UserProfile, UserProfileVisibility } from "models"
 import useUserProfileById from "./useUserProfileById"
 import { useHasUserProfile } from "./useHasUserProfile"
+import useUserProfilesByNameSearch from "./useUserProfilesByNameSearch"
 
 export default class UserProfileDataStore {
   static useHasUserProfile = useHasUserProfile
   static useUserProfile = useUserProfile
   static useUserProfileById = useUserProfileById
   static useUserProfiles = useUserProfiles
+  static useUserProfilesByNameSearch = useUserProfilesByNameSearch
 
   static createUserProfile(
     name: string,

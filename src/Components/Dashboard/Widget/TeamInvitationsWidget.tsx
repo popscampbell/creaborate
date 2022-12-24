@@ -2,13 +2,15 @@ import { ListItemButton, ListItemText } from "@mui/material"
 import { DataStore } from "aws-amplify"
 import TeamInvitationDialog from "Components/Team/TeamMembers/TeamInvitationDialog"
 import TeamDataStore from "DataStores/TeamDataStore/TeamDataStore"
-import { TeamMember, TeamMemberRole } from "models"
+import { TeamMember, TeamMemberRole, UserProfile } from "models"
 import { useState } from "react"
 import { TeamMemberUtilities } from "Utilities"
 import ListWidget from "./ListWidget"
 
-export default function TeamInvitationsWidget() {
-  const userInvitations = TeamDataStore.useUserInvitations()
+export default function TeamInvitationsWidget(props: {
+  userProfile: UserProfile
+}) {
+  const userInvitations = TeamDataStore.useUserInvitations(props.userProfile)
 
   const [open, setOpen] = useState(false)
 

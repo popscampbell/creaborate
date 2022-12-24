@@ -3,10 +3,9 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogTitle
+  DialogTitle,
 } from "@mui/material"
 import TeamDataStore from "DataStores/TeamDataStore/TeamDataStore"
-import UserProfileDataStore from "DataStores/UserProfileDataStore"
 import { TeamMember, TeamMemberRole } from "models"
 import { useState } from "react"
 import TeamMemberRoleControl from "./TeamMemberRoleControl"
@@ -19,9 +18,7 @@ export default function EditTeamMemberDialog(props: {
 }) {
   const { teamMember, open, onSave, onCancel } = props
 
-  const userProfile = UserProfileDataStore.useUserProfileById(
-    teamMember.UserProfile
-  )
+  const userProfile = TeamDataStore.useUserProfileByTeamMember(teamMember)
   const team = TeamDataStore.useTeam(teamMember.Team)
 
   const [role, setRole] = useState(teamMember.Role)

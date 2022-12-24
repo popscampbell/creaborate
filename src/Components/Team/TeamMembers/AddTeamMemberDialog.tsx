@@ -1,3 +1,4 @@
+import { useAuthenticator } from "@aws-amplify/ui-react"
 import {
   Autocomplete,
   Box,
@@ -7,12 +8,12 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  TextField
+  TextField,
 } from "@mui/material"
 import TeamDataStore from "DataStores/TeamDataStore/TeamDataStore"
 import UserProfileDataStore from "DataStores/UserProfileDataStore"
 import { Team, TeamMemberRole, UserProfile } from "models"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { TeamUtilities } from "Utilities"
 import TeamMemberRoleControl from "./TeamMemberRoleControl"
 
@@ -20,31 +21,31 @@ const defaultRole = TeamMemberRole.MEMBER
 
 export default function AddTeamMemberDialog(props: { team: Team }) {
   const { team } = props
-  const teamMembers = TeamDataStore.useTeamMembers(team)
 
   const [open, setOpen] = useState(false)
-  const [options, setOptions] = useState<UserProfile[]>([])
   const [value, setValue] = useState<UserProfile | null>(null)
   const [inputValue, setInputValue] = useState("")
   const [role, setRole] = useState<TeamMemberRole>(defaultRole)
 
-  useEffect(() => {
-    UserProfileDataStore.findUserProfiles(inputValue)
-      .then((foundUserProfiles) => {
-        return foundUserProfiles.filter((userProfile) => {
-          return !teamMembers.find(
-            (teamMember) => teamMember.UserProfile === userProfile.id
-          )
-        })
-      })
-      .then((validUserProfiles) => setOptions(validUserProfiles))
-  }, [team, teamMembers, inputValue])
+  const { user } = useAuthenticator()
+  const currentUserProfile = UserProfileDataStore.useUserProfile(
+    user?.username || ""
+  )
+  const userProfiles =
+    UserProfileDataStore.useUserProfilesByNameSearch(inputValue)
+  const teamMembers = TeamDataStore.useTeamMembers(team)
 
   const teamTypeLabel = TeamUtilities.TeamTypeLabel(team.TeamType || "", true)
 
   function handleAdd() {
     value &&
-      TeamDataStore.inviteTeamMember(team, value, role).then(() => {
+      currentUserProfile &&
+      TeamDataStore.inviteTeamMember(
+        currentUserProfile,
+        team,
+        value,
+        role
+      ).then(() => {
         setOpen(false)
         setValue(null)
         setRole(defaultRole)
@@ -71,7 +72,12 @@ export default function AddTeamMemberDialog(props: { team: Team }) {
             onInputChange={(event, newInputValue) => {
               setInputValue(newInputValue)
             }}
-            options={options}
+            options={userProfiles.filter(
+              (userProfile) =>
+                !teamMembers
+                  .map((teamMember) => teamMember.teamMemberUserProfileId)
+                  .includes(userProfile.id)
+            )}
             getOptionLabel={(userProfile) => userProfile.Name || "(no name)"}
             sx={{ width: 300 }}
             renderInput={(params) => <TextField {...params} />}

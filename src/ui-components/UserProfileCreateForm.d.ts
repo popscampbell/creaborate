@@ -6,13 +6,14 @@
 
 import * as React from "react";
 import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
-import { GridProps, TextFieldProps } from "@aws-amplify/ui-react";
+import { GridProps, SelectFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type UserProfileCreateFormInputValues = {
+    Visibility?: string;
     Username?: string;
     Name?: string;
     Tagline?: string;
@@ -22,6 +23,7 @@ export declare type UserProfileCreateFormInputValues = {
     Location?: string;
 };
 export declare type UserProfileCreateFormValidationValues = {
+    Visibility?: ValidationFunction<string>;
     Username?: ValidationFunction<string>;
     Name?: ValidationFunction<string>;
     Tagline?: ValidationFunction<string>;
@@ -33,6 +35,7 @@ export declare type UserProfileCreateFormValidationValues = {
 export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type UserProfileCreateFormOverridesProps = {
     UserProfileCreateFormGrid?: FormProps<GridProps>;
+    Visibility?: FormProps<SelectFieldProps>;
     Username?: FormProps<TextFieldProps>;
     Name?: FormProps<TextFieldProps>;
     Tagline?: FormProps<TextFieldProps>;

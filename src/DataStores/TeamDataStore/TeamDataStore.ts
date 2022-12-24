@@ -1,18 +1,21 @@
-import { Auth, DataStore, Predicates } from "aws-amplify"
+import { DataStore, Predicates } from "aws-amplify"
 import {
   Team,
   TeamMember,
   TeamMemberRole,
   TeamMemberStatus,
-  TeamType, TeamVisibility, UserProfile
+  TeamType,
+  TeamVisibility,
+  UserProfile,
 } from "models"
 import useTeam from "./useTeam"
-import { useTeamAuthStatus } from "./useTeamAuthStatus"
+import useTeamAuthStatus from "./useTeamAuthStatus"
 import useTeamInvitations from "./useTeamInvitations"
-import { useTeamMemberRole } from "./useTeamMemberRole"
+import useTeamMemberRole from "./useTeamMemberRole"
 import useTeamMembers from "./useTeamMembers"
-import useTeams from "./useTeams"
+import useTeams from "./useTeamsByUserProfile"
 import useUserInvitations from "./useUserInvitations"
+import useUserProfileByTeamMember from "./useUserProfileByTeamMember"
 
 export default class TeamDataStore {
   static useTeam = useTeam
@@ -22,35 +25,35 @@ export default class TeamDataStore {
   static useTeamMembers = useTeamMembers
   static useTeams = useTeams
   static useUserInvitations = useUserInvitations
+  static useUserProfileByTeamMember = useUserProfileByTeamMember
 
-  static async addTeam(name: string, description: string, teamType: TeamType, visibility: TeamVisibility = TeamVisibility.PRIVATE): Promise<Team> {
-    return this.getCurrentUserProfile().then((userProfile) =>
-      DataStore.save(new Team({ Name: name, Description: description, TeamType: teamType, Visibility: visibility })).then(
-        (team) => {
-          DataStore.save(
-            new TeamMember({
-              Team: team.id,
-              UserProfile: userProfile.id,
-              Status: TeamMemberStatus.CONFIRMED,
-              InvitedByUserProfile: userProfile.id,
-              InvitedDateTime: new Date().toISOString(),
-              Role: TeamMemberRole.ADMINISTRATOR,
-            })
-          )
-          return team
-        }
+  static async addTeam(
+    userProfile: UserProfile,
+    name: string,
+    description: string,
+    teamType: TeamType,
+    visibility: TeamVisibility = TeamVisibility.PRIVATE
+  ): Promise<Team> {
+    return DataStore.save(
+      new Team({
+        Name: name,
+        Description: description,
+        TeamType: teamType,
+        Visibility: visibility,
+      })
+    ).then((team) => {
+      DataStore.save(
+        new TeamMember({
+          Team: team.id,
+          UserProfile: userProfile,
+          Status: TeamMemberStatus.CONFIRMED,
+          InvitedByUserProfile: userProfile.id,
+          InvitedDateTime: new Date().toISOString(),
+          Role: TeamMemberRole.ADMINISTRATOR,
+        })
       )
-    )
-  }
-
-  private static getCurrentUserProfile() {
-    return Auth.currentUserInfo()
-      .then((user) =>
-        DataStore.query(UserProfile, (userProfile) =>
-          userProfile.Username.eq(user.username)
-        )
-      )
-      .then((userProfiles) => userProfiles[0])
+      return team
+    })
   }
 
   static updateTeam(
@@ -62,7 +65,7 @@ export default class TeamDataStore {
     return DataStore.save(
       Team.copyOf(team, (updated) => {
         if (name) updated.Name = name
-        //if (description) updated.Description = description
+        if (description) updated.Description = description
         if (teamType) updated.TeamType = teamType
       })
     )
@@ -89,36 +92,35 @@ export default class TeamDataStore {
   }
 
   static async inviteTeamMember(
+    invitingUserProfile: UserProfile,
     team: Team,
     userProfile: UserProfile,
     role: TeamMemberRole
   ) {
-    return this.getCurrentUserProfile().then((currentUserProfile) =>
-      this.getTeamMember(team.id, userProfile.id).then((teamMember) =>
-        teamMember && teamMember.Status !== TeamMemberStatus.INVITED
-          ? DataStore.save(
+    return this.getTeamMember(team.id, userProfile.id).then((teamMember) =>
+      teamMember && teamMember.Status !== TeamMemberStatus.INVITED
+        ? DataStore.save(
             TeamMember.copyOf(teamMember, (updated) => {
               updated.Status = TeamMemberStatus.INVITED
-              updated.InvitedByUserProfile = currentUserProfile.id
+              updated.InvitedByUserProfile = invitingUserProfile.id
               updated.InvitedDateTime = new Date().toISOString()
               updated.Role = role
             })
           ).catch((error) =>
             Promise.reject(`Error updating existing team member: ${error}`)
           )
-          : DataStore.save(
+        : DataStore.save(
             new TeamMember({
               Team: team.id,
-              UserProfile: userProfile.id,
+              UserProfile: userProfile,
               Status: TeamMemberStatus.INVITED,
-              InvitedByUserProfile: currentUserProfile.id,
+              InvitedByUserProfile: invitingUserProfile.id,
               InvitedDateTime: new Date().toISOString(),
               Role: role,
             })
           ).catch((error) =>
             Promise.reject(`Error adding new team member: ${error}`)
           )
-      )
     )
   }
 
@@ -172,16 +174,20 @@ export default class TeamDataStore {
     )
   }
 
-  static async leaveTeam(team: Team, comment?: string) {
-    return this.getCurrentUserProfile()
-      .then((currentUserProfile) =>
-        team.TeamMembers.toArray().then((teamMembers) =>
-          teamMembers.find(
-            (teamMember) => teamMember.UserProfile === currentUserProfile.id
-          )
-        )
-      )
-      .then((teamMember) => teamMember && this.removeTeamMember(teamMember))
+  static async leaveTeam(
+    userProfile: UserProfile,
+    team: Team,
+    comment?: string
+  ) {
+    return DataStore.query(TeamMember, (teamMember) =>
+      teamMember.and((teamMember) => [
+        teamMember.Team.eq(team.id),
+        teamMember.UserProfile.id.eq(userProfile.id),
+        teamMember.Status.ne(TeamMemberStatus.DEPARTED),
+      ])
+    )
+      .then((teamMembers) => teamMembers[0])
+      .then((teamMember) => this.removeTeamMember(teamMember))
   }
 
   private static async getTeam(teamId: string) {
@@ -192,7 +198,7 @@ export default class TeamDataStore {
     return DataStore.query(TeamMember, (teamMember) =>
       teamMember.and((teamMember) => [
         teamMember.Team.eq(teamId),
-        teamMember.UserProfile.eq(userProfileId),
+        teamMember.UserProfile.id.eq(userProfileId),
       ])
     ).then((teamMembers) => teamMembers[0])
   }
