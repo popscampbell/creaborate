@@ -4,7 +4,9 @@ import {
   TeamMember,
   TeamMemberRole,
   TeamMemberStatus,
-  TeamType, TeamVisibility, UserProfile
+  TeamType,
+  TeamVisibility,
+  UserProfile,
 } from "models"
 import useTeam from "./useTeam"
 import { useTeamAuthStatus } from "./useTeamAuthStatus"
@@ -23,23 +25,34 @@ export default class TeamDataStore {
   static useTeams = useTeams
   static useUserInvitations = useUserInvitations
 
-  static async addTeam(name: string, description: string, teamType: TeamType, visibility: TeamVisibility = TeamVisibility.PRIVATE): Promise<Team> {
+  static async addTeam(
+    name: string,
+    description: string,
+    teamType: TeamType,
+    visibility: TeamVisibility = TeamVisibility.PRIVATE
+  ): Promise<Team> {
     return this.getCurrentUserProfile().then((userProfile) =>
-      DataStore.save(new Team({ Name: name, Description: description, TeamType: teamType, Visibility: visibility })).then(
-        (team) => {
-          DataStore.save(
-            new TeamMember({
-              Team: team.id,
-              UserProfile: userProfile.id,
-              Status: TeamMemberStatus.CONFIRMED,
-              InvitedByUserProfile: userProfile.id,
-              InvitedDateTime: new Date().toISOString(),
-              Role: TeamMemberRole.ADMINISTRATOR,
-            })
-          )
-          return team
-        }
-      )
+      DataStore.save(
+        new Team({
+          Name: name,
+          Description: description,
+          TeamType: teamType,
+          Visibility: visibility,
+        })
+      ).then((team) => {
+        DataStore.save(
+          new TeamMember({
+            Team: team.id,
+            UserProfile: userProfile.id,
+            Status: TeamMemberStatus.CONFIRMED,
+            InvitedByUserProfile: userProfile.id,
+            InvitedDateTime: new Date().toISOString(),
+            Role: TeamMemberRole.ADMINISTRATOR,
+            ConfirmedDateTime: new Date().toISOString(),
+          })
+        )
+        return team
+      })
     )
   }
 
@@ -62,7 +75,7 @@ export default class TeamDataStore {
     return DataStore.save(
       Team.copyOf(team, (updated) => {
         if (name) updated.Name = name
-        //if (description) updated.Description = description
+        if (description) updated.Description = description
         if (teamType) updated.TeamType = teamType
       })
     )
@@ -97,27 +110,27 @@ export default class TeamDataStore {
       this.getTeamMember(team.id, userProfile.id).then((teamMember) =>
         teamMember && teamMember.Status !== TeamMemberStatus.INVITED
           ? DataStore.save(
-            TeamMember.copyOf(teamMember, (updated) => {
-              updated.Status = TeamMemberStatus.INVITED
-              updated.InvitedByUserProfile = currentUserProfile.id
-              updated.InvitedDateTime = new Date().toISOString()
-              updated.Role = role
-            })
-          ).catch((error) =>
-            Promise.reject(`Error updating existing team member: ${error}`)
-          )
+              TeamMember.copyOf(teamMember, (updated) => {
+                updated.Status = TeamMemberStatus.INVITED
+                updated.InvitedByUserProfile = currentUserProfile.id
+                updated.InvitedDateTime = new Date().toISOString()
+                updated.Role = role
+              })
+            ).catch((error) =>
+              Promise.reject(`Error updating existing team member: ${error}`)
+            )
           : DataStore.save(
-            new TeamMember({
-              Team: team.id,
-              UserProfile: userProfile.id,
-              Status: TeamMemberStatus.INVITED,
-              InvitedByUserProfile: currentUserProfile.id,
-              InvitedDateTime: new Date().toISOString(),
-              Role: role,
-            })
-          ).catch((error) =>
-            Promise.reject(`Error adding new team member: ${error}`)
-          )
+              new TeamMember({
+                Team: team.id,
+                UserProfile: userProfile.id,
+                Status: TeamMemberStatus.INVITED,
+                InvitedByUserProfile: currentUserProfile.id,
+                InvitedDateTime: new Date().toISOString(),
+                Role: role,
+              })
+            ).catch((error) =>
+              Promise.reject(`Error adding new team member: ${error}`)
+            )
       )
     )
   }
