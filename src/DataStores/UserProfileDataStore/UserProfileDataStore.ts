@@ -11,7 +11,15 @@ export default class UserProfileDataStore {
   static useUserProfileById = useUserProfileById
   static useUserProfiles = useUserProfiles
 
-  static createUserProfile(
+  static async getCurrentUserProfile() {
+    const currentUserInfo = await Auth.currentUserInfo()
+
+    return await DataStore.query(UserProfile, (userProfile) =>
+      userProfile.Username.eq(currentUserInfo.username)
+    ).then((userProfiles) => userProfiles[0])
+  }
+
+  static async createUserProfile(
     name: string,
     visibility: UserProfileVisibility,
     skills: string[] = [],
@@ -20,22 +28,21 @@ export default class UserProfileDataStore {
     about?: string | null,
     location?: string | null
   ) {
-    return Auth.currentUserInfo().then((currentUserInfo) =>
-      currentUserInfo.username
-        ? DataStore.save(
-            new UserProfile({
-              Username: currentUserInfo.username,
-              Name: name,
-              Visibility: visibility,
-              Skills: skills,
-              Interests: interests,
-              Tagline: tagLine,
-              About: about,
-              Location: location,
-            })
-          )
-        : Promise.reject("Invalid username")
-    )
+    const currentUserInfo = await Auth.currentUserInfo()
+    return await (currentUserInfo.username
+      ? DataStore.save(
+          new UserProfile({
+            Username: currentUserInfo.username,
+            Name: name,
+            Visibility: visibility,
+            Skills: skills,
+            Interests: interests,
+            Tagline: tagLine,
+            About: about,
+            Location: location,
+          })
+        )
+      : Promise.reject("Invalid username"))
   }
 
   static updateUserProfile(

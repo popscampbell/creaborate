@@ -5,7 +5,8 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  TextField
+  TextField,
+  Typography,
 } from "@mui/material"
 import TeamDataStore from "DataStores/TeamDataStore/TeamDataStore"
 import { TeamType } from "models"
@@ -26,13 +27,14 @@ export default function CreateTeamDialog(props: {
     buttonIcon,
     dialogTitle,
     onCancel,
-    onSuccess
+    onSuccess,
   } = props
 
   const [open, setOpen] = useState(false)
   const [teamName, setTeamName] = useState("")
   const [description, setDescription] = useState("")
   const [teamType, setTeamType] = useState(TeamType.TEAM)
+  const [errorMessage, setErrorMessage] = useState("")
 
   function handleClickOpen() {
     setOpen(true)
@@ -47,9 +49,9 @@ export default function CreateTeamDialog(props: {
     setOpen(false)
 
     if (teamName && teamType) {
-      TeamDataStore.addTeam(teamName, description, teamType).then(
-        (team) => onSuccess && onSuccess(team.id)
-      )
+      TeamDataStore.addTeam(teamName, description, teamType)
+        .then((team) => onSuccess && onSuccess(team.id))
+        .catch((error) => setErrorMessage(error))
     }
   }
 
@@ -92,6 +94,11 @@ export default function CreateTeamDialog(props: {
               onChange={(newType) => setTeamType(newType)}
             />
           </Box>
+          {errorMessage && (
+            <Box>
+              <Typography color="red" children={errorMessage} />
+            </Box>
+          )}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCancel}>Cancel</Button>
