@@ -2,6 +2,18 @@
 import { initSchema } from '@aws-amplify/datastore';
 import { schema } from './schema';
 
+const TaskPriority = {
+  "HIGH": "HIGH",
+  "MEDIUM": "MEDIUM",
+  "LOW": "LOW"
+};
+
+const TaskStatus = {
+  "ACTIVE": "ACTIVE",
+  "CLOSED": "CLOSED",
+  "ARCHIVED": "ARCHIVED"
+};
+
 const UserProfileVisibility = {
   "PRIVATE": "PRIVATE",
   "PUBLIC": "PUBLIC",
@@ -32,12 +44,16 @@ const TeamType = {
   "GROUP": "GROUP"
 };
 
-const { TeamMember, Team, UserProfile } = initSchema(schema);
+const { TaskDiscussion, Task, TeamMember, Team, UserProfile } = initSchema(schema);
 
 export {
+  TaskDiscussion,
+  Task,
   TeamMember,
   Team,
   UserProfile,
+  TaskPriority,
+  TaskStatus,
   UserProfileVisibility,
   TeamVisibility,
   TeamMemberStatus,

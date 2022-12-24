@@ -1,3 +1,37 @@
+type TaskDiscussion @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  T: ID! @index(name: "byTask")
+  Comment: String!
+  CommentDateTime: AWSDateTime!
+  CommentTeamMember: String!
+}
+
+enum TaskPriority {
+  HIGH
+  MEDIUM
+  LOW
+}
+
+enum TaskStatus {
+  ACTIVE
+  CLOSED
+  ARCHIVED
+}
+
+type Task @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  Team: ID! @index(name: "byTeam")
+  Name: String!
+  Description: String
+  OwningTeamMembers: [String]!
+  DueDateTime: AWSDateTime
+  Status: TaskStatus!
+  Priority: TaskPriority!
+  CompletedByTeamMember: String
+  CompletedDateTime: AWSDateTime
+  TaskDiscussions: [TaskDiscussion] @hasMany(indexName: "byTask", fields: ["id"])
+}
+
 enum UserProfileVisibility {
   PRIVATE
   PUBLIC
@@ -49,6 +83,7 @@ type Team @model @auth(rules: [{allow: public}]) {
   TeamMembers: [TeamMember!] @hasMany(indexName: "byTeam", fields: ["id"])
   Visibility: TeamVisibility!
   Description: String!
+  Tasks: [Task] @hasMany(indexName: "byTeam", fields: ["id"])
 }
 
 type UserProfile @model @auth(rules: [{allow: public}]) {

@@ -1,5 +1,239 @@
 export const schema = {
     "models": {
+        "TaskDiscussion": {
+            "name": "TaskDiscussion",
+            "fields": {
+                "id": {
+                    "name": "id",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "T": {
+                    "name": "T",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "Comment": {
+                    "name": "Comment",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "CommentDateTime": {
+                    "name": "CommentDateTime",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "CommentTeamMember": {
+                    "name": "CommentTeamMember",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                }
+            },
+            "syncable": true,
+            "pluralName": "TaskDiscussions",
+            "attributes": [
+                {
+                    "type": "model",
+                    "properties": {}
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "byTask",
+                        "fields": [
+                            "T"
+                        ]
+                    }
+                },
+                {
+                    "type": "auth",
+                    "properties": {
+                        "rules": [
+                            {
+                                "allow": "public",
+                                "operations": [
+                                    "create",
+                                    "update",
+                                    "delete",
+                                    "read"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        "Task": {
+            "name": "Task",
+            "fields": {
+                "id": {
+                    "name": "id",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "Team": {
+                    "name": "Team",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "Name": {
+                    "name": "Name",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "Description": {
+                    "name": "Description",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "OwningTeamMembers": {
+                    "name": "OwningTeamMembers",
+                    "isArray": true,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isArrayNullable": false
+                },
+                "DueDateTime": {
+                    "name": "DueDateTime",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "Status": {
+                    "name": "Status",
+                    "isArray": false,
+                    "type": {
+                        "enum": "TaskStatus"
+                    },
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "Priority": {
+                    "name": "Priority",
+                    "isArray": false,
+                    "type": {
+                        "enum": "TaskPriority"
+                    },
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "CompletedByTeamMember": {
+                    "name": "CompletedByTeamMember",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "CompletedDateTime": {
+                    "name": "CompletedDateTime",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "TaskDiscussions": {
+                    "name": "TaskDiscussions",
+                    "isArray": true,
+                    "type": {
+                        "model": "TaskDiscussion"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "isArrayNullable": true,
+                    "association": {
+                        "connectionType": "HAS_MANY",
+                        "associatedWith": [
+                            "T"
+                        ]
+                    }
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                }
+            },
+            "syncable": true,
+            "pluralName": "Tasks",
+            "attributes": [
+                {
+                    "type": "model",
+                    "properties": {}
+                },
+                {
+                    "type": "key",
+                    "properties": {
+                        "name": "byTeam",
+                        "fields": [
+                            "Team"
+                        ]
+                    }
+                },
+                {
+                    "type": "auth",
+                    "properties": {
+                        "rules": [
+                            {
+                                "allow": "public",
+                                "operations": [
+                                    "create",
+                                    "update",
+                                    "delete",
+                                    "read"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
         "TeamMember": {
             "name": "TeamMember",
             "fields": {
@@ -202,6 +436,22 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
+                "Tasks": {
+                    "name": "Tasks",
+                    "isArray": true,
+                    "type": {
+                        "model": "Task"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "isArrayNullable": true,
+                    "association": {
+                        "connectionType": "HAS_MANY",
+                        "associatedWith": [
+                            "Team"
+                        ]
+                    }
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -374,6 +624,22 @@ export const schema = {
         }
     },
     "enums": {
+        "TaskPriority": {
+            "name": "TaskPriority",
+            "values": [
+                "HIGH",
+                "MEDIUM",
+                "LOW"
+            ]
+        },
+        "TaskStatus": {
+            "name": "TaskStatus",
+            "values": [
+                "ACTIVE",
+                "CLOSED",
+                "ARCHIVED"
+            ]
+        },
         "UserProfileVisibility": {
             "name": "UserProfileVisibility",
             "values": [
@@ -417,5 +683,5 @@ export const schema = {
     },
     "nonModels": {},
     "codegenVersion": "3.3.2",
-    "version": "0b8e64d0b108c52f4bc2b3e1974038c0"
+    "version": "fb4273163a39428cb40db0700054b35b"
 };
