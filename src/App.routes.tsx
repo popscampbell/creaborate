@@ -2,6 +2,7 @@ import { useAuthenticator } from "@aws-amplify/ui-react"
 import { Skeleton } from "@mui/material"
 import TeamStore from "DataStores/TeamDataStore/TeamDataStore"
 import UserProfileDataStore from "DataStores/UserProfileDataStore"
+import useUserProfile from "DataStores/UserProfileDataStore/useUserProfile"
 import {
   AboutPage,
   AdminPage,
@@ -9,7 +10,7 @@ import {
   HomePage,
   NotFoundPage,
   TeamPage,
-  UserProfilePage
+  UserProfilePage,
 } from "Pages"
 import { Navigate, Route, Routes, useSearchParams } from "react-router-dom"
 
@@ -42,8 +43,11 @@ function TeamGuard(props: { children: any }) {
   const teamId = params.get("id")
 
   const { user } = useAuthenticator()
-  const userId = user.username || ""
-  const teamAuthStatus = TeamStore.useTeamAuthStatus(userId, teamId || "")
+  const userProfile = useUserProfile(user.username || "")
+  const teamAuthStatus = TeamStore.useTeamAuthStatus(
+    userProfile?.id || "",
+    teamId || ""
+  )
 
   switch (teamAuthStatus) {
     case "C":
