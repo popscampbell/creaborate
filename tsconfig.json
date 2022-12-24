@@ -1,11 +1,8 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["es5", "dom"], //, "dom.iterable", "esnext"],
+    "types": ["cypress", "node"],
     "baseUrl": "src",
     "allowJs": true,
     "skipLibCheck": true,
@@ -23,7 +20,5 @@
     "useDefineForClassFields": true,
     "outDir": "./build"
   },
-  "include": [
-    "src"
-  ]
+  "include": ["**/*.ts"]
 }
