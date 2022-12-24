@@ -1,33 +1,24 @@
-import { useAuthenticator } from "@aws-amplify/ui-react"
-import { DataStore, Predicates } from "aws-amplify"
-import { Team, TeamMemberStatus } from "models"
+import { DataStore } from "aws-amplify"
+import { Team, TeamMemberStatus, UserProfile } from "models"
 import { useEffect, useState } from "react"
 
-export default function useTeams(all: boolean = false) {
-  const [teams, setTeams] = useState<Team[]>()
-
-  const { user } = useAuthenticator()
+export default function useTeams(userProfile?: UserProfile) {
+  const [teams, setTeams] = useState<Team[]>([])
 
   useEffect(() => {
-    const userId = user.username
-
-    if (userId) {
-      const subscription = all
-        ? DataStore.observeQuery(Team, Predicates.ALL).subscribe((snapshot) =>
-            setTeams(snapshot.items)
-          )
-        : DataStore.observeQuery(Team, (team) =>
-            team.TeamMembers.and((teamMember) => [
-              teamMember.UserProfile.eq(userId),
-              teamMember.Status.eq(TeamMemberStatus.CONFIRMED),
-            ])
-          ).subscribe((snapshot) => setTeams(snapshot.items))
+    if (userProfile) {
+      const sub = DataStore.observeQuery(Team, (team) =>
+        team.TeamMembers.and((teamMember) => [
+          teamMember.UserProfile.eq(userProfile.id),
+          teamMember.Status.eq(TeamMemberStatus.CONFIRMED),
+        ])
+      ).subscribe((snapshot) => setTeams(snapshot.items))
 
       return function cleanup() {
-        subscription && subscription.unsubscribe()
+        sub.unsubscribe()
       }
     }
-  }, [all, user.username])
+  }, [userProfile])
 
   return teams
 }
