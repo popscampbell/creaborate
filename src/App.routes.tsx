@@ -9,13 +9,12 @@ import {
   HomePage,
   NotFoundPage,
   TeamPage,
-  UserProfilePage,
+  UserProfilePage
 } from "Pages"
 import { Navigate, Route, Routes, useSearchParams } from "react-router-dom"
 
 function AuthGuard(props: { children: any }) {
   const authenticator = useAuthenticator()
-  console.log("authenticator:", authenticator)
 
   return (
     <>

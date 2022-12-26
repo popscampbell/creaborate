@@ -48,6 +48,7 @@ export default class TeamDataStore {
         new TeamMember({
           Team: team.id,
           UserProfile: userProfile,
+          teamMemberUserProfileId: userProfile.id,
           Status: TeamMemberStatus.CONFIRMED,
           InvitedByUserProfile: userProfile.id,
           InvitedDateTime: new Date().toISOString(),
@@ -102,27 +103,28 @@ export default class TeamDataStore {
     return this.getTeamMember(team.id, userProfile.id).then((teamMember) =>
       teamMember && teamMember.Status !== TeamMemberStatus.INVITED
         ? DataStore.save(
-            TeamMember.copyOf(teamMember, (updated) => {
-              updated.Status = TeamMemberStatus.INVITED
-              updated.InvitedByUserProfile = invitingUserProfile.id
-              updated.InvitedDateTime = new Date().toISOString()
-              updated.Role = role
-            })
-          ).catch((error) =>
-            Promise.reject(`Error updating existing team member: ${error}`)
-          )
+          TeamMember.copyOf(teamMember, (updated) => {
+            updated.Status = TeamMemberStatus.INVITED
+            updated.InvitedByUserProfile = invitingUserProfile.id
+            updated.InvitedDateTime = new Date().toISOString()
+            updated.Role = role
+          })
+        ).catch((error) =>
+          Promise.reject(`Error updating existing team member: ${error}`)
+        )
         : DataStore.save(
-            new TeamMember({
-              Team: team.id,
-              UserProfile: userProfile,
-              Status: TeamMemberStatus.INVITED,
-              InvitedByUserProfile: invitingUserProfile.id,
-              InvitedDateTime: new Date().toISOString(),
-              Role: role,
-            })
-          ).catch((error) =>
-            Promise.reject(`Error adding new team member: ${error}`)
-          )
+          new TeamMember({
+            Team: team.id,
+            UserProfile: userProfile,
+            teamMemberUserProfileId: userProfile.id,
+            Status: TeamMemberStatus.INVITED,
+            InvitedByUserProfile: invitingUserProfile.id,
+            InvitedDateTime: new Date().toISOString(),
+            Role: role,
+          })
+        ).catch((error) =>
+          Promise.reject(`Error adding new team member: ${error}`)
+        )
     )
   }
 

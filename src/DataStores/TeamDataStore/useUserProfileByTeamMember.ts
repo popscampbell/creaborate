@@ -5,7 +5,7 @@ export default function useUserProfileByTeamMember(teamMember: TeamMember) {
   const [userProfile, setUserProfile] = useState<UserProfile>()
 
   useEffect(() => {
-    teamMember.UserProfile.then((value) => setUserProfile(value))
+    // teamMember.UserProfile.then((value) => setUserProfile(value))
   })
 
   return userProfile

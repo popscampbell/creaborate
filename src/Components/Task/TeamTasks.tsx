@@ -1,24 +1,41 @@
-import { ArrowDownward, Delete, PriorityHigh } from "@mui/icons-material"
-import { Box, IconButton, Paper, TextField, Typography } from "@mui/material"
+import {
+  Add,
+  ArrowDownward,
+  Delete,
+  Edit,
+  PriorityHigh
+} from "@mui/icons-material"
+import {
+  Box,
+  Drawer,
+  IconButton,
+  Paper,
+  TextField,
+  Toolbar,
+  Typography
+} from "@mui/material"
 import { DataGrid, GridValueGetterParams } from "@mui/x-data-grid"
-import { DatePicker, StaticDatePicker } from "@mui/x-date-pickers"
+import { StaticDatePicker } from "@mui/x-date-pickers"
+import TeamMemberName from "Components/Team/TeamMembers/TeamMemberName"
 import TaskDataStore from "DataStores/TaskDataStore"
 import TeamDataStore from "DataStores/TeamDataStore"
-import UserProfileDataStore from "DataStores/UserProfileDataStore"
 import { Task, TaskPriority, TaskStatus, Team } from "models"
 import moment from "moment"
 import { useState } from "react"
+import TaskForm from "./TaskForm"
 
 export default function TeamTasks(props: { team: Team }) {
   const { team } = props
 
-  const teamTasks = TaskDataStore.useTasksByTeam(team, TaskStatus.ACTIVE)
-  const tasks: Task[] = teamTasks?.length > 0 ? [teamTasks[0]] : []
-  //const teamMembers = TeamDataStore.useTeamMembers(team)
-  //const userProfiles = UserProfileDataStore.useUserProfiles()
+  const tasks = TaskDataStore.useTasksByTeam(team, TaskStatus.ACTIVE)
+  const teamMembers = TeamDataStore.useTeamMembers(team)
 
-  // console.log("teamMembers:", teamMembers)
-  // console.log("userProfiles:", userProfiles)
+  function getTaskOwner(task: Task) {
+    return teamMembers.find((teamMember) => teamMember.id === task.taskOwnerId)
+  }
+
+  const [open, setOpen] = useState(false)
+  const [selectedTask, setSelectedTask] = useState<Task>()
 
   function getDate(value?: string) {
     return value ? moment(new Date(value)).fromNow() : "(none)"
@@ -34,27 +51,41 @@ export default function TeamTasks(props: { team: Team }) {
     )
   }
 
-  function TaskOwnerName(props: { task: Task }) {
-    const teamMember = TaskDataStore.useTaskOwnerTeamMember(props.task)
-    //const userProfile = TaskDataStore.useTaskOwnerUserProfile(props.task)
-
-    return <>{teamMember?.id || "(none)"}</>
-  }
-
   const [value, setValue] = useState<any>()
   function handleDueDateChange(value: any) {}
 
-  function handleDeleteTask(id: string) {
-    TaskDataStore.getTask(id).then((task) => TaskDataStore.deleteTask(task))
+  function handleNewTask() {
+    setSelectedTask(undefined)
+    setOpen(true)
   }
+
+  function handleEditTask(id: string) {
+    const task = tasks.find((task) => task.id === id)
+    if (task) {
+      setSelectedTask(task)
+      setOpen(true)
+    }
+  }
+
+  function handleDeleteTask(id: string) {
+    const task = tasks.find((task) => task.id === id)
+    task && TaskDataStore.deleteTask(task)
+  }
+
+  function handleSave() {}
 
   return (
     <Paper variant="outlined">
       <Box padding={2}>
         <Box marginBottom={2}>
-          <Typography variant="h5" marginBottom={1}>
-            Tasks
-          </Typography>
+          <Box display="flex">
+            <Typography variant="h5" marginBottom={1} flexGrow="1">
+              Tasks
+            </Typography>
+            <Toolbar>
+              <IconButton onClick={handleNewTask} children={<Add />} />
+            </Toolbar>
+          </Box>
           {tasks.length > 0 && (
             <Box marginBottom={2} display="flex" height="100%">
               <Box flexGrow={1}>
@@ -70,23 +101,30 @@ export default function TeamTasks(props: { team: Team }) {
                           color="action"
                         />
                       ),
-                      renderCell: (params) => (
-                        <PriorityIcon task={params.row} />
-                      ),
+                      renderCell: (params) => <PriorityIcon task={params.row} />
                     },
                     {
                       flex: 2,
                       field: "Name",
                       headerName: "Task",
-                      editable: true,
+                      editable: true
                     },
                     {
                       flex: 1,
                       field: "Owner",
                       headerName: "Owner",
-                      renderCell: (params) => (
-                        <TaskOwnerName task={params.row} />
-                      ),
+                      renderCell: (params) => {
+                        const taskOwner = getTaskOwner(params.row)
+                        return (
+                          <Typography
+                            children={
+                              taskOwner && (
+                                <TeamMemberName teamMember={taskOwner} />
+                              )
+                            }
+                          />
+                        )
+                      }
                     },
                     {
                       flex: 1,
@@ -107,22 +145,29 @@ export default function TeamTasks(props: { team: Team }) {
                             renderInput={(params) => <TextField {...params} />}
                           />
                         )
-                      },
+                      }
                     },
                     {
                       field: "id",
                       renderCell: (params) => {
                         return (
-                          <IconButton
-                            onClick={() => handleDeleteTask(params.row.id)}
-                          >
-                            <Delete />
-                          </IconButton>
+                          <Toolbar>
+                            <IconButton
+                              onClick={() => handleEditTask(params.row.id)}
+                            >
+                              <Edit />
+                            </IconButton>
+                            <IconButton
+                              onClick={() => handleDeleteTask(params.row.id)}
+                            >
+                              <Delete />
+                            </IconButton>
+                          </Toolbar>
                         )
-                      },
-                    },
+                      }
+                    }
                   ]}
-                  rows={teamTasks}
+                  rows={tasks}
                   pageSize={5}
                   rowsPerPageOptions={[5]}
                   autoHeight
@@ -130,10 +175,20 @@ export default function TeamTasks(props: { team: Team }) {
               </Box>
             </Box>
           )}
-          {teamTasks.length === 0 && (
+          {tasks.length === 0 && (
             <Typography>There are no tasks yet.</Typography>
           )}
         </Box>
+        <Drawer anchor="left" open={open} onClose={() => setOpen(false)}>
+          <Box margin={2}>
+            <TaskForm
+              team={team}
+              task={selectedTask}
+              onSave={() => setOpen(false)}
+              onCancel={() => setOpen(false)}
+            />
+          </Box>
+        </Drawer>
       </Box>
     </Paper>
   )

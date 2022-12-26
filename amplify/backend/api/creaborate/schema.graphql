@@ -2,7 +2,7 @@ enum RecurrenceFrequency {
   DAILY
   WEEKLY
   MONTHLY
-  ANNULLY
+  ANNUALLY
 }
 
 type Recurrence {
@@ -17,42 +17,42 @@ type Recurrence {
   IsSunday: Boolean!
 }
 
-type EventImage @model @auth(rules: [{allow: public}]) {
+type EventImage @model @auth(rules: [{ allow: public }]) {
   id: ID!
   Event: ID! @index(name: "byEvent")
   Image: Image! @hasOne
   IsPrimary: Boolean!
 }
 
-type AssetImage @model @auth(rules: [{allow: public}]) {
+type AssetImage @model @auth(rules: [{ allow: public }]) {
   id: ID!
   Asset: ID! @index(name: "byAsset")
   Image: Image! @hasOne
   IsPrimary: Boolean!
 }
 
-type LocationImage @model @auth(rules: [{allow: public}]) {
+type LocationImage @model @auth(rules: [{ allow: public }]) {
   id: ID!
   Image: Image! @hasOne
   Location: ID! @index(name: "byLocation")
   IsPrimary: Boolean!
 }
 
-type Image @model @auth(rules: [{allow: public}]) {
+type Image @model @auth(rules: [{ allow: public }]) {
   id: ID!
   File: String!
   Caption: String
   Detail: String
 }
 
-type Asset @model @auth(rules: [{allow: public}]) {
+type Asset @model @auth(rules: [{ allow: public }]) {
   id: ID!
   Name: String!
   AssetImages: [AssetImage] @hasMany(indexName: "byAsset", fields: ["id"])
   Description: String
 }
 
-type Expense @model @auth(rules: [{allow: public}]) {
+type Expense @model @auth(rules: [{ allow: public }]) {
   id: ID!
   Name: String!
   Description: String
@@ -62,7 +62,7 @@ type Expense @model @auth(rules: [{allow: public}]) {
   Recurrence: Recurrence
 }
 
-type Location @model @auth(rules: [{allow: public}]) {
+type Location @model @auth(rules: [{ allow: public }]) {
   id: ID!
   Name: String!
   Address: String
@@ -70,10 +70,11 @@ type Location @model @auth(rules: [{allow: public}]) {
   Phone: AWSPhone
   ContactEmail: AWSEmail
   ContactName: String
-  LocationImages: [LocationImage] @hasMany(indexName: "byLocation", fields: ["id"])
+  LocationImages: [LocationImage]
+    @hasMany(indexName: "byLocation", fields: ["id"])
 }
 
-type Event @model @auth(rules: [{allow: public}]) {
+type Event @model @auth(rules: [{ allow: public }]) {
   id: ID!
   Team: ID! @index(name: "byTeam")
   Name: String!
@@ -90,7 +91,7 @@ enum ProjectMilestoneStatus {
   CLOSED
 }
 
-type ProjectMilestone @model @auth(rules: [{allow: public}]) {
+type ProjectMilestone @model @auth(rules: [{ allow: public }]) {
   id: ID!
   Project: ID! @index(name: "byProject")
   Name: String!
@@ -105,18 +106,19 @@ enum ProjectStatus {
   CANCELED
 }
 
-type Project @model @auth(rules: [{allow: public}]) {
+type Project @model @auth(rules: [{ allow: public }]) {
   id: ID!
   Team: ID! @index(name: "byTeam")
   Name: String!
-  Descript: String
+  Description: String
   Status: ProjectStatus!
-  ProjectMilestones: [ProjectMilestone] @hasMany(indexName: "byProject", fields: ["id"])
+  ProjectMilestones: [ProjectMilestone]
+    @hasMany(indexName: "byProject", fields: ["id"])
   StartDate: AWSDate
   EndDate: AWSDate
 }
 
-type TaskComment @model @auth(rules: [{allow: public}]) {
+type TaskComment @model @auth(rules: [{ allow: public }]) {
   id: ID!
   Task: ID! @index(name: "byTask")
   Comment: String!
@@ -136,7 +138,7 @@ enum TaskStatus {
   ARCHIVED
 }
 
-type Task @model @auth(rules: [{allow: public}]) {
+type Task @model @auth(rules: [{ allow: public }]) {
   id: ID!
   Team: ID! @index(name: "byTeam")
   Name: String!
@@ -177,7 +179,7 @@ enum TeamMemberRole {
   MEMBER
 }
 
-type TeamMember @model @auth(rules: [{allow: public}]) {
+type TeamMember @model @auth(rules: [{ allow: public }]) {
   id: ID!
   Team: ID! @index(name: "byTeam")
   Role: TeamMemberRole!
@@ -188,7 +190,7 @@ type TeamMember @model @auth(rules: [{allow: public}]) {
   DeclinedDateTime: AWSDateTime
   DepartedDateTime: AWSDateTime
   DepartedComment: String
-  UserProfile: UserProfile @hasOne
+  UserProfile: UserProfile! @hasOne
 }
 
 enum TeamType {
@@ -197,7 +199,7 @@ enum TeamType {
   GROUP
 }
 
-type Team @model @auth(rules: [{allow: public}]) {
+type Team @model @auth(rules: [{ allow: public }]) {
   id: ID!
   Name: String!
   TeamType: TeamType!
@@ -209,7 +211,7 @@ type Team @model @auth(rules: [{allow: public}]) {
   Events: [Event] @hasMany(indexName: "byTeam", fields: ["id"])
 }
 
-type UserProfile @model @auth(rules: [{allow: public}]) {
+type UserProfile @model @auth(rules: [{ allow: public }]) {
   Visibility: UserProfileVisibility!
   Username: String!
   Name: String!
@@ -220,4 +222,3 @@ type UserProfile @model @auth(rules: [{allow: public}]) {
   Location: String
   id: ID!
 }
- 

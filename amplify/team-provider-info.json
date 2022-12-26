@@ -53,6 +53,12 @@
     "categories": {
       "auth": {
         "creaborate": {}
+      },
+      "api": {
+        "creaborate": {}
+      },
+      "storage": {
+        "s3creaboratestoragecf167f6b": {}
       }
     }
   }

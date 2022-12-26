@@ -560,10 +560,10 @@ type EagerTeamMember = {
   readonly DeclinedDateTime?: string | null;
   readonly DepartedDateTime?: string | null;
   readonly DepartedComment?: string | null;
-  readonly UserProfile?: UserProfile | null;
+  readonly UserProfile: UserProfile;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
-  readonly teamMemberUserProfileId?: string | null;
+  readonly teamMemberUserProfileId: string;
 }
 
 type LazyTeamMember = {
@@ -581,10 +581,10 @@ type LazyTeamMember = {
   readonly DeclinedDateTime?: string | null;
   readonly DepartedDateTime?: string | null;
   readonly DepartedComment?: string | null;
-  readonly UserProfile: AsyncItem<UserProfile | undefined>;
+  readonly UserProfile: AsyncItem<UserProfile>;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
-  readonly teamMemberUserProfileId?: string | null;
+  readonly teamMemberUserProfileId: string;
 }
 
 export declare type TeamMember = LazyLoading extends LazyLoadingDisabled ? EagerTeamMember : LazyTeamMember

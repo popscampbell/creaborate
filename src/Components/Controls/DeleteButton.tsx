@@ -1,10 +1,12 @@
+import { Delete } from "@mui/icons-material"
 import {
   Button,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogContentText,
-  DialogActions
+  DialogActions,
+  IconButton
 } from "@mui/material"
 import { DataStore } from "aws-amplify"
 import { useState } from "react"
@@ -14,8 +16,9 @@ export default function DeleteButton(props: {
   item: any
   itemType: string
   onDelete?: () => void
+  icon?: boolean
 }) {
-  const { item, itemType, onDelete } = props
+  const { item, itemType, onDelete, icon } = props
 
   const navigate = useNavigate()
 
@@ -34,19 +37,20 @@ export default function DeleteButton(props: {
     item &&
       DataStore.delete(item).then(() => {
         onDelete && onDelete()
-        navigate("/dashboard")
       })
   }
 
   return (
     <>
-      <Button
-        title={`Delete project "${item.name}"`}
-        onClick={handleClickOpen}
-        variant="outlined"
-      >
-        Delete
-      </Button>
+      {icon && <IconButton onClick={handleClickOpen} children={<Delete />} />}
+      {!icon && (
+        <Button
+          title={`Delete project "${item.name}"`}
+          onClick={handleClickOpen}
+          variant="outlined"
+          children="Delete"
+        />
+      )}
       <Dialog
         open={open}
         onClose={handleClose}

@@ -5,6 +5,7 @@ import { teamMemberRoleLabels } from "Labels/enumLabels"
 import { TeamMember, TeamMemberRole } from "models"
 import { useState } from "react"
 import EditTeamMemberDialog from "./EditTeamMemberDialog"
+import TeamMemberName from "./TeamMemberName"
 
 export function TeamMemberChip(props: {
   teamMember: TeamMember
@@ -14,8 +15,6 @@ export function TeamMemberChip(props: {
   short?: boolean
 }) {
   const { teamMember, onChanged, onDelete, editable, short } = props
-
-  const userProfile = TeamDataStore.useUserProfileByTeamMember(teamMember)
 
   const [open, setOpen] = useState(false)
 
@@ -32,7 +31,7 @@ export function TeamMemberChip(props: {
   return (
     <>
       <Chip
-        label={`${short ? userProfile?.Name.split(" ")[0] : userProfile?.Name}`}
+        label={<TeamMemberName teamMember={teamMember} />}
         onClick={editable ? () => setOpen(true) : undefined}
         onDelete={editable && onDelete ? () => onDelete(teamMember) : undefined}
         color="primary"

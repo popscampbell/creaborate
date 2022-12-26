@@ -36,7 +36,7 @@
     "files.insertFinalNewline": false
   },
   "editor.renderFinalNewline": false,
-  "cSpell.words": ["Creaborate"],
+  "cSpell.words": ["AWSURL", "Creaborate"],
   "search.exclude": {
     "**/node_modules": false,
     "**/node_modules_suspended": true

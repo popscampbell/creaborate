@@ -53,14 +53,14 @@ export default class TaskDataStore {
       .then((t) => this.deleteTask(t))
   }
 
-  static updateTask(
+  static async updateTask(
     task: Task,
     properties: {
       name?: string
       status?: TaskStatus
       priority?: TaskPriority
       description?: string
-      owner?: TeamMember
+      ownerId?: string
       dueDate?: Date
       startDate?: Date
       completedByTeamMember?: string
@@ -72,12 +72,16 @@ export default class TaskDataStore {
       status,
       priority,
       description,
-      owner,
+      ownerId,
       dueDate,
       startDate,
       completedByTeamMember,
       completedDate,
     } = properties
+
+    const owner = await DataStore.query(TeamMember, (teamMember) =>
+      teamMember.id.eq(ownerId || "")
+    ).then(teamMembers => teamMembers.length > 0 && teamMembers[0] || undefined)
 
     return DataStore.save(
       Task.copyOf(task, (updated) => {
@@ -85,7 +89,7 @@ export default class TaskDataStore {
         if (status) updated.Status = status
         if (priority) updated.Priority = priority
         if (description) updated.Description = description
-        if (owner) updated.Owner = owner
+        if (ownerId) updated.Owner = owner
         if (dueDate) updated.DueDate = dueDate.toISOString()
         if (startDate) updated.StartDate = startDate.toISOString()
         if (completedByTeamMember)

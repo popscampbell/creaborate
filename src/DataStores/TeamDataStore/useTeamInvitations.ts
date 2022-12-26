@@ -12,9 +12,8 @@ export default function useTeamInvitations(team: Team) {
         teamMember.Team.eq(team.id),
         teamMember.Status.eq(TeamMemberStatus.INVITED),
       ])
-    ).subscribe((snapshot) => {
-      setInvitations(snapshot.items)
-    })
+    ).subscribe((snapshot) => setInvitations(snapshot.items))
+
 
     return function cleanup() {
       subscription && subscription.unsubscribe()

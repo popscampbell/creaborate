@@ -1,5 +1,6 @@
 import {
   TaskPriority,
+  TaskStatus,
   TeamMemberRole,
   TeamMemberStatus,
   TeamType,
@@ -14,7 +15,13 @@ const taskPriorityLabels = {
   [TaskPriority.LOW]: "Low",
 }
 
-export { taskPriorityLabels }
+const taskStatusLabels = {
+  [TaskStatus.ACTIVE]: "Active",
+  [TaskStatus.ARCHIVED]: "Archived",
+  [TaskStatus.CLOSED]: "Closed",
+}
+
+export { taskPriorityLabels, taskStatusLabels }
 
 // Team enums
 const teamTypeLabels = {
