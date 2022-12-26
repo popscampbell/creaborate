@@ -4,11 +4,10 @@ import { Team, TeamMember } from "models"
 import AddTeamMemberDialog from "./AddTeamMemberDialog"
 import { TeamMemberChip } from "./TeamMemberChip"
 
-export default function TeamMembers(props: { team: Team }) {
-  const { team } = props
+export default function TeamMembers(props: { team: Team; editable?: boolean }) {
+  const { team, editable } = props
 
   const teamMembers = TeamDataStore.useTeamMembers(team)
-  const invitations = TeamDataStore.useTeamInvitations(team)
 
   function handleRemoveTeamMember(teamMember: TeamMember) {
     TeamDataStore.removeTeamMember(teamMember)
@@ -27,7 +26,8 @@ export default function TeamMembers(props: { team: Team }) {
                 <Box key={member.id} display="inline" marginRight={1}>
                   <TeamMemberChip
                     teamMember={member}
-                    onDelete={handleRemoveTeamMember}
+                    onDelete={editable ? handleRemoveTeamMember : undefined}
+                    editable
                   />
                 </Box>
               ))}
@@ -36,25 +36,8 @@ export default function TeamMembers(props: { team: Team }) {
           {teamMembers.length === 0 && (
             <Typography>There are no team members yet.</Typography>
           )}
-          <AddTeamMemberDialog team={team} />
+          {editable && <AddTeamMemberDialog team={team} />}
         </Box>
-        {invitations.length > 0 && (
-          <Box>
-            <Typography variant="h5" marginBottom={1}>
-              Invitations
-            </Typography>
-            <Box>
-              {invitations.map((invitation) => (
-                <Box key={invitation.id} display="inline" marginRight={1}>
-                  <TeamMemberChip
-                    teamMember={invitation}
-                    onDelete={handleRemoveTeamMember}
-                  />
-                </Box>
-              ))}
-            </Box>
-          </Box>
-        )}
       </Box>
     </Paper>
   )

@@ -12,9 +12,9 @@ import {
 } from "@mui/material"
 import TeamDataStore from "DataStores/TeamDataStore/TeamDataStore"
 import UserProfileDataStore from "DataStores/UserProfileDataStore"
+import { teamTypeLabels } from "Labels/enumLabels"
 import { Team, TeamMemberRole, UserProfile } from "models"
 import { useState } from "react"
-import { TeamUtilities } from "Utilities"
 import TeamMemberRoleControl from "./TeamMemberRoleControl"
 
 const defaultRole = TeamMemberRole.MEMBER
@@ -35,8 +35,6 @@ export default function AddTeamMemberDialog(props: { team: Team }) {
     UserProfileDataStore.useUserProfilesByNameSearch(inputValue)
   const teamMembers = TeamDataStore.useTeamMembers(team)
 
-  const teamTypeLabel = TeamUtilities.TeamTypeLabel(team.TeamType || "", true)
-
   function handleAdd() {
     value &&
       currentUserProfile &&
@@ -55,13 +53,15 @@ export default function AddTeamMemberDialog(props: { team: Team }) {
   return (
     <>
       <Button onClick={() => setOpen(true)} variant="outlined">
-        Invite someone to join your {teamTypeLabel}
+        Invite someone to join your{" "}
+        {teamTypeLabels[team.TeamType].toLowerCase()}
       </Button>
       <Dialog open={open}>
         <DialogTitle>Invite</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Invite someone to join your {teamTypeLabel}.
+            Invite someone to join your{" "}
+            {teamTypeLabels[team.TeamType].toLowerCase()}.
           </DialogContentText>
           <Autocomplete
             value={value}

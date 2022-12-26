@@ -2,9 +2,9 @@ import { Add } from "@mui/icons-material"
 import { ListItemButton, ListItemText } from "@mui/material"
 import { CreateTeamDialog } from "Components/Team"
 import TeamDataStore from "DataStores/TeamDataStore/TeamDataStore"
-import { LazyTeam, TeamType, UserProfile } from "models"
+import { teamTypeLabels } from "Labels/enumLabels"
+import { LazyTeam, UserProfile } from "models"
 import { useNavigate } from "react-router-dom"
-import { TeamUtilities } from "Utilities"
 import ListWidget from "./ListWidget"
 
 export default function TeamsWidget(props: { userProfile: UserProfile }) {
@@ -38,8 +38,12 @@ export default function TeamsWidget(props: { userProfile: UserProfile }) {
   }
 
   function secondary(team: LazyTeam) {
-    const typeLabel = TeamUtilities.TeamTypeLabel(team.TeamType as TeamType)
-    return <ListItemText secondary={typeLabel} sx={{ textAlign: "end" }} />
+    return (
+      <ListItemText
+        secondary={teamTypeLabels[team.TeamType]}
+        sx={{ textAlign: "end" }}
+      />
+    )
   }
 
   return (

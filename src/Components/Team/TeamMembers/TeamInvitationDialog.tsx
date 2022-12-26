@@ -5,13 +5,12 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle
+  DialogTitle,
 } from "@mui/material"
 import TeamDataStore from "DataStores/TeamDataStore/TeamDataStore"
 import UserProfileDataStore from "DataStores/UserProfileDataStore"
-import { Team, TeamMember, TeamType } from "models"
-import { useState } from "react"
-import { TeamUtilities } from "Utilities"
+import { teamTypeLabels } from "Labels/enumLabels"
+import { Team, TeamMember } from "models"
 
 export default function TeamInvitationDialog(props: {
   open: boolean
@@ -24,15 +23,6 @@ export default function TeamInvitationDialog(props: {
 
   const invitedByUserProfile = UserProfileDataStore.useUserProfileById(
     invitation.InvitedByUserProfile
-  )
-
-  const typeLabel = TeamUtilities.TeamTypeLabel(team.TeamType as TeamType, true)
-
-  const [message, setMessage] = useState(
-    `Someone has invited you to join their ${typeLabel}, "${team.Name}".`
-  )
-  setMessage(
-    `${invitedByUserProfile?.Name} has invited you to join their ${typeLabel}, "${team.Name}".`
   )
 
   function handleAccept() {
@@ -48,13 +38,17 @@ export default function TeamInvitationDialog(props: {
     <Dialog open={open}>
       <DialogTitle>Invitation to join {team.Name}</DialogTitle>
       <DialogContent>
-        <DialogContentText>{message}</DialogContentText>
+        <DialogContentText>{`${
+          invitedByUserProfile?.Name || "Someone"
+        } has invited you to join their ${teamTypeLabels[
+          team.TeamType
+        ].toLowerCase()}, "${team.Name}".`}</DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button color="primary" onClick={handleDecline} startIcon={<ThumbUp />}>
+        <Button color="primary" onClick={handleAccept} startIcon={<ThumbUp />}>
           Accept
         </Button>
-        <Button onClick={handleAccept} startIcon={<ThumbDown />}>
+        <Button onClick={handleDecline} startIcon={<ThumbDown />}>
           Decline
         </Button>
       </DialogActions>

@@ -7,7 +7,7 @@ import {
 } from "@mui/material"
 import { TeamVisibility } from "models"
 import { ChangeEvent, useState } from "react"
-import { TeamUtilities } from "Utilities"
+import { teamVisibilityLabels } from "Labels/enumLabels"
 
 export default function TeamVisibilityControl(props: {
   visibility: TeamVisibility
@@ -36,12 +36,12 @@ export default function TeamVisibilityControl(props: {
         <FormControlLabel
           value={TeamVisibility.PRIVATE}
           control={<Radio />}
-          label={TeamUtilities.TeamVisibilityLabel(TeamVisibility.PRIVATE)}
+          label={teamVisibilityLabels[TeamVisibility.PRIVATE]}
         />
         <FormControlLabel
           value={TeamVisibility.PUBLIC}
           control={<Radio />}
-          label={TeamUtilities.TeamVisibilityLabel(TeamVisibility.PUBLIC)}
+          label={teamVisibilityLabels[TeamVisibility.PUBLIC]}
         />
       </RadioGroup>
     </FormControl>

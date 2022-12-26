@@ -6,9 +6,9 @@ import {
   FormControlLabel,
   Typography,
 } from "@mui/material"
+import { userProfileVisibilityLabels } from "Labels/enumLabels"
 import { UserProfileVisibility } from "models"
 import { ChangeEvent, useState } from "react"
-import { UserProfileUtilities } from "Utilities"
 
 export default function UserProfileVisibilityControl(props: {
   visibility: UserProfileVisibility
@@ -37,16 +37,12 @@ export default function UserProfileVisibilityControl(props: {
         <FormControlLabel
           value={UserProfileVisibility.PRIVATE}
           control={<Radio />}
-          label={UserProfileUtilities.UserProfileVisibilityLabel(
-            UserProfileVisibility.PRIVATE
-          )}
+          label={userProfileVisibilityLabels[UserProfileVisibility.PRIVATE]}
         />
         <FormControlLabel
           value={UserProfileVisibility.PUBLIC}
           control={<Radio />}
-          label={UserProfileUtilities.UserProfileVisibilityLabel(
-            UserProfileVisibility.PUBLIC
-          )}
+          label={userProfileVisibilityLabels[UserProfileVisibility.PUBLIC]}
         />
       </RadioGroup>
       <Typography children="You will be visible to other users on Creaborate if your profile is public." />

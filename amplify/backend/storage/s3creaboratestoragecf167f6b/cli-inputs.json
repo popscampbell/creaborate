@@ -1,0 +1,12 @@
+{
+  "resourceName": "s3creaboratestoragecf167f6b",
+  "bucketName": "creaborate-storage-cf167f6b",
+  "policyUUID": "0e41ce40",
+  "storageAccess": "auth",
+  "guestAccess": [],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ]
+}

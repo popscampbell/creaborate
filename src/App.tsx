@@ -8,6 +8,7 @@ import AppRoutes from "App.routes"
 import useStyles from "App.styles"
 import awsexports from "./aws-exports"
 import { Amplify, Auth } from "aws-amplify"
+import HeaderBar from "Components/Header/HeaderBar"
 
 export default function App() {
   const classes = useStyles()

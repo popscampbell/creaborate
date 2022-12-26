@@ -2,9 +2,9 @@ import { ListItemButton, ListItemText } from "@mui/material"
 import { DataStore } from "aws-amplify"
 import TeamInvitationDialog from "Components/Team/TeamMembers/TeamInvitationDialog"
 import TeamDataStore from "DataStores/TeamDataStore/TeamDataStore"
-import { TeamMember, TeamMemberRole, UserProfile } from "models"
+import { teamMemberRoleLabels } from "Labels/enumLabels"
+import { TeamMember, UserProfile } from "models"
 import { useState } from "react"
-import { TeamMemberUtilities } from "Utilities"
 import ListWidget from "./ListWidget"
 
 export default function TeamInvitationsWidget(props: {
@@ -50,9 +50,7 @@ export default function TeamInvitationsWidget(props: {
   function secondary(invitation: TeamMember) {
     return (
       <ListItemText
-        secondary={TeamMemberUtilities.TeamMemberRoleLabel(
-          invitation.Role as TeamMemberRole
-        )}
+        secondary={teamMemberRoleLabels[invitation.Role]}
         sx={{ textAlign: "end" }}
       />
     )

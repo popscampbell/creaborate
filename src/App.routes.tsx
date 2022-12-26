@@ -14,9 +14,21 @@ import {
 import { Navigate, Route, Routes, useSearchParams } from "react-router-dom"
 
 function AuthGuard(props: { children: any }) {
-  const { authStatus } = useAuthenticator()
+  const authenticator = useAuthenticator()
+  console.log("authenticator:", authenticator)
 
-  return authStatus === "authenticated" ? props.children : <Navigate to="/" />
+  return (
+    <>
+      {authenticator.authStatus === "configuring" &&
+        (authenticator.route === "forceNewPassword" ||
+          authenticator.route === "setup") &&
+        props.children}
+      {authenticator.authStatus === "configuring" &&
+        authenticator.route !== "setup" && <Skeleton />}
+      {authenticator.authStatus === "authenticated" && props.children}
+      {authenticator.authStatus === "unauthenticated" && <Navigate to="/" />}
+    </>
+  )
 }
 
 function UserProfileGuard(props: { children: any }) {
@@ -25,58 +37,44 @@ function UserProfileGuard(props: { children: any }) {
     authenticator.user?.username || ""
   )
 
-  if (authenticator.authStatus !== "authenticated") return props.children
-
-  switch (hasUserProfile) {
-    case "C":
-      return <Skeleton variant="rectangular" />
-    case "N":
-      return <Navigate to="/userProfile" />
-    default:
-      return props.children
-  }
+  return (
+    <>
+      {(authenticator.authStatus === "configuring" ||
+        hasUserProfile === "C") && <Skeleton />}
+      {hasUserProfile === "Y" && props.children}
+      {hasUserProfile === "N" && <Navigate to="/userProfile" />}
+    </>
+  )
 }
 
 function TeamGuard(props: { children: any }) {
   const [params] = useSearchParams()
   const teamId = params.get("id")
 
-  const { user } = useAuthenticator()
-  const userProfile = UserProfileDataStore.useUserProfile(user?.username || "")
+  const authenticator = useAuthenticator()
+  const userProfile = UserProfileDataStore.useUserProfile(
+    authenticator.user?.username || ""
+  )
   const teamAuthStatus = TeamStore.useTeamAuthStatus(
     userProfile?.id || "",
     teamId || ""
   )
 
-  switch (teamAuthStatus) {
-    case "C":
-      return <Skeleton variant="rectangular" />
-    case "N":
-      return <Navigate to="/dashboard" />
-    default:
-      return props.children
-  }
+  return (
+    <>
+      {(authenticator.authStatus === "configuring" ||
+        teamAuthStatus === "C") && <Skeleton />}
+      {teamAuthStatus === "Y" && props.children}
+      {teamAuthStatus === "N" && <Navigate to="/dashboard" />}
+    </>
+  )
 }
 
 export default function AppRoutes() {
   return (
     <Routes>
-      <Route
-        index
-        element={
-          <UserProfileGuard>
-            <HomePage />
-          </UserProfileGuard>
-        }
-      />
-      <Route
-        path="about"
-        element={
-          <UserProfileGuard>
-            <AboutPage />
-          </UserProfileGuard>
-        }
-      />
+      <Route index element={<HomePage />} />
+      <Route path="about" element={<AboutPage />} />
       <Route
         path="admin"
         element={

@@ -1,18 +1,19 @@
+import { LocalPolice } from "@mui/icons-material"
 import { Chip } from "@mui/material"
 import TeamDataStore from "DataStores/TeamDataStore/TeamDataStore"
-import UserProfileDataStore from "DataStores/UserProfileDataStore"
-import { TeamMember, TeamMemberRole, UserProfile } from "models"
-import { useEffect, useState } from "react"
-import { TeamMemberUtilities, UserProfileUtilities } from "Utilities"
+import { teamMemberRoleLabels } from "Labels/enumLabels"
+import { TeamMember, TeamMemberRole } from "models"
+import { useState } from "react"
 import EditTeamMemberDialog from "./EditTeamMemberDialog"
 
 export function TeamMemberChip(props: {
   teamMember: TeamMember
   onDelete?: (teamMember: TeamMember) => void
   onChanged?: () => void
+  editable?: boolean
   short?: boolean
 }) {
-  const { teamMember, onChanged, onDelete, short } = props
+  const { teamMember, onChanged, onDelete, editable, short } = props
 
   const userProfile = TeamDataStore.useUserProfileByTeamMember(teamMember)
 
@@ -28,22 +29,21 @@ export function TeamMemberChip(props: {
     })
   }
 
-  const roleLabel = TeamMemberUtilities.TeamMemberRoleLabel(
-    teamMember.Role,
-    true
-  )
-
-  const shortName =
-    userProfile && UserProfileUtilities.getShortName(userProfile)
-
   return (
     <>
       <Chip
-        label={`${short ? shortName : userProfile?.Name} (${roleLabel})`}
-        onClick={() => setOpen(true)}
-        onDelete={() => onDelete && onDelete(teamMember)}
+        label={`${short ? userProfile?.Name.split(" ")[0] : userProfile?.Name}`}
+        onClick={editable ? () => setOpen(true) : undefined}
+        onDelete={editable && onDelete ? () => onDelete(teamMember) : undefined}
         color="primary"
         variant="outlined"
+        icon={
+          teamMember.Role === TeamMemberRole.ADMINISTRATOR ? (
+            <LocalPolice titleAccess={teamMemberRoleLabels[teamMember.Role]} />
+          ) : (
+            <></>
+          )
+        }
       />
       <EditTeamMemberDialog
         teamMember={teamMember}

@@ -7,7 +7,7 @@ export default function useUserProfileById(id: string) {
 
   useEffect(() => {
     const subscription = DataStore.observe(UserProfile, id).subscribe(
-      message => setUserProfile(message.element)
+      (message) => setUserProfile(message.element)
     )
 
     return function cleanup() {

@@ -2,7 +2,7 @@ import { DataStore } from "aws-amplify"
 import { TeamMemberStatus, TeamMember, UserProfile } from "models"
 import { useEffect, useState } from "react"
 
-export default function useTeamInvitations(userProfile: UserProfile) {
+export default function useUserInvitations(userProfile: UserProfile) {
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([])
 
   useEffect(() => {

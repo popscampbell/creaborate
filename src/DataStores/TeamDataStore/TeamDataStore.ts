@@ -11,6 +11,7 @@ import {
 import useTeam from "./useTeam"
 import useTeamAuthStatus from "./useTeamAuthStatus"
 import useTeamInvitations from "./useTeamInvitations"
+import useTeamMember from "./useTeamMember"
 import useTeamMemberRole from "./useTeamMemberRole"
 import useTeamMembers from "./useTeamMembers"
 import useTeams from "./useTeamsByUserProfile"
@@ -22,6 +23,7 @@ export default class TeamDataStore {
   static useTeamAuthStatus = useTeamAuthStatus
   static useTeamInvitations = useTeamInvitations
   static useTeamMemberRole = useTeamMemberRole
+  static useTeamMember = useTeamMember
   static useTeamMembers = useTeamMembers
   static useTeams = useTeams
   static useUserInvitations = useUserInvitations

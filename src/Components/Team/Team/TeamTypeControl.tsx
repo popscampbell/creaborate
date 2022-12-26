@@ -5,9 +5,9 @@ import {
   RadioGroup,
   FormControlLabel,
 } from "@mui/material"
+import { teamTypeLabels } from "Labels/enumLabels"
 import { TeamType } from "models"
 import { ChangeEvent, useState } from "react"
-import { TeamUtilities } from "Utilities"
 
 export default function TeamTypeControl(props: {
   teamType: TeamType
@@ -36,17 +36,17 @@ export default function TeamTypeControl(props: {
         <FormControlLabel
           value={TeamType.BAND}
           control={<Radio />}
-          label={TeamUtilities.TeamTypeLabel(TeamType.BAND)}
+          label={teamTypeLabels[TeamType.BAND]}
         />
         <FormControlLabel
           value={TeamType.TEAM}
           control={<Radio />}
-          label={TeamUtilities.TeamTypeLabel(TeamType.TEAM)}
+          label={teamTypeLabels[TeamType.TEAM]}
         />
         <FormControlLabel
           value={TeamType.GROUP}
           control={<Radio />}
-          label={TeamUtilities.TeamTypeLabel(TeamType.GROUP)}
+          label={teamTypeLabels[TeamType.GROUP]}
         />
       </RadioGroup>
     </FormControl>

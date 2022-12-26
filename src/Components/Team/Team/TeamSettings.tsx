@@ -3,6 +3,7 @@ import { DeleteButton } from "Components/Controls"
 import TeamDataStore from "DataStores/TeamDataStore/TeamDataStore"
 import { Team, TeamType } from "models"
 import { useState } from "react"
+import TeamInvitations from "../TeamMembers/TeamInvitations"
 import TeamMembers from "../TeamMembers/TeamMembers"
 import TeamTypeControl from "./TeamTypeControl"
 
@@ -12,6 +13,8 @@ export default function TeamSettings(props: {
   onCancel: () => void
 }) {
   const { team, onSave, onCancel } = props
+
+  const teamInvitations = TeamDataStore.useTeamInvitations(team)
 
   const [name, setName] = useState(team.Name)
   const [description, setDescription] = useState(team.Description || "")
@@ -49,8 +52,13 @@ export default function TeamSettings(props: {
         />
       </Box>
       <Box marginBottom={2}>
-        <TeamMembers team={team} />
+        <TeamMembers team={team} editable />
       </Box>
+      {teamInvitations.length > 0 && (
+        <Box marginBottom={2}>
+          <TeamInvitations team={team} editable />
+        </Box>
+      )}
       <Container sx={{ display: "flex", alignContent: "end" }}>
         <Button
           onClick={() => {

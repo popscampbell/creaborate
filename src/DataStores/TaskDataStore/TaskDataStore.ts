@@ -1,6 +1,8 @@
-import { DataStore } from "aws-amplify"
+import { DataStore, Predicates } from "aws-amplify"
 import { Task, TaskPriority, TaskStatus, Team, TeamMember } from "models"
 import useTask from "./useTask"
+import useTaskOwnerTeamMember from "./useTaskOwnerTeamMember"
+import useTaskOwnerUserProfile from "./useTaskOwnerUserProfile"
 import useTasksByProject from "./useTasksByProject"
 import useTasksByProjectMilestone from "./useTasksByProjectMilestone"
 import useTasksByTeam from "./useTasksByTeam"
@@ -14,6 +16,8 @@ export default class TaskDataStore {
   static useTasksByTeam = useTasksByTeam
   static useTasksByTeamMember = useTasksByTeamMember
   static useTasksByUserProfile = useTasksByUserProfile
+  static useTaskOwnerTeamMember = useTaskOwnerTeamMember
+  static useTaskOwnerUserProfile = useTaskOwnerUserProfile
 
   static async createTask(
     team: Team,
@@ -43,7 +47,13 @@ export default class TaskDataStore {
     )
   }
 
-  updateTask(
+  static getTask(id: string) {
+    return DataStore.query(Task, (task) => task.id.eq(id))
+      .then((tasks) => tasks[0])
+      .then((t) => this.deleteTask(t))
+  }
+
+  static updateTask(
     task: Task,
     properties: {
       name?: string
@@ -85,7 +95,11 @@ export default class TaskDataStore {
     )
   }
 
-  deleteTask(task: Task) {
+  static deleteTask(task: Task) {
     return DataStore.delete(task)
+  }
+
+  static truncateTasks() {
+    return DataStore.delete(Task, Predicates.ALL)
   }
 }
