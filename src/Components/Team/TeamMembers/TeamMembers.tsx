@@ -1,43 +1,100 @@
-import { Box, Paper, Typography } from "@mui/material"
+import { LocalPolice } from "@mui/icons-material"
+import { Box, Chip, Paper, Typography } from "@mui/material"
+import { DataStore } from "aws-amplify"
+import ChipSet from "Components/Controls/ChipSet"
 import TeamDataStore from "DataStores/TeamDataStore/TeamDataStore"
-import { Team, TeamMember } from "models"
-import AddTeamMemberDialog from "./AddTeamMemberDialog"
-import { TeamMemberChip } from "./TeamMemberChip"
+import { teamMemberRoleLabels } from "Labels/enumLabels"
+import { Team, TeamMember, TeamMemberRole, UserProfile } from "models"
+import React from "react"
+import EditTeamMemberDialog from "./EditTeamMemberDialog"
+import TeamMemberName from "./TeamMemberName"
 
 export default function TeamMembers(props: { team: Team; editable?: boolean }) {
   const { team, editable } = props
 
   const teamMembers = TeamDataStore.useTeamMembers(team)
 
-  function handleRemoveTeamMember(teamMember: TeamMember) {
+  const [isLastAdmin, setIsLastAdmin] = React.useState(false)
+  const [selectedTeamMember, setSelectedTeamMember] =
+    React.useState<TeamMember>()
+  const [open, setOpen] = React.useState(false)
+
+  React.useEffect(() => {
+    function getIsLastAdmin() {
+      return (teamMembers &&
+        teamMembers.length < 2 &&
+        teamMembers.filter(
+          (member) => member.Role === TeamMemberRole.ADMINISTRATOR
+        ).length === 1) as boolean
+    }
+    setIsLastAdmin(getIsLastAdmin())
+  }, [teamMembers])
+
+  function handleClick(teamMember: TeamMember) {
+    setSelectedTeamMember(teamMember)
+    setOpen(true)
+  }
+
+  function handleDelete(teamMember: TeamMember) {
     TeamDataStore.removeTeamMember(teamMember)
+  }
+
+  function handleSave(changed: TeamMember) {
+    selectedTeamMember &&
+      TeamDataStore.setTeamMemberRole(
+        selectedTeamMember,
+        changed.Role as TeamMemberRole
+      ).then(() => {
+        setOpen(false)
+      })
   }
 
   return (
     <Paper variant="outlined">
       <Box padding={2}>
-        <Box marginBottom={2}>
-          <Typography variant="h5" marginBottom={1}>
-            Members
-          </Typography>
-          {teamMembers.length > 0 && (
-            <Box marginBottom={2}>
-              {teamMembers.map((member) => (
-                <Box key={member.id} display="inline" marginRight={1}>
-                  <TeamMemberChip
-                    teamMember={member}
-                    onDelete={editable ? handleRemoveTeamMember : undefined}
-                    editable
+        <ChipSet
+          heading="Team members"
+          items={teamMembers}
+          chip={(teamMember) => (
+            <Chip
+              label={<TeamMemberName teamMemberId={teamMember.id} short />}
+              onClick={
+                editable && !isLastAdmin
+                  ? () => handleClick(teamMember)
+                  : undefined
+              }
+              onDelete={
+                editable && !isLastAdmin
+                  ? () => handleDelete(teamMember)
+                  : undefined
+              }
+              color="primary"
+              variant="outlined"
+              icon={
+                teamMember.Role === TeamMemberRole.ADMINISTRATOR ? (
+                  <LocalPolice
+                    titleAccess={teamMemberRoleLabels[teamMember.Role]}
                   />
-                </Box>
-              ))}
-            </Box>
+                ) : undefined
+              }
+            />
           )}
-          {teamMembers.length === 0 && (
-            <Typography>There are no team members yet.</Typography>
-          )}
-          {editable && <AddTeamMemberDialog team={team} />}
-        </Box>
+        />
+        {editable && isLastAdmin && (
+          <Typography
+            variant="caption"
+            color="InfoText"
+            children="There must be at least one administrator."
+          />
+        )}
+        {selectedTeamMember && (
+          <EditTeamMemberDialog
+            teamMember={selectedTeamMember}
+            open={open}
+            onCancel={() => setOpen(false)}
+            onSave={handleSave}
+          />
+        )}
       </Box>
     </Paper>
   )

@@ -2,14 +2,20 @@ import { DataStore } from "aws-amplify"
 import { Task, TeamMember } from "models"
 import { useEffect, useState } from "react"
 
-export default function useTaskOwnerTeamMember(task: Task) {
+export default function useTaskOwnerTeamMember(task?: Task) {
   const [teamMember, setTeamMember] = useState<TeamMember>()
 
   useEffect(() => {
-    task.taskOwnerId &&
-      DataStore.observe(TeamMember, task.taskOwnerId).subscribe((result) =>
-        setTeamMember(result.element)
+    task?.taskOwnerId &&
+      DataStore.query(TeamMember, (teamMember1) =>
+        teamMember1.teamMemberUserProfileId.eq(task.taskOwnerId || "")
       )
+        .then((results) => results[0])
+        .then((tm) => setTeamMember(tm))
+
+    if (!task) {
+      setTeamMember(undefined)
+    }
 
     // const subscription = DataStore.observe(
     //   TeamMember,

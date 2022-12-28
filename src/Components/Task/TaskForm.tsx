@@ -1,3 +1,4 @@
+import { useAuthenticator } from "@aws-amplify/ui-react"
 import { Cancel, Save } from "@mui/icons-material"
 import {
   Autocomplete,
@@ -5,15 +6,18 @@ import {
   IconButton,
   TextField,
   Toolbar,
-  Typography
+  Typography,
 } from "@mui/material"
+import { DataStore } from "aws-amplify"
 import { DeleteButton } from "Components/Controls"
 import EnumRadioGroup from "Components/Controls/EnumRadioGroup"
 import TaskDataStore from "DataStores/TaskDataStore"
 import TeamDataStore from "DataStores/TeamDataStore"
+import UserProfileDataStore from "DataStores/UserProfileDataStore"
 import { taskPriorityLabels, taskStatusLabels } from "Labels/enumLabels"
 import { uniqueId } from "lodash"
 import { Task, TaskPriority, TaskStatus, Team, TeamMember } from "models"
+import React from "react"
 import { useState } from "react"
 
 export default function TaskForm(props: {
@@ -24,7 +28,18 @@ export default function TaskForm(props: {
 }) {
   const { team, task, onSave, onCancel } = props
 
-  const teamMembers = TeamDataStore.useTeamMembers(team)
+  const { user } = useAuthenticator()
+  const userProfile = UserProfileDataStore.useUserProfile(user.username || "")
+
+  const [userTeamMember, setUserTeamMember] = React.useState<TeamMember>()
+
+  React.useEffect(() => {
+    DataStore.query(TeamMember, (member) =>
+      member.teamMemberUserProfileId.eq(userProfile?.id || "")
+    )
+      .then((member) => (member.length > 0 ? member[0] : undefined))
+      .then((member) => setUserTeamMember(member))
+  }, [userProfile])
 
   const [name, setName] = useState(task?.Name || "")
   const [description, setDescription] = useState(task?.Description || "")
@@ -36,20 +51,55 @@ export default function TaskForm(props: {
   const [startDate, setStartDate] = useState<Date>()
 
   function handleSave() {
+    console.log(
+      "user:",
+      user,
+      ", userProfile:",
+      userProfile,
+      ", userTeamMember:",
+      userTeamMember
+    )
     const taskProps = {
       name,
       description,
       status,
       priority,
-      ownerId: ownerId,
+      ownerId,
+      owner: userTeamMember,
       dueDate,
-      startDate
+      startDate,
     }
     if (task) {
       TaskDataStore.updateTask(task, taskProps).then(() => onSave())
     } else {
-      TaskDataStore.createTask(team, taskProps).then(() => onSave())
+      TaskDataStore.createTask(team, taskProps)
+        .then((newTask) => {})
+        .then(() => onSave())
     }
+  }
+
+  function TeamMemberPicker(props: { team: Team }) {
+    const { team } = props
+
+    const [teamMembers, setTeamMembers] = React.useState<TeamMember[]>([])
+
+    React.useEffect(() => {
+      team.TeamMembers.toArray().then((members) => {
+        setTeamMembers(members)
+        return members
+      })
+    })
+
+    return (
+      <Autocomplete
+        disablePortal
+        id={uniqueId()}
+        options={teamMembers}
+        getOptionLabel={(teamMember) => teamMember.Role}
+        sx={{ width: 300 }}
+        renderInput={(params) => <TextField {...params} label="Owner" />}
+      />
+    )
   }
 
   return (
@@ -99,19 +149,7 @@ export default function TaskForm(props: {
         />
       </Box>
       <Box marginBottom={2}>
-        <Autocomplete
-          options={teamMembers.map((teamMember) => teamMember.id)}
-          value={ownerId}
-          onChange={(event, newInputValue: string | null) =>
-            setOwnerId(newInputValue || "")
-          }
-          renderInput={(params) => <TextField {...params} />}
-          inputValue={ownerInputValue}
-          onInputChange={(event, newInputValue) =>
-            setOwnerInputValue(newInputValue)
-          }
-          getOptionLabel={(option) => "Yo"}
-        />
+        <TeamMemberPicker team={team} />
       </Box>
       <Box marginBottom={2}>
         <TextField

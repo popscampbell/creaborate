@@ -6,7 +6,7 @@ export enum RecurrenceFrequency {
   DAILY = "DAILY",
   WEEKLY = "WEEKLY",
   MONTHLY = "MONTHLY",
-  ANNULLY = "ANNULLY"
+  ANNUALLY = "ANNUALLY"
 }
 
 export enum ProjectMilestoneStatus {
@@ -90,6 +90,126 @@ type LazyRecurrence = {
 export declare type Recurrence = LazyLoading extends LazyLoadingDisabled ? EagerRecurrence : LazyRecurrence
 
 export declare const Recurrence: (new (init: ModelInit<Recurrence>) => Recurrence)
+
+type EagerUserSkill = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<UserSkill, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly userprofileID: string;
+  readonly Skill: Skill;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+  readonly userSkillSkillId: string;
+}
+
+type LazyUserSkill = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<UserSkill, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly userprofileID: string;
+  readonly Skill: AsyncItem<Skill>;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+  readonly userSkillSkillId: string;
+}
+
+export declare type UserSkill = LazyLoading extends LazyLoadingDisabled ? EagerUserSkill : LazyUserSkill
+
+export declare const UserSkill: (new (init: ModelInit<UserSkill>) => UserSkill) & {
+  copyOf(source: UserSkill, mutator: (draft: MutableModel<UserSkill>) => MutableModel<UserSkill> | void): UserSkill;
+}
+
+type EagerSkill = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Skill, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly Name: string;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazySkill = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Skill, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly Name: string;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type Skill = LazyLoading extends LazyLoadingDisabled ? EagerSkill : LazySkill
+
+export declare const Skill: (new (init: ModelInit<Skill>) => Skill) & {
+  copyOf(source: Skill, mutator: (draft: MutableModel<Skill>) => MutableModel<Skill> | void): Skill;
+}
+
+type EagerUserInterest = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<UserInterest, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly userprofileID: string;
+  readonly Interest: Interest;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+  readonly userInterestInterestId: string;
+}
+
+type LazyUserInterest = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<UserInterest, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly userprofileID: string;
+  readonly Interest: AsyncItem<Interest>;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+  readonly userInterestInterestId: string;
+}
+
+export declare type UserInterest = LazyLoading extends LazyLoadingDisabled ? EagerUserInterest : LazyUserInterest
+
+export declare const UserInterest: (new (init: ModelInit<UserInterest>) => UserInterest) & {
+  copyOf(source: UserInterest, mutator: (draft: MutableModel<UserInterest>) => MutableModel<UserInterest> | void): UserInterest;
+}
+
+type EagerInterest = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Interest, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly Name: string;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyInterest = {
+  readonly [__modelMeta__]: {
+    identifier: ManagedIdentifier<Interest, 'id'>;
+    readOnlyFields: 'createdAt' | 'updatedAt';
+  };
+  readonly id: string;
+  readonly Name: string;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type Interest = LazyLoading extends LazyLoadingDisabled ? EagerInterest : LazyInterest
+
+export declare const Interest: (new (init: ModelInit<Interest>) => Interest) & {
+  copyOf(source: Interest, mutator: (draft: MutableModel<Interest>) => MutableModel<Interest> | void): Interest;
+}
 
 type EagerEventImage = {
   readonly [__modelMeta__]: {
@@ -421,7 +541,7 @@ type EagerProject = {
   readonly id: string;
   readonly Team: string;
   readonly Name: string;
-  readonly Descript?: string | null;
+  readonly Description?: string | null;
   readonly Status: ProjectStatus | keyof typeof ProjectStatus;
   readonly ProjectMilestones?: (ProjectMilestone | null)[] | null;
   readonly StartDate?: string | null;
@@ -438,7 +558,7 @@ type LazyProject = {
   readonly id: string;
   readonly Team: string;
   readonly Name: string;
-  readonly Descript?: string | null;
+  readonly Description?: string | null;
   readonly Status: ProjectStatus | keyof typeof ProjectStatus;
   readonly ProjectMilestones: AsyncCollection<ProjectMilestone>;
   readonly StartDate?: string | null;
@@ -555,12 +675,12 @@ type EagerTeamMember = {
   readonly Role: TeamMemberRole | keyof typeof TeamMemberRole;
   readonly Status: TeamMemberStatus | keyof typeof TeamMemberStatus;
   readonly InvitedDateTime: string;
-  readonly InvitedByUserProfile: string;
   readonly ConfirmedDateTime?: string | null;
   readonly DeclinedDateTime?: string | null;
   readonly DepartedDateTime?: string | null;
   readonly DepartedComment?: string | null;
   readonly UserProfile: UserProfile;
+  readonly InvitedByUser: string;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
   readonly teamMemberUserProfileId: string;
@@ -576,12 +696,12 @@ type LazyTeamMember = {
   readonly Role: TeamMemberRole | keyof typeof TeamMemberRole;
   readonly Status: TeamMemberStatus | keyof typeof TeamMemberStatus;
   readonly InvitedDateTime: string;
-  readonly InvitedByUserProfile: string;
   readonly ConfirmedDateTime?: string | null;
   readonly DeclinedDateTime?: string | null;
   readonly DepartedDateTime?: string | null;
   readonly DepartedComment?: string | null;
   readonly UserProfile: AsyncItem<UserProfile>;
+  readonly InvitedByUser: string;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
   readonly teamMemberUserProfileId: string;
@@ -600,13 +720,13 @@ type EagerUserProfile = {
   };
   readonly id: string;
   readonly Visibility: UserProfileVisibility | keyof typeof UserProfileVisibility;
-  readonly Username: string;
   readonly Name: string;
   readonly Tagline?: string | null;
-  readonly Skills: (string | null)[];
-  readonly Interests: (string | null)[];
   readonly About?: string | null;
   readonly Location?: string | null;
+  readonly UserId: string;
+  readonly UserInterests?: (UserInterest | null)[] | null;
+  readonly UserSkills?: (UserSkill | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -618,13 +738,13 @@ type LazyUserProfile = {
   };
   readonly id: string;
   readonly Visibility: UserProfileVisibility | keyof typeof UserProfileVisibility;
-  readonly Username: string;
   readonly Name: string;
   readonly Tagline?: string | null;
-  readonly Skills: (string | null)[];
-  readonly Interests: (string | null)[];
   readonly About?: string | null;
   readonly Location?: string | null;
+  readonly UserId: string;
+  readonly UserInterests: AsyncCollection<UserInterest>;
+  readonly UserSkills: AsyncCollection<UserSkill>;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

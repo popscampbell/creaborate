@@ -31,7 +31,7 @@ export function TeamMemberChip(props: {
   return (
     <>
       <Chip
-        label={<TeamMemberName teamMember={teamMember} />}
+        label={<TeamMemberName short teamMemberId={teamMember.id} />}
         onClick={editable ? () => setOpen(true) : undefined}
         onDelete={editable && onDelete ? () => onDelete(teamMember) : undefined}
         color="primary"

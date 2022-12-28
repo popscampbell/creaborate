@@ -3,7 +3,7 @@ import {
   ArrowDownward,
   Delete,
   Edit,
-  PriorityHigh
+  PriorityHigh,
 } from "@mui/icons-material"
 import {
   Box,
@@ -12,30 +12,36 @@ import {
   Paper,
   TextField,
   Toolbar,
-  Typography
+  Typography,
 } from "@mui/material"
 import { DataGrid, GridValueGetterParams } from "@mui/x-data-grid"
 import { StaticDatePicker } from "@mui/x-date-pickers"
+import { DataStore } from "aws-amplify"
 import TeamMemberName from "Components/Team/TeamMembers/TeamMemberName"
 import TaskDataStore from "DataStores/TaskDataStore"
 import TeamDataStore from "DataStores/TeamDataStore"
-import { Task, TaskPriority, TaskStatus, Team } from "models"
+import {
+  Task,
+  TaskPriority,
+  TaskStatus,
+  Team,
+  TeamMember,
+  UserProfile,
+} from "models"
 import moment from "moment"
-import { useState } from "react"
+import React, { useEffect } from "react"
 import TaskForm from "./TaskForm"
 
+interface TaskWithOwnerName extends Task {
+  ownerName?: string
+}
 export default function TeamTasks(props: { team: Team }) {
   const { team } = props
 
   const tasks = TaskDataStore.useTasksByTeam(team, TaskStatus.ACTIVE)
-  const teamMembers = TeamDataStore.useTeamMembers(team)
 
-  function getTaskOwner(task: Task) {
-    return teamMembers.find((teamMember) => teamMember.id === task.taskOwnerId)
-  }
-
-  const [open, setOpen] = useState(false)
-  const [selectedTask, setSelectedTask] = useState<Task>()
+  const [open, setOpen] = React.useState(false)
+  const [selectedTask, setSelectedTask] = React.useState<Task>()
 
   function getDate(value?: string) {
     return value ? moment(new Date(value)).fromNow() : "(none)"
@@ -51,7 +57,7 @@ export default function TeamTasks(props: { team: Team }) {
     )
   }
 
-  const [value, setValue] = useState<any>()
+  const [value, setValue] = React.useState<any>()
   function handleDueDateChange(value: any) {}
 
   function handleNewTask() {
@@ -61,10 +67,8 @@ export default function TeamTasks(props: { team: Team }) {
 
   function handleEditTask(id: string) {
     const task = tasks.find((task) => task.id === id)
-    if (task) {
-      setSelectedTask(task)
-      setOpen(true)
-    }
+    setSelectedTask(task)
+    setOpen(true)
   }
 
   function handleDeleteTask(id: string) {
@@ -86,7 +90,7 @@ export default function TeamTasks(props: { team: Team }) {
               <IconButton onClick={handleNewTask} children={<Add />} />
             </Toolbar>
           </Box>
-          {tasks.length > 0 && (
+          {tasks && tasks.length > 0 && (
             <Box marginBottom={2} display="flex" height="100%">
               <Box flexGrow={1}>
                 <DataGrid
@@ -101,30 +105,29 @@ export default function TeamTasks(props: { team: Team }) {
                           color="action"
                         />
                       ),
-                      renderCell: (params) => <PriorityIcon task={params.row} />
+                      renderCell: (params) => (
+                        <PriorityIcon task={params.row} />
+                      ),
                     },
                     {
                       flex: 2,
                       field: "Name",
                       headerName: "Task",
-                      editable: true
+                      editable: true,
                     },
                     {
                       flex: 1,
                       field: "Owner",
                       headerName: "Owner",
-                      renderCell: (params) => {
-                        const taskOwner = getTaskOwner(params.row)
-                        return (
-                          <Typography
-                            children={
-                              taskOwner && (
-                                <TeamMemberName teamMember={taskOwner} />
-                              )
-                            }
+                      renderCell: (params) =>
+                        params.row.taskOwnerId ? (
+                          <TeamMemberName
+                            teamMemberId={params.row.taskOwnerId}
+                            short
                           />
-                        )
-                      }
+                        ) : (
+                          <>Unassigned</>
+                        ),
                     },
                     {
                       flex: 1,
@@ -145,7 +148,7 @@ export default function TeamTasks(props: { team: Team }) {
                             renderInput={(params) => <TextField {...params} />}
                           />
                         )
-                      }
+                      },
                     },
                     {
                       field: "id",
@@ -164,8 +167,8 @@ export default function TeamTasks(props: { team: Team }) {
                             </IconButton>
                           </Toolbar>
                         )
-                      }
-                    }
+                      },
+                    },
                   ]}
                   rows={tasks}
                   pageSize={5}

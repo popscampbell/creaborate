@@ -7,14 +7,22 @@ import theme from "Theme"
 import AppRoutes from "App.routes"
 import useStyles from "App.styles"
 import awsexports from "./aws-exports"
-import { Amplify, Auth } from "aws-amplify"
+import { Amplify, Auth, DataStore, Predicates, Storage } from "aws-amplify"
 import HeaderBar from "Components/Header/HeaderBar"
+import { Task, Team, TeamMember, UserProfile } from "models"
 
 export default function App() {
   const classes = useStyles()
 
   Amplify.configure(awsexports)
   Auth.configure(awsexports)
+  Storage.configure(awsexports)
+  // DataStore.stop().then(() => DataStore.clear().then(() => DataStore.start()))
+
+  // DataStore.delete(Task, Predicates.ALL)
+  // DataStore.delete(TeamMember, Predicates.ALL)
+  // DataStore.delete(Team, Predicates.ALL)
+  // DataStore.delete(UserProfile, Predicates.ALL)
 
   return (
     <div className={classes.root}>

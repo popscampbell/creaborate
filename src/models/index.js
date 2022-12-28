@@ -6,7 +6,7 @@ const RecurrenceFrequency = {
   "DAILY": "DAILY",
   "WEEKLY": "WEEKLY",
   "MONTHLY": "MONTHLY",
-  "ANNULLY": "ANNULLY"
+  "ANNUALLY": "ANNUALLY"
 };
 
 const ProjectMilestoneStatus = {
@@ -63,9 +63,13 @@ const TeamType = {
   "GROUP": "GROUP"
 };
 
-const { EventImage, Image, AssetImage, LocationImage, Asset, Expense, Location, Event, ProjectMilestone, Project, TaskComment, Task, TeamMember, UserProfile, Team, Recurrence } = initSchema(schema);
+const { UserSkill, Skill, UserInterest, Interest, EventImage, Image, AssetImage, LocationImage, Asset, Expense, Location, Event, ProjectMilestone, Project, TaskComment, Task, TeamMember, UserProfile, Team, Recurrence } = initSchema(schema);
 
 export {
+  UserSkill,
+  Skill,
+  UserInterest,
+  Interest,
   EventImage,
   Image,
   AssetImage,

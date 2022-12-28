@@ -32,8 +32,12 @@ export default function TeamView(props: { teamId: string }) {
             </IconButton>
           </Toolbar>
           <Typography variant="h1">{team.Name}</Typography>
-          <TeamTasks team={team} />
-          <TeamMembers team={team} />
+          <Box>
+            <TeamTasks team={team} />
+          </Box>
+          <Box marginTop={1}>
+            <TeamMembers team={team} />
+          </Box>
           <Drawer anchor="right" open={open} onClose={() => setOpen(false)}>
             <Box margin={2}>
               <Typography variant="h5" sx={{ marginBottom: 2 }}>

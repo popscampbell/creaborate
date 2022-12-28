@@ -31,8 +31,14 @@ export default function AddTeamMemberDialog(props: { team: Team }) {
   const currentUserProfile = UserProfileDataStore.useUserProfile(
     user?.username || ""
   )
-  const userProfiles =
-    UserProfileDataStore.useUserProfilesByNameSearch(inputValue)
+  const userProfiles = UserProfileDataStore.useUserProfilesByNameSearch(
+    inputValue
+  ).filter(
+    (userProfile) =>
+      !teamMembers?.find(
+        (teamMember) => teamMember.teamMemberUserProfileId === userProfile.id
+      )
+  )
   const teamMembers = TeamDataStore.useTeamMembers(team)
 
   function handleAdd() {
@@ -72,12 +78,7 @@ export default function AddTeamMemberDialog(props: { team: Team }) {
             onInputChange={(event, newInputValue) => {
               setInputValue(newInputValue)
             }}
-            options={userProfiles.filter(
-              (userProfile) =>
-                !teamMembers
-                  .map((teamMember) => teamMember.teamMemberUserProfileId)
-                  .includes(userProfile.id)
-            )}
+            options={userProfiles}
             getOptionLabel={(userProfile) => userProfile.Name || "(no name)"}
             sx={{ width: 300 }}
             renderInput={(params) => <TextField {...params} />}

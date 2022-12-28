@@ -12,6 +12,7 @@ import useTeam from "./useTeam"
 import useTeamAuthStatus from "./useTeamAuthStatus"
 import useTeamInvitations from "./useTeamInvitations"
 import useTeamMember from "./useTeamMember"
+import useTeamMemberByUserProfile from "./useTeamMemberByUserProfile"
 import useTeamMemberRole from "./useTeamMemberRole"
 import useTeamMembers from "./useTeamMembers"
 import useTeams from "./useTeamsByUserProfile"
@@ -28,6 +29,7 @@ export default class TeamDataStore {
   static useTeams = useTeams
   static useUserInvitations = useUserInvitations
   static useUserProfileByTeamMember = useUserProfileByTeamMember
+  static useTeamMemberByUserProfile = useTeamMemberByUserProfile
 
   static async addTeam(
     userProfile: UserProfile,
@@ -100,31 +102,32 @@ export default class TeamDataStore {
     userProfile: UserProfile,
     role: TeamMemberRole
   ) {
-    return this.getTeamMember(team.id, userProfile.id).then((teamMember) =>
-      teamMember && teamMember.Status !== TeamMemberStatus.INVITED
-        ? DataStore.save(
-          TeamMember.copyOf(teamMember, (updated) => {
-            updated.Status = TeamMemberStatus.INVITED
-            updated.InvitedByUserProfile = invitingUserProfile.id
-            updated.InvitedDateTime = new Date().toISOString()
-            updated.Role = role
-          })
-        ).catch((error) =>
-          Promise.reject(`Error updating existing team member: ${error}`)
-        )
-        : DataStore.save(
-          new TeamMember({
-            Team: team.id,
-            UserProfile: userProfile,
-            teamMemberUserProfileId: userProfile.id,
-            Status: TeamMemberStatus.INVITED,
-            InvitedByUserProfile: invitingUserProfile.id,
-            InvitedDateTime: new Date().toISOString(),
-            Role: role,
-          })
-        ).catch((error) =>
-          Promise.reject(`Error adding new team member: ${error}`)
-        )
+    return this.getTeamMemberByTeamAndUserProfile(team.id, userProfile.id).then(
+      (teamMember) =>
+        teamMember && teamMember.Status !== TeamMemberStatus.INVITED
+          ? DataStore.save(
+              TeamMember.copyOf(teamMember, (updated) => {
+                updated.Status = TeamMemberStatus.INVITED
+                updated.InvitedByUserProfile = invitingUserProfile.id
+                updated.InvitedDateTime = new Date().toISOString()
+                updated.Role = role
+              })
+            ).catch((error) =>
+              Promise.reject(`Error updating existing team member: ${error}`)
+            )
+          : DataStore.save(
+              new TeamMember({
+                Team: team.id,
+                UserProfile: userProfile,
+                teamMemberUserProfileId: userProfile.id,
+                Status: TeamMemberStatus.INVITED,
+                InvitedByUserProfile: invitingUserProfile.id,
+                InvitedDateTime: new Date().toISOString(),
+                Role: role,
+              })
+            ).catch((error) =>
+              Promise.reject(`Error adding new team member: ${error}`)
+            )
     )
   }
 
@@ -132,7 +135,7 @@ export default class TeamDataStore {
     if (role === teamMember.Role)
       return Promise.reject("This person is already in this role.")
 
-    const isLastAdmin = await this.getIsLastAdmin(teamMember)
+    const isLastAdmin = await this.isLastAdmin(teamMember)
 
     if (isLastAdmin) {
       return Promise.reject("There must be at least one administrator.")
@@ -164,7 +167,7 @@ export default class TeamDataStore {
   }
 
   static async removeTeamMember(teamMember: TeamMember) {
-    const isLastAdmin = await this.getIsLastAdmin(teamMember)
+    const isLastAdmin = await this.isLastAdmin(teamMember)
 
     if (isLastAdmin) {
       return Promise.reject("There must be at least one administrator.")
@@ -194,11 +197,18 @@ export default class TeamDataStore {
       .then((teamMember) => this.removeTeamMember(teamMember))
   }
 
-  private static async getTeam(teamId: string) {
+  static async getTeam(teamId: string) {
     return DataStore.query(Team, teamId)
   }
 
-  private static async getTeamMember(teamId: string, userProfileId: string) {
+  static async getTeamMember(id: string) {
+    return DataStore.query(TeamMember, id)
+  }
+
+  static async getTeamMemberByTeamAndUserProfile(
+    teamId: string,
+    userProfileId: string
+  ) {
     return DataStore.query(TeamMember, (teamMember) =>
       teamMember.and((teamMember) => [
         teamMember.Team.eq(teamId),
@@ -207,16 +217,14 @@ export default class TeamDataStore {
     ).then((teamMembers) => teamMembers[0])
   }
 
-  private static async getIsLastAdmin(teamMember: TeamMember) {
-    return await this.getTeam(teamMember.Team).then(
+  static async isLastAdmin(teamMember: TeamMember) {
+    return DataStore.query(Team, teamMember.Team).then(
       (team) =>
         team?.TeamMembers.toArray().then(
           (teamMembers) =>
             teamMembers.filter(
-              (member) =>
-                member.UserProfile !== teamMember.UserProfile &&
-                member.Role === TeamMemberRole.ADMINISTRATOR
-            ).length === 0
+              (member) => member.Role === TeamMemberRole.ADMINISTRATOR
+            ).length === 1
         ) || false
     )
   }

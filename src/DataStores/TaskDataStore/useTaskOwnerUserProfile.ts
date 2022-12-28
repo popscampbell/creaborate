@@ -1,29 +1,20 @@
-import { DataStore } from "aws-amplify"
 import { Task, UserProfile } from "models"
 import { useEffect, useState } from "react"
-import TaskDataStore from "./TaskDataStore"
 
-export default function useTaskOwnerUserProfile(task: Task) {
+export default function useTaskOwnerUserProfile(task?: Task) {
   const [userProfile, setUserProfile] = useState<UserProfile>()
-  const [name, setName] = useState("")
-
-  const teamMember = TaskDataStore.useTaskOwnerTeamMember(task)
 
   useEffect(() => {
-    task && teamMember && setName(teamMember?.id)
+    task?.Owner.then((owner) => {
+      owner?.UserProfile.then((profile) => {
+        setUserProfile(profile)
+      })
+    })
 
-    const sub =
-      task &&
-      teamMember?.teamMemberUserProfileId &&
-      DataStore.observe(
-        UserProfile,
-        teamMember.teamMemberUserProfileId
-      ).subscribe((result) => setUserProfile(result.element))
-
-    return function cleanup() {
-      sub && sub.unsubscribe()
+    if (!task) {
+      setUserProfile(undefined)
     }
-  }, [task, teamMember])
+  }, [task])
 
-  return name
+  return userProfile
 }
