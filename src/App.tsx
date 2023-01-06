@@ -1,38 +1,56 @@
-import { Authenticator } from "@aws-amplify/ui-react"
-import { ThemeProvider } from "@mui/material"
-import { Footer, Header } from "Components"
-import { Suspense } from "react"
-import { BrowserRouter } from "react-router-dom"
-import theme from "Theme"
-import AppRoutes from "App.routes"
-import useStyles from "App.styles"
-import awsexports from "./aws-exports"
-import { Amplify, Auth } from "aws-amplify"
-import { clearData } from "DataStores"
+import {
+  defaultDarkModeOverride,
+  Flex,
+  Text,
+  ThemeProvider,
+  useTheme
+} from "@aws-amplify/ui-react"
+import { Amplify, Auth, Storage } from "aws-amplify"
+import AppLayout from "Components/AppLayout"
+import { createBrowserRouter, RouterProvider } from "react-router-dom"
+import awsconfig from "./aws-exports"
 
-export default function App() {
-  const classes = useStyles()
+Amplify.configure(awsconfig)
+Auth.configure(awsconfig)
+Storage.configure(awsconfig)
 
-  Amplify.configure(awsexports)
-  // Auth.configure(awsexports)
+function App() {
+  const { tokens } = useTheme()
 
-  // clearData()
+  const appTheme = {
+    name: "creaborate-theme",
+    overrides: [defaultDarkModeOverride]
+  }
+
+  const AppRoutes = createBrowserRouter([
+    {
+      path: "/",
+      element: <AppLayout />,
+      errorElement: <Text>Error</Text>,
+
+      children: [
+        { index: true, element: <Text>Home</Text> },
+        {
+          path: "user",
+          errorElement: <Text>Error</Text>,
+          children: [{ path: "profile", element: <Text>Profile</Text> }]
+        }
+      ]
+    }
+  ])
 
   return (
-    <div className={classes.root}>
-      <Suspense fallback="Loading...">
-        <BrowserRouter>
-          <ThemeProvider theme={theme}>
-            <Authenticator.Provider>
-              <Header />
-              <main className={classes.main}>
-                <AppRoutes />
-              </main>
-              <Footer />
-            </Authenticator.Provider>
-          </ThemeProvider>
-        </BrowserRouter>
-      </Suspense>
-    </div>
+    <ThemeProvider theme={appTheme} colorMode={"system"}>
+      <Flex
+        direction="column"
+        backgroundColor={tokens.colors.background.primary}
+        color={tokens.colors.font.primary}
+        minHeight="100vh"
+      >
+        <RouterProvider router={AppRoutes} />
+      </Flex>
+    </ThemeProvider>
   )
 }
+
+export default App
