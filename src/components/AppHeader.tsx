@@ -1,4 +1,5 @@
-import { AppBar, Toolbar, Typography, useTheme } from "@mui/material"
+import { AppBar, Toolbar, useTheme } from "@mui/material"
+import Creaborate from "./Creaborate"
 
 export default function AppHeader() {
   const theme = useTheme()
@@ -6,7 +7,7 @@ export default function AppHeader() {
   return (
     <AppBar position="sticky">
       <Toolbar>
-        <Typography variant="h4">Creaborate</Typography>
+        <Creaborate variant="header" />
       </Toolbar>
     </AppBar>
   )

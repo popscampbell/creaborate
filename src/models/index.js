@@ -53,21 +53,58 @@ const TaskPriority = {
   "LOW": "LOW"
 };
 
-const { UserProfile, UserInterest, Interest, UserSkill, Skill, UserImage, UserNotification, Team, TeamMember, TeamInvitation, Task, TaskComment, Image, Comment } = initSchema(schema);
+const ProjectStatus = {
+  "DRAFT": "DRAFT",
+  "ACTIVE": "ACTIVE",
+  "COMPLETED": "COMPLETED",
+  "CANCELED": "CANCELED"
+};
+
+const ProjectMilestoneStatus = {
+  "ACTIVE": "ACTIVE",
+  "CLOSED": "CLOSED"
+};
+
+const RecurrenceFrequency = {
+  "DAILY": "DAILY",
+  "WEEKLY": "WEEKLY",
+  "MONTHLY": "MONTHLY",
+  "ANNUALLY": "ANNUALLY"
+};
+
+const { UserProfile, Location, UserInterest, Interest, UserSkill, Skill, UserImage, UserNotification, UserContact, Team, TeamMember, TeamInvitation, Task, TaskComment, TeamImage, TeamEvent, Event, Venue, VenueContact, TeamEventImage, TeamEventComment, TeamEventContact, TeamContact, TeamContactComment, TeamProject, TeamProjectMilestone, TeamProjectMilestoneComment, TeamProjectComment, Asset, Product, Image, Contact, Address, Comment, Expense, Recurrence } = initSchema(schema);
 
 export {
   UserProfile,
+  Location,
   UserInterest,
   Interest,
   UserSkill,
   Skill,
   UserImage,
   UserNotification,
+  UserContact,
   Team,
   TeamMember,
   TeamInvitation,
   Task,
   TaskComment,
+  TeamImage,
+  TeamEvent,
+  Event,
+  Venue,
+  VenueContact,
+  TeamEventImage,
+  TeamEventComment,
+  TeamEventContact,
+  TeamContact,
+  TeamContactComment,
+  TeamProject,
+  TeamProjectMilestone,
+  TeamProjectMilestoneComment,
+  TeamProjectComment,
+  Asset,
+  Product,
   UserProfileVisibility,
   UserNotificationLevel,
   TeamVisibility,
@@ -76,6 +113,13 @@ export {
   TeamInvitationStatus,
   TaskStatus,
   TaskPriority,
+  ProjectStatus,
+  ProjectMilestoneStatus,
+  RecurrenceFrequency,
   Image,
-  Comment
+  Contact,
+  Address,
+  Comment,
+  Expense,
+  Recurrence
 };

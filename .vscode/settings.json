@@ -1,11 +1,5 @@
 {
   "files.exclude": {
-    "**/.DS_Store": true,
-    "**/.git": true,
-    "**/.hg": true,
-    "**/.svn": true,
-    "**/node_modules": true,
-    "**/Thumbs.db": true,
     "amplify/.config": true,
     "amplify/**/*-parameters.json": true,
     "amplify/**/amplify.state": true,
@@ -13,6 +7,12 @@
     "amplify/#current-cloud-backend": true,
     "amplify/backend/amplify-meta.json": true,
     "amplify/backend/awscloudformation": true,
+    "**/.DS_Store": true,
+    "**/.git": true,
+    "**/.hg": true,
+    "**/.svn": true,
+    "**/node_modules": true,
+    "**/Thumbs.db": true,
     ".yarn": true,
     ".next": true,
     "src/aws-exports.js": true
@@ -39,7 +39,9 @@
     "files.insertFinalNewline": false
   },
   "editor.renderFinalNewline": false,
-  "cSpell.words": ["Creaborate"],
+  "cSpell.words": [
+    "Creaborate"
+  ],
   "search.exclude": {
     "**/node_modules": false,
     "**/node_modules_suspended": true

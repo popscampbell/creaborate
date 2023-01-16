@@ -1,6 +1,3 @@
-# This "input" configures a global authorization rule to enable public access to
-# all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
-input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONLY!
 type UserProfile @model @auth(rules: [{ allow: public }]) {
   id: ID!
   username: String!
@@ -10,8 +7,10 @@ type UserProfile @model @auth(rules: [{ allow: public }]) {
   profileImage: Image
   tagline: String
   about: String
-  interests: [UserInterest] @hasMany(indexName: "byUserProfile", fields: ["id"])
-  skills: [UserSkill] @hasMany(indexName: "byUserProfile", fields: ["id"])
+  Location: Location @hasOne
+  UserInterests: [UserInterest]
+    @hasMany(indexName: "byUserProfile", fields: ["id"])
+  UserSkills: [UserSkill] @hasMany(indexName: "byUserProfile", fields: ["id"])
 }
 
 enum UserProfileVisibility {
@@ -36,10 +35,17 @@ type Image {
   searchDetail: String
 }
 
+type Location @model @auth(rules: [{ allow: public }]) {
+  id: ID!
+  name: String!
+  searchName: String!
+}
+
 type UserSkill @model @auth(rules: [{ allow: public }]) {
   id: ID!
-  userProfileId: ID! @index(name: "byUserProfile")
-  skill: Skill! @hasOne
+  userprofileID: ID! @index(name: "byUserProfile")
+  Skill: Skill! @hasOne
+  UserProfile: UserProfile @belongsTo(fields: ["userprofileID"])
 }
 
 type Skill @model @auth(rules: [{ allow: public }]) {
@@ -50,8 +56,9 @@ type Skill @model @auth(rules: [{ allow: public }]) {
 
 type UserInterest @model @auth(rules: [{ allow: public }]) {
   id: ID!
-  userProfileId: ID! @index(name: "byUserProfile")
-  interest: Interest! @hasOne
+  userprofileID: ID! @index(name: "byUserProfile")
+  Interest: Interest! @hasOne
+  UserProfile: UserProfile @belongsTo(fields: ["userprofileID"])
 }
 
 type Interest @model @auth(rules: [{ allow: public }]) {
@@ -77,6 +84,12 @@ enum UserNotificationLevel {
   ERROR
 }
 
+type UserContact @model @auth(rules: [{ allow: public }]) {
+  id: ID!
+  username: ID!
+  contact: Contact!
+}
+
 type Team @model @auth(rules: [{ allow: public }]) {
   id: ID!
   name: String!
@@ -85,8 +98,14 @@ type Team @model @auth(rules: [{ allow: public }]) {
   teamType: TeamType!
   customTeamType: String
   description: String!
-  teamMembers: [TeamMember!] @hasMany(indexName: "byTeam", fields: ["id"])
-  invitations: [TeamInvitation] @hasMany(indexName: "byTeam", fields: ["id"])
+  TeamMembers: [TeamMember!] @hasMany(indexName: "byTeam", fields: ["id"])
+  TeamInvitations: [TeamInvitation]
+    @hasMany(indexName: "byTeam", fields: ["id"])
+  Tasks: [Task] @hasMany(indexName: "byTeam", fields: ["id"])
+  TeamImages: [TeamImage] @hasMany(indexName: "byTeam", fields: ["id"])
+  TeamContacts: [TeamContact] @hasMany(indexName: "byTeam", fields: ["id"])
+  TeamEvents: [TeamEvent] @hasMany(indexName: "byTeam", fields: ["id"])
+  TeamProjects: [TeamProject] @hasMany(indexName: "byTeam", fields: ["id"])
 }
 
 enum TeamType {
@@ -104,9 +123,10 @@ enum TeamVisibility {
 
 type TeamMember @model @auth(rules: [{ allow: public }]) {
   id: ID!
-  teamId: ID! @index(name: "byTeam")
+  teamID: ID! @index(name: "byTeam")
   username: String!
   role: TeamMemberRole!
+  Team: Team @belongsTo(fields: ["teamID"])
 }
 
 enum TeamMemberRole {
@@ -116,7 +136,7 @@ enum TeamMemberRole {
 
 type TeamInvitation @model @auth(rules: [{ allow: public }]) {
   id: ID!
-  teamId: ID! @index(name: "byTeam")
+  teamID: ID! @index(name: "byTeam")
   role: TeamMemberRole!
   status: TeamInvitationStatus!
   username: String!
@@ -124,6 +144,7 @@ type TeamInvitation @model @auth(rules: [{ allow: public }]) {
   invitedByUsername: String
   responseDateTime: AWSDateTime
   responseComment: String
+  Team: Team @belongsTo(fields: ["teamID"])
 }
 
 enum TeamInvitationStatus {
@@ -133,9 +154,43 @@ enum TeamInvitationStatus {
   EXPIRED
 }
 
+type TeamImage @model @auth(rules: [{ allow: public }]) {
+  id: ID!
+  teamID: ID! @index(name: "byTeam")
+  image: Image!
+  Team: Team @belongsTo(fields: ["teamID"])
+  TeamEvent: TeamEvent @hasOne
+}
+
+type TeamContact @model @auth(rules: [{ allow: public }]) {
+  id: ID!
+  teamID: ID! @index(name: "byTeam")
+  contact: Contact!
+  Team: Team @belongsTo(fields: ["teamID"])
+  TeamContactComments: [TeamContactComment]
+    @hasMany(indexName: "byTeamContact", fields: ["id"])
+}
+
+type TeamContactComment @model @auth(rules: [{ allow: public }]) {
+  id: ID!
+  teamContactID: ID! @index(name: "byTeamContact")
+  comment: Comment!
+  TeamContact: TeamContact @belongsTo(fields: ["teamContactID"])
+}
+
+type Contact {
+  name: String!
+  searchString: String!
+  email: AWSEmail
+  phone: AWSPhone
+  address: Address
+  notes: String
+  searchNotes: String
+}
+
 type Task @model @auth(rules: [{ allow: public }]) {
   id: ID!
-  teamId: ID! @index(name: "byTeam")
+  teamID: ID! @index(name: "byTeam")
   name: String!
   searchName: String!
   description: String
@@ -145,9 +200,10 @@ type Task @model @auth(rules: [{ allow: public }]) {
   priority: TaskPriority!
   completedByUsername: String
   completedDate: AWSDate
-  comments: [TaskComment] @hasMany(indexName: "byTask", fields: ["id"])
+  TaskComments: [TaskComment] @hasMany(indexName: "byTask", fields: ["id"])
   ownerUsername: String
   startDate: AWSDate
+  Team: Team @belongsTo(fields: ["teamID"])
 }
 
 enum TaskStatus {
@@ -164,12 +220,199 @@ enum TaskPriority {
 
 type TaskComment @model @auth(rules: [{ allow: public }]) {
   id: ID!
-  taskId: ID! @index(name: "byTask")
+  taskID: ID! @index(name: "byTask")
   comment: Comment!
+  Task: Task @belongsTo(fields: ["taskID"])
 }
 
 type Comment {
   comment: String!
   searchComment: String!
   postedByUsername: String!
+}
+
+type Venue @model @auth(rules: [{ allow: public }]) {
+  id: ID!
+  name: String!
+  searchName: String!
+  address: Address
+  website: AWSURL
+  phone: AWSPhone
+  email: AWSEmail
+  VenueContacts: [VenueContact] @hasMany(indexName: "byVenue", fields: ["id"])
+}
+
+type Address {
+  addressLine1: String!
+  addressLine2: String
+  city: String!
+  stateProvince: String!
+  country: String!
+  postalCode: String!
+}
+
+type VenueContact @model @auth(rules: [{ allow: public }]) {
+  id: ID!
+  venueID: ID! @index(name: "byVenue")
+  contact: Contact!
+  Venue: Venue @belongsTo(fields: ["venueID"])
+}
+
+type Event @model @auth(rules: [{ allow: public }]) {
+  id: ID!
+  name: String!
+  searchName: String!
+  venue: Venue @hasOne
+  date: AWSDate
+  time: AWSTime
+  description: String
+  searchDescription: String
+  website: AWSURL
+}
+
+type TeamEvent @model @auth(rules: [{ allow: public }]) {
+  id: ID!
+  teamID: ID! @index(name: "byTeam")
+  name: String!
+  searchName: String!
+  description: String
+  searchDescription: String
+  event: Event @hasOne
+  Team: Team @belongsTo(fields: ["teamID"])
+  TeamEventImages: [TeamEventImage]
+    @hasMany(indexName: "byTeamEvent", fields: ["id"])
+  TeamEventComments: [TeamEventComment]
+    @hasMany(indexName: "byTeamEvent", fields: ["id"])
+  TeamEventContacts: [TeamEventContact]
+    @hasMany(indexName: "byTeamEvent", fields: ["id"])
+}
+
+type TeamEventImage @model @auth(rules: [{ allow: public }]) {
+  id: ID!
+  teameventID: ID! @index(name: "byTeamEvent")
+  teamImage: TeamImage @hasOne
+  TeamEvent: TeamEvent @belongsTo(fields: ["teameventID"])
+}
+
+type TeamEventComment @model @auth(rules: [{ allow: public }]) {
+  id: ID!
+  teameventID: ID! @index(name: "byTeamEvent")
+  comment: Comment!
+  TeamEvent: TeamEvent @belongsTo(fields: ["teameventID"])
+}
+
+type TeamEventContact @model @auth(rules: [{ allow: public }]) {
+  id: ID!
+  teameventID: ID! @index(name: "byTeamEvent")
+  contact: Contact!
+  TeamEvent: TeamEvent @belongsTo(fields: ["teameventID"])
+}
+
+type TeamProject @model @auth(rules: [{ allow: public }]) {
+  id: ID!
+  teamID: ID! @index(name: "byTeam")
+  name: String!
+  searchName: String!
+  description: String
+  searchDescription: String
+  status: ProjectStatus!
+  startDate: AWSDate
+  endDate: AWSDate
+  Team: Team @belongsTo(fields: ["teamID"])
+  TeamProjectMilestones: [TeamProjectMilestone]
+    @hasMany(indexName: "byTeamProject", fields: ["id"])
+  TeamProjectComments: [TeamProjectComment]
+    @hasMany(indexName: "byTeamProject", fields: ["id"])
+}
+
+enum ProjectStatus {
+  DRAFT
+  ACTIVE
+  COMPLETED
+  CANCELED
+}
+
+type TeamProjectComment @model @auth(rules: [{ allow: public }]) {
+  id: ID!
+  teamprojectID: ID! @index(name: "byTeamProject")
+  comment: Comment!
+  TeamProject: TeamProject @belongsTo(fields: ["teamprojectID"])
+}
+
+type TeamProjectMilestone @model @auth(rules: [{ allow: public }]) {
+  id: ID!
+  teamprojectID: ID! @index(name: "byTeamProject")
+  name: String!
+  searchName: String!
+  description: String
+  searchDescription: String
+  status: ProjectMilestoneStatus!
+  date: AWSDate
+  TeamProject: TeamProject @belongsTo(fields: ["teamprojectID"])
+  TeamProjectMilestoneComments: [TeamProjectMilestoneComment]
+    @hasMany(indexName: "byTeamProjectMilestone", fields: ["id"])
+}
+
+enum ProjectMilestoneStatus {
+  ACTIVE
+  CLOSED
+}
+
+type TeamProjectMilestoneComment @model @auth(rules: [{ allow: public }]) {
+  id: ID!
+  teamprojectmilestoneID: ID! @index(name: "byTeamProjectMilestone")
+  comment: Comment!
+  TeamProjectMilestone: TeamProjectMilestone
+    @belongsTo(fields: ["teamprojectmilestoneID"])
+}
+
+type Expense {
+  name: String!
+  searchName: String!
+  description: String
+  searchDescription: String
+  notes: String
+  searchNotes: String
+  amount: Float
+  incurredAt: AWSDate
+  isRecurring: Boolean!
+  recurrence: Recurrence
+}
+
+type Recurrence {
+  frequency: RecurrenceFrequency!
+  periodCount: Int!
+  isMonday: Boolean!
+  isTuesday: Boolean!
+  isWednesday: Boolean!
+  isThursday: Boolean!
+  isFriday: Boolean!
+  isSaturday: Boolean!
+  isSunday: Boolean!
+}
+
+enum RecurrenceFrequency {
+  DAILY
+  WEEKLY
+  MONTHLY
+  ANNUALLY
+}
+
+type Asset @model @auth(rules: [{ allow: public }]) {
+  id: ID!
+  name: String!
+  searchName: String!
+  description: String
+  searchDescription: String
+  notes: String
+  searchNotes: String
+  product: Product @hasOne
+}
+
+type Product @model @auth(rules: [{ allow: public }]) {
+  id: ID!
+  name: String!
+  searchString: String!
+  description: String
+  searchDescription: String
 }
