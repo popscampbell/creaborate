@@ -1,5 +1,6 @@
+import { Team, TeamMemberRole } from "@/models"
 import { BadgeProps } from "@mui/material"
-import { Task, TeamMember } from "@src/models"
+import { TeamMember } from "src/models"
 
 export type ContextArea = "Home" | "User" | "Team"
 export type TeamMemberWithName = TeamMember & { name: string }
