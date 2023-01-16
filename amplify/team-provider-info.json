@@ -19,5 +19,29 @@
         "usercontent": {}
       }
     }
+  },
+  "mike": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-creaborate-mike-210341-authRole",
+      "UnauthRoleArn": "arn:aws:iam::546014678210:role/amplify-creaborate-mike-210341-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::546014678210:role/amplify-creaborate-mike-210341-authRole",
+      "Region": "us-west-2",
+      "DeploymentBucketName": "amplify-creaborate-mike-210341-deployment",
+      "UnauthRoleName": "amplify-creaborate-mike-210341-unauthRole",
+      "StackName": "amplify-creaborate-mike-210341",
+      "StackId": "arn:aws:cloudformation:us-west-2:546014678210:stack/amplify-creaborate-mike-210341/26f16430-955b-11ed-a754-06779a082de9",
+      "AmplifyAppId": "d6s3o8306oqh5"
+    },
+    "categories": {
+      "auth": {
+        "creaborateb8d5eddd": {}
+      },
+      "api": {
+        "creaborate": {}
+      },
+      "storage": {
+        "usercontent": {}
+      }
+    }
   }
 }

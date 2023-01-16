@@ -23,10 +23,20 @@ export const createUserProfile = /* GraphQL */ `
       }
       tagline
       about
-      interests {
+      Location {
+        id
+        name
+        searchName
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      UserInterests {
         items {
           id
-          userProfileId
+          userprofileID
           createdAt
           updatedAt
           _version
@@ -37,10 +47,10 @@ export const createUserProfile = /* GraphQL */ `
         nextToken
         startedAt
       }
-      skills {
+      UserSkills {
         items {
           id
-          userProfileId
+          userprofileID
           createdAt
           updatedAt
           _version
@@ -56,6 +66,7 @@ export const createUserProfile = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
+      userProfileLocationId
     }
   }
 `;
@@ -81,10 +92,20 @@ export const updateUserProfile = /* GraphQL */ `
       }
       tagline
       about
-      interests {
+      Location {
+        id
+        name
+        searchName
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      UserInterests {
         items {
           id
-          userProfileId
+          userprofileID
           createdAt
           updatedAt
           _version
@@ -95,10 +116,10 @@ export const updateUserProfile = /* GraphQL */ `
         nextToken
         startedAt
       }
-      skills {
+      UserSkills {
         items {
           id
-          userProfileId
+          userprofileID
           createdAt
           updatedAt
           _version
@@ -114,6 +135,7 @@ export const updateUserProfile = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
+      userProfileLocationId
     }
   }
 `;
@@ -139,10 +161,20 @@ export const deleteUserProfile = /* GraphQL */ `
       }
       tagline
       about
-      interests {
+      Location {
+        id
+        name
+        searchName
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      UserInterests {
         items {
           id
-          userProfileId
+          userprofileID
           createdAt
           updatedAt
           _version
@@ -153,10 +185,10 @@ export const deleteUserProfile = /* GraphQL */ `
         nextToken
         startedAt
       }
-      skills {
+      UserSkills {
         items {
           id
-          userProfileId
+          userprofileID
           createdAt
           updatedAt
           _version
@@ -172,6 +204,7 @@ export const deleteUserProfile = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
+      userProfileLocationId
     }
   }
 `;
@@ -250,6 +283,57 @@ export const deleteUserImage = /* GraphQL */ `
     }
   }
 `;
+export const createLocation = /* GraphQL */ `
+  mutation CreateLocation(
+    $input: CreateLocationInput!
+    $condition: ModelLocationConditionInput
+  ) {
+    createLocation(input: $input, condition: $condition) {
+      id
+      name
+      searchName
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const updateLocation = /* GraphQL */ `
+  mutation UpdateLocation(
+    $input: UpdateLocationInput!
+    $condition: ModelLocationConditionInput
+  ) {
+    updateLocation(input: $input, condition: $condition) {
+      id
+      name
+      searchName
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const deleteLocation = /* GraphQL */ `
+  mutation DeleteLocation(
+    $input: DeleteLocationInput!
+    $condition: ModelLocationConditionInput
+  ) {
+    deleteLocation(input: $input, condition: $condition) {
+      id
+      name
+      searchName
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
 export const createUserSkill = /* GraphQL */ `
   mutation CreateUserSkill(
     $input: CreateUserSkillInput!
@@ -257,8 +341,8 @@ export const createUserSkill = /* GraphQL */ `
   ) {
     createUserSkill(input: $input, condition: $condition) {
       id
-      userProfileId
-      skill {
+      userprofileID
+      Skill {
         id
         name
         searchName
@@ -267,6 +351,48 @@ export const createUserSkill = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+      }
+      UserProfile {
+        id
+        username
+        visibility
+        name
+        searchName
+        profileImage {
+          storageKey
+          alt
+          searchAlt
+          caption
+          searchCaption
+          detail
+          searchDetail
+        }
+        tagline
+        about
+        Location {
+          id
+          name
+          searchName
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        UserInterests {
+          nextToken
+          startedAt
+        }
+        UserSkills {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        userProfileLocationId
       }
       createdAt
       updatedAt
@@ -284,8 +410,8 @@ export const updateUserSkill = /* GraphQL */ `
   ) {
     updateUserSkill(input: $input, condition: $condition) {
       id
-      userProfileId
-      skill {
+      userprofileID
+      Skill {
         id
         name
         searchName
@@ -294,6 +420,48 @@ export const updateUserSkill = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+      }
+      UserProfile {
+        id
+        username
+        visibility
+        name
+        searchName
+        profileImage {
+          storageKey
+          alt
+          searchAlt
+          caption
+          searchCaption
+          detail
+          searchDetail
+        }
+        tagline
+        about
+        Location {
+          id
+          name
+          searchName
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        UserInterests {
+          nextToken
+          startedAt
+        }
+        UserSkills {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        userProfileLocationId
       }
       createdAt
       updatedAt
@@ -311,8 +479,8 @@ export const deleteUserSkill = /* GraphQL */ `
   ) {
     deleteUserSkill(input: $input, condition: $condition) {
       id
-      userProfileId
-      skill {
+      userprofileID
+      Skill {
         id
         name
         searchName
@@ -321,6 +489,48 @@ export const deleteUserSkill = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+      }
+      UserProfile {
+        id
+        username
+        visibility
+        name
+        searchName
+        profileImage {
+          storageKey
+          alt
+          searchAlt
+          caption
+          searchCaption
+          detail
+          searchDetail
+        }
+        tagline
+        about
+        Location {
+          id
+          name
+          searchName
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        UserInterests {
+          nextToken
+          startedAt
+        }
+        UserSkills {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        userProfileLocationId
       }
       createdAt
       updatedAt
@@ -389,8 +599,8 @@ export const createUserInterest = /* GraphQL */ `
   ) {
     createUserInterest(input: $input, condition: $condition) {
       id
-      userProfileId
-      interest {
+      userprofileID
+      Interest {
         id
         name
         searchName
@@ -399,6 +609,48 @@ export const createUserInterest = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+      }
+      UserProfile {
+        id
+        username
+        visibility
+        name
+        searchName
+        profileImage {
+          storageKey
+          alt
+          searchAlt
+          caption
+          searchCaption
+          detail
+          searchDetail
+        }
+        tagline
+        about
+        Location {
+          id
+          name
+          searchName
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        UserInterests {
+          nextToken
+          startedAt
+        }
+        UserSkills {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        userProfileLocationId
       }
       createdAt
       updatedAt
@@ -416,8 +668,8 @@ export const updateUserInterest = /* GraphQL */ `
   ) {
     updateUserInterest(input: $input, condition: $condition) {
       id
-      userProfileId
-      interest {
+      userprofileID
+      Interest {
         id
         name
         searchName
@@ -426,6 +678,48 @@ export const updateUserInterest = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+      }
+      UserProfile {
+        id
+        username
+        visibility
+        name
+        searchName
+        profileImage {
+          storageKey
+          alt
+          searchAlt
+          caption
+          searchCaption
+          detail
+          searchDetail
+        }
+        tagline
+        about
+        Location {
+          id
+          name
+          searchName
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        UserInterests {
+          nextToken
+          startedAt
+        }
+        UserSkills {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        userProfileLocationId
       }
       createdAt
       updatedAt
@@ -443,8 +737,8 @@ export const deleteUserInterest = /* GraphQL */ `
   ) {
     deleteUserInterest(input: $input, condition: $condition) {
       id
-      userProfileId
-      interest {
+      userprofileID
+      Interest {
         id
         name
         searchName
@@ -453,6 +747,48 @@ export const deleteUserInterest = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+      }
+      UserProfile {
+        id
+        username
+        visibility
+        name
+        searchName
+        profileImage {
+          storageKey
+          alt
+          searchAlt
+          caption
+          searchCaption
+          detail
+          searchDetail
+        }
+        tagline
+        about
+        Location {
+          id
+          name
+          searchName
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        UserInterests {
+          nextToken
+          startedAt
+        }
+        UserSkills {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        userProfileLocationId
       }
       createdAt
       updatedAt
@@ -574,6 +910,102 @@ export const deleteUserNotification = /* GraphQL */ `
     }
   }
 `;
+export const createUserContact = /* GraphQL */ `
+  mutation CreateUserContact(
+    $input: CreateUserContactInput!
+    $condition: ModelUserContactConditionInput
+  ) {
+    createUserContact(input: $input, condition: $condition) {
+      id
+      username
+      contact {
+        name
+        searchString
+        email
+        phone
+        address {
+          addressLine1
+          addressLine2
+          city
+          stateProvince
+          country
+          postalCode
+        }
+        notes
+        searchNotes
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const updateUserContact = /* GraphQL */ `
+  mutation UpdateUserContact(
+    $input: UpdateUserContactInput!
+    $condition: ModelUserContactConditionInput
+  ) {
+    updateUserContact(input: $input, condition: $condition) {
+      id
+      username
+      contact {
+        name
+        searchString
+        email
+        phone
+        address {
+          addressLine1
+          addressLine2
+          city
+          stateProvince
+          country
+          postalCode
+        }
+        notes
+        searchNotes
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const deleteUserContact = /* GraphQL */ `
+  mutation DeleteUserContact(
+    $input: DeleteUserContactInput!
+    $condition: ModelUserContactConditionInput
+  ) {
+    deleteUserContact(input: $input, condition: $condition) {
+      id
+      username
+      contact {
+        name
+        searchString
+        email
+        phone
+        address {
+          addressLine1
+          addressLine2
+          city
+          stateProvince
+          country
+          postalCode
+        }
+        notes
+        searchNotes
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
 export const createTeam = /* GraphQL */ `
   mutation CreateTeam(
     $input: CreateTeamInput!
@@ -587,10 +1019,10 @@ export const createTeam = /* GraphQL */ `
       teamType
       customTeamType
       description
-      teamMembers {
+      TeamMembers {
         items {
           id
-          teamId
+          teamID
           username
           role
           createdAt
@@ -602,10 +1034,10 @@ export const createTeam = /* GraphQL */ `
         nextToken
         startedAt
       }
-      invitations {
+      TeamInvitations {
         items {
           id
-          teamId
+          teamID
           role
           status
           username
@@ -613,6 +1045,95 @@ export const createTeam = /* GraphQL */ `
           invitedByUsername
           responseDateTime
           responseComment
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      Tasks {
+        items {
+          id
+          teamID
+          name
+          searchName
+          description
+          searchDescription
+          dueDate
+          status
+          priority
+          completedByUsername
+          completedDate
+          ownerUsername
+          startDate
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      TeamImages {
+        items {
+          id
+          teamID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          teamImageTeamEventId
+        }
+        nextToken
+        startedAt
+      }
+      TeamContacts {
+        items {
+          id
+          teamID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      TeamEvents {
+        items {
+          id
+          teamID
+          name
+          searchName
+          description
+          searchDescription
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          teamEventEventId
+        }
+        nextToken
+        startedAt
+      }
+      TeamProjects {
+        items {
+          id
+          teamID
+          name
+          searchName
+          description
+          searchDescription
+          status
+          startDate
+          endDate
           createdAt
           updatedAt
           _version
@@ -643,10 +1164,10 @@ export const updateTeam = /* GraphQL */ `
       teamType
       customTeamType
       description
-      teamMembers {
+      TeamMembers {
         items {
           id
-          teamId
+          teamID
           username
           role
           createdAt
@@ -658,10 +1179,10 @@ export const updateTeam = /* GraphQL */ `
         nextToken
         startedAt
       }
-      invitations {
+      TeamInvitations {
         items {
           id
-          teamId
+          teamID
           role
           status
           username
@@ -669,6 +1190,95 @@ export const updateTeam = /* GraphQL */ `
           invitedByUsername
           responseDateTime
           responseComment
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      Tasks {
+        items {
+          id
+          teamID
+          name
+          searchName
+          description
+          searchDescription
+          dueDate
+          status
+          priority
+          completedByUsername
+          completedDate
+          ownerUsername
+          startDate
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      TeamImages {
+        items {
+          id
+          teamID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          teamImageTeamEventId
+        }
+        nextToken
+        startedAt
+      }
+      TeamContacts {
+        items {
+          id
+          teamID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      TeamEvents {
+        items {
+          id
+          teamID
+          name
+          searchName
+          description
+          searchDescription
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          teamEventEventId
+        }
+        nextToken
+        startedAt
+      }
+      TeamProjects {
+        items {
+          id
+          teamID
+          name
+          searchName
+          description
+          searchDescription
+          status
+          startDate
+          endDate
           createdAt
           updatedAt
           _version
@@ -699,10 +1309,10 @@ export const deleteTeam = /* GraphQL */ `
       teamType
       customTeamType
       description
-      teamMembers {
+      TeamMembers {
         items {
           id
-          teamId
+          teamID
           username
           role
           createdAt
@@ -714,10 +1324,10 @@ export const deleteTeam = /* GraphQL */ `
         nextToken
         startedAt
       }
-      invitations {
+      TeamInvitations {
         items {
           id
-          teamId
+          teamID
           role
           status
           username
@@ -725,6 +1335,95 @@ export const deleteTeam = /* GraphQL */ `
           invitedByUsername
           responseDateTime
           responseComment
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      Tasks {
+        items {
+          id
+          teamID
+          name
+          searchName
+          description
+          searchDescription
+          dueDate
+          status
+          priority
+          completedByUsername
+          completedDate
+          ownerUsername
+          startDate
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      TeamImages {
+        items {
+          id
+          teamID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          teamImageTeamEventId
+        }
+        nextToken
+        startedAt
+      }
+      TeamContacts {
+        items {
+          id
+          teamID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      TeamEvents {
+        items {
+          id
+          teamID
+          name
+          searchName
+          description
+          searchDescription
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          teamEventEventId
+        }
+        nextToken
+        startedAt
+      }
+      TeamProjects {
+        items {
+          id
+          teamID
+          name
+          searchName
+          description
+          searchDescription
+          status
+          startDate
+          endDate
           createdAt
           updatedAt
           _version
@@ -749,9 +1448,51 @@ export const createTeamMember = /* GraphQL */ `
   ) {
     createTeamMember(input: $input, condition: $condition) {
       id
-      teamId
+      teamID
       username
       role
+      Team {
+        id
+        name
+        searchName
+        visibility
+        teamType
+        customTeamType
+        description
+        TeamMembers {
+          nextToken
+          startedAt
+        }
+        TeamInvitations {
+          nextToken
+          startedAt
+        }
+        Tasks {
+          nextToken
+          startedAt
+        }
+        TeamImages {
+          nextToken
+          startedAt
+        }
+        TeamContacts {
+          nextToken
+          startedAt
+        }
+        TeamEvents {
+          nextToken
+          startedAt
+        }
+        TeamProjects {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
       createdAt
       updatedAt
       _version
@@ -767,9 +1508,51 @@ export const updateTeamMember = /* GraphQL */ `
   ) {
     updateTeamMember(input: $input, condition: $condition) {
       id
-      teamId
+      teamID
       username
       role
+      Team {
+        id
+        name
+        searchName
+        visibility
+        teamType
+        customTeamType
+        description
+        TeamMembers {
+          nextToken
+          startedAt
+        }
+        TeamInvitations {
+          nextToken
+          startedAt
+        }
+        Tasks {
+          nextToken
+          startedAt
+        }
+        TeamImages {
+          nextToken
+          startedAt
+        }
+        TeamContacts {
+          nextToken
+          startedAt
+        }
+        TeamEvents {
+          nextToken
+          startedAt
+        }
+        TeamProjects {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
       createdAt
       updatedAt
       _version
@@ -785,9 +1568,51 @@ export const deleteTeamMember = /* GraphQL */ `
   ) {
     deleteTeamMember(input: $input, condition: $condition) {
       id
-      teamId
+      teamID
       username
       role
+      Team {
+        id
+        name
+        searchName
+        visibility
+        teamType
+        customTeamType
+        description
+        TeamMembers {
+          nextToken
+          startedAt
+        }
+        TeamInvitations {
+          nextToken
+          startedAt
+        }
+        Tasks {
+          nextToken
+          startedAt
+        }
+        TeamImages {
+          nextToken
+          startedAt
+        }
+        TeamContacts {
+          nextToken
+          startedAt
+        }
+        TeamEvents {
+          nextToken
+          startedAt
+        }
+        TeamProjects {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
       createdAt
       updatedAt
       _version
@@ -803,7 +1628,7 @@ export const createTeamInvitation = /* GraphQL */ `
   ) {
     createTeamInvitation(input: $input, condition: $condition) {
       id
-      teamId
+      teamID
       role
       status
       username
@@ -811,6 +1636,48 @@ export const createTeamInvitation = /* GraphQL */ `
       invitedByUsername
       responseDateTime
       responseComment
+      Team {
+        id
+        name
+        searchName
+        visibility
+        teamType
+        customTeamType
+        description
+        TeamMembers {
+          nextToken
+          startedAt
+        }
+        TeamInvitations {
+          nextToken
+          startedAt
+        }
+        Tasks {
+          nextToken
+          startedAt
+        }
+        TeamImages {
+          nextToken
+          startedAt
+        }
+        TeamContacts {
+          nextToken
+          startedAt
+        }
+        TeamEvents {
+          nextToken
+          startedAt
+        }
+        TeamProjects {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
       createdAt
       updatedAt
       _version
@@ -826,7 +1693,7 @@ export const updateTeamInvitation = /* GraphQL */ `
   ) {
     updateTeamInvitation(input: $input, condition: $condition) {
       id
-      teamId
+      teamID
       role
       status
       username
@@ -834,6 +1701,48 @@ export const updateTeamInvitation = /* GraphQL */ `
       invitedByUsername
       responseDateTime
       responseComment
+      Team {
+        id
+        name
+        searchName
+        visibility
+        teamType
+        customTeamType
+        description
+        TeamMembers {
+          nextToken
+          startedAt
+        }
+        TeamInvitations {
+          nextToken
+          startedAt
+        }
+        Tasks {
+          nextToken
+          startedAt
+        }
+        TeamImages {
+          nextToken
+          startedAt
+        }
+        TeamContacts {
+          nextToken
+          startedAt
+        }
+        TeamEvents {
+          nextToken
+          startedAt
+        }
+        TeamProjects {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
       createdAt
       updatedAt
       _version
@@ -849,7 +1758,7 @@ export const deleteTeamInvitation = /* GraphQL */ `
   ) {
     deleteTeamInvitation(input: $input, condition: $condition) {
       id
-      teamId
+      teamID
       role
       status
       username
@@ -857,6 +1766,849 @@ export const deleteTeamInvitation = /* GraphQL */ `
       invitedByUsername
       responseDateTime
       responseComment
+      Team {
+        id
+        name
+        searchName
+        visibility
+        teamType
+        customTeamType
+        description
+        TeamMembers {
+          nextToken
+          startedAt
+        }
+        TeamInvitations {
+          nextToken
+          startedAt
+        }
+        Tasks {
+          nextToken
+          startedAt
+        }
+        TeamImages {
+          nextToken
+          startedAt
+        }
+        TeamContacts {
+          nextToken
+          startedAt
+        }
+        TeamEvents {
+          nextToken
+          startedAt
+        }
+        TeamProjects {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const createTeamImage = /* GraphQL */ `
+  mutation CreateTeamImage(
+    $input: CreateTeamImageInput!
+    $condition: ModelTeamImageConditionInput
+  ) {
+    createTeamImage(input: $input, condition: $condition) {
+      id
+      teamID
+      image {
+        storageKey
+        alt
+        searchAlt
+        caption
+        searchCaption
+        detail
+        searchDetail
+      }
+      Team {
+        id
+        name
+        searchName
+        visibility
+        teamType
+        customTeamType
+        description
+        TeamMembers {
+          nextToken
+          startedAt
+        }
+        TeamInvitations {
+          nextToken
+          startedAt
+        }
+        Tasks {
+          nextToken
+          startedAt
+        }
+        TeamImages {
+          nextToken
+          startedAt
+        }
+        TeamContacts {
+          nextToken
+          startedAt
+        }
+        TeamEvents {
+          nextToken
+          startedAt
+        }
+        TeamProjects {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      TeamEvent {
+        id
+        teamID
+        name
+        searchName
+        description
+        searchDescription
+        event {
+          id
+          name
+          searchName
+          date
+          time
+          description
+          searchDescription
+          website
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          eventVenueId
+        }
+        Team {
+          id
+          name
+          searchName
+          visibility
+          teamType
+          customTeamType
+          description
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        TeamEventImages {
+          nextToken
+          startedAt
+        }
+        TeamEventComments {
+          nextToken
+          startedAt
+        }
+        TeamEventContacts {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        teamEventEventId
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      teamImageTeamEventId
+    }
+  }
+`;
+export const updateTeamImage = /* GraphQL */ `
+  mutation UpdateTeamImage(
+    $input: UpdateTeamImageInput!
+    $condition: ModelTeamImageConditionInput
+  ) {
+    updateTeamImage(input: $input, condition: $condition) {
+      id
+      teamID
+      image {
+        storageKey
+        alt
+        searchAlt
+        caption
+        searchCaption
+        detail
+        searchDetail
+      }
+      Team {
+        id
+        name
+        searchName
+        visibility
+        teamType
+        customTeamType
+        description
+        TeamMembers {
+          nextToken
+          startedAt
+        }
+        TeamInvitations {
+          nextToken
+          startedAt
+        }
+        Tasks {
+          nextToken
+          startedAt
+        }
+        TeamImages {
+          nextToken
+          startedAt
+        }
+        TeamContacts {
+          nextToken
+          startedAt
+        }
+        TeamEvents {
+          nextToken
+          startedAt
+        }
+        TeamProjects {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      TeamEvent {
+        id
+        teamID
+        name
+        searchName
+        description
+        searchDescription
+        event {
+          id
+          name
+          searchName
+          date
+          time
+          description
+          searchDescription
+          website
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          eventVenueId
+        }
+        Team {
+          id
+          name
+          searchName
+          visibility
+          teamType
+          customTeamType
+          description
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        TeamEventImages {
+          nextToken
+          startedAt
+        }
+        TeamEventComments {
+          nextToken
+          startedAt
+        }
+        TeamEventContacts {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        teamEventEventId
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      teamImageTeamEventId
+    }
+  }
+`;
+export const deleteTeamImage = /* GraphQL */ `
+  mutation DeleteTeamImage(
+    $input: DeleteTeamImageInput!
+    $condition: ModelTeamImageConditionInput
+  ) {
+    deleteTeamImage(input: $input, condition: $condition) {
+      id
+      teamID
+      image {
+        storageKey
+        alt
+        searchAlt
+        caption
+        searchCaption
+        detail
+        searchDetail
+      }
+      Team {
+        id
+        name
+        searchName
+        visibility
+        teamType
+        customTeamType
+        description
+        TeamMembers {
+          nextToken
+          startedAt
+        }
+        TeamInvitations {
+          nextToken
+          startedAt
+        }
+        Tasks {
+          nextToken
+          startedAt
+        }
+        TeamImages {
+          nextToken
+          startedAt
+        }
+        TeamContacts {
+          nextToken
+          startedAt
+        }
+        TeamEvents {
+          nextToken
+          startedAt
+        }
+        TeamProjects {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      TeamEvent {
+        id
+        teamID
+        name
+        searchName
+        description
+        searchDescription
+        event {
+          id
+          name
+          searchName
+          date
+          time
+          description
+          searchDescription
+          website
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          eventVenueId
+        }
+        Team {
+          id
+          name
+          searchName
+          visibility
+          teamType
+          customTeamType
+          description
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        TeamEventImages {
+          nextToken
+          startedAt
+        }
+        TeamEventComments {
+          nextToken
+          startedAt
+        }
+        TeamEventContacts {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        teamEventEventId
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      teamImageTeamEventId
+    }
+  }
+`;
+export const createTeamContact = /* GraphQL */ `
+  mutation CreateTeamContact(
+    $input: CreateTeamContactInput!
+    $condition: ModelTeamContactConditionInput
+  ) {
+    createTeamContact(input: $input, condition: $condition) {
+      id
+      teamID
+      contact {
+        name
+        searchString
+        email
+        phone
+        address {
+          addressLine1
+          addressLine2
+          city
+          stateProvince
+          country
+          postalCode
+        }
+        notes
+        searchNotes
+      }
+      Team {
+        id
+        name
+        searchName
+        visibility
+        teamType
+        customTeamType
+        description
+        TeamMembers {
+          nextToken
+          startedAt
+        }
+        TeamInvitations {
+          nextToken
+          startedAt
+        }
+        Tasks {
+          nextToken
+          startedAt
+        }
+        TeamImages {
+          nextToken
+          startedAt
+        }
+        TeamContacts {
+          nextToken
+          startedAt
+        }
+        TeamEvents {
+          nextToken
+          startedAt
+        }
+        TeamProjects {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      TeamContactComments {
+        items {
+          id
+          teamContactID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const updateTeamContact = /* GraphQL */ `
+  mutation UpdateTeamContact(
+    $input: UpdateTeamContactInput!
+    $condition: ModelTeamContactConditionInput
+  ) {
+    updateTeamContact(input: $input, condition: $condition) {
+      id
+      teamID
+      contact {
+        name
+        searchString
+        email
+        phone
+        address {
+          addressLine1
+          addressLine2
+          city
+          stateProvince
+          country
+          postalCode
+        }
+        notes
+        searchNotes
+      }
+      Team {
+        id
+        name
+        searchName
+        visibility
+        teamType
+        customTeamType
+        description
+        TeamMembers {
+          nextToken
+          startedAt
+        }
+        TeamInvitations {
+          nextToken
+          startedAt
+        }
+        Tasks {
+          nextToken
+          startedAt
+        }
+        TeamImages {
+          nextToken
+          startedAt
+        }
+        TeamContacts {
+          nextToken
+          startedAt
+        }
+        TeamEvents {
+          nextToken
+          startedAt
+        }
+        TeamProjects {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      TeamContactComments {
+        items {
+          id
+          teamContactID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const deleteTeamContact = /* GraphQL */ `
+  mutation DeleteTeamContact(
+    $input: DeleteTeamContactInput!
+    $condition: ModelTeamContactConditionInput
+  ) {
+    deleteTeamContact(input: $input, condition: $condition) {
+      id
+      teamID
+      contact {
+        name
+        searchString
+        email
+        phone
+        address {
+          addressLine1
+          addressLine2
+          city
+          stateProvince
+          country
+          postalCode
+        }
+        notes
+        searchNotes
+      }
+      Team {
+        id
+        name
+        searchName
+        visibility
+        teamType
+        customTeamType
+        description
+        TeamMembers {
+          nextToken
+          startedAt
+        }
+        TeamInvitations {
+          nextToken
+          startedAt
+        }
+        Tasks {
+          nextToken
+          startedAt
+        }
+        TeamImages {
+          nextToken
+          startedAt
+        }
+        TeamContacts {
+          nextToken
+          startedAt
+        }
+        TeamEvents {
+          nextToken
+          startedAt
+        }
+        TeamProjects {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      TeamContactComments {
+        items {
+          id
+          teamContactID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const createTeamContactComment = /* GraphQL */ `
+  mutation CreateTeamContactComment(
+    $input: CreateTeamContactCommentInput!
+    $condition: ModelTeamContactCommentConditionInput
+  ) {
+    createTeamContactComment(input: $input, condition: $condition) {
+      id
+      teamContactID
+      comment {
+        comment
+        searchComment
+        postedByUsername
+      }
+      TeamContact {
+        id
+        teamID
+        contact {
+          name
+          searchString
+          email
+          phone
+          notes
+          searchNotes
+        }
+        Team {
+          id
+          name
+          searchName
+          visibility
+          teamType
+          customTeamType
+          description
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        TeamContactComments {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const updateTeamContactComment = /* GraphQL */ `
+  mutation UpdateTeamContactComment(
+    $input: UpdateTeamContactCommentInput!
+    $condition: ModelTeamContactCommentConditionInput
+  ) {
+    updateTeamContactComment(input: $input, condition: $condition) {
+      id
+      teamContactID
+      comment {
+        comment
+        searchComment
+        postedByUsername
+      }
+      TeamContact {
+        id
+        teamID
+        contact {
+          name
+          searchString
+          email
+          phone
+          notes
+          searchNotes
+        }
+        Team {
+          id
+          name
+          searchName
+          visibility
+          teamType
+          customTeamType
+          description
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        TeamContactComments {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const deleteTeamContactComment = /* GraphQL */ `
+  mutation DeleteTeamContactComment(
+    $input: DeleteTeamContactCommentInput!
+    $condition: ModelTeamContactCommentConditionInput
+  ) {
+    deleteTeamContactComment(input: $input, condition: $condition) {
+      id
+      teamContactID
+      comment {
+        comment
+        searchComment
+        postedByUsername
+      }
+      TeamContact {
+        id
+        teamID
+        contact {
+          name
+          searchString
+          email
+          phone
+          notes
+          searchNotes
+        }
+        Team {
+          id
+          name
+          searchName
+          visibility
+          teamType
+          customTeamType
+          description
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        TeamContactComments {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
       createdAt
       updatedAt
       _version
@@ -872,7 +2624,7 @@ export const createTask = /* GraphQL */ `
   ) {
     createTask(input: $input, condition: $condition) {
       id
-      teamId
+      teamID
       name
       searchName
       description
@@ -882,10 +2634,10 @@ export const createTask = /* GraphQL */ `
       priority
       completedByUsername
       completedDate
-      comments {
+      TaskComments {
         items {
           id
-          taskId
+          taskID
           createdAt
           updatedAt
           _version
@@ -897,6 +2649,48 @@ export const createTask = /* GraphQL */ `
       }
       ownerUsername
       startDate
+      Team {
+        id
+        name
+        searchName
+        visibility
+        teamType
+        customTeamType
+        description
+        TeamMembers {
+          nextToken
+          startedAt
+        }
+        TeamInvitations {
+          nextToken
+          startedAt
+        }
+        Tasks {
+          nextToken
+          startedAt
+        }
+        TeamImages {
+          nextToken
+          startedAt
+        }
+        TeamContacts {
+          nextToken
+          startedAt
+        }
+        TeamEvents {
+          nextToken
+          startedAt
+        }
+        TeamProjects {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
       createdAt
       updatedAt
       _version
@@ -912,7 +2706,7 @@ export const updateTask = /* GraphQL */ `
   ) {
     updateTask(input: $input, condition: $condition) {
       id
-      teamId
+      teamID
       name
       searchName
       description
@@ -922,10 +2716,10 @@ export const updateTask = /* GraphQL */ `
       priority
       completedByUsername
       completedDate
-      comments {
+      TaskComments {
         items {
           id
-          taskId
+          taskID
           createdAt
           updatedAt
           _version
@@ -937,6 +2731,48 @@ export const updateTask = /* GraphQL */ `
       }
       ownerUsername
       startDate
+      Team {
+        id
+        name
+        searchName
+        visibility
+        teamType
+        customTeamType
+        description
+        TeamMembers {
+          nextToken
+          startedAt
+        }
+        TeamInvitations {
+          nextToken
+          startedAt
+        }
+        Tasks {
+          nextToken
+          startedAt
+        }
+        TeamImages {
+          nextToken
+          startedAt
+        }
+        TeamContacts {
+          nextToken
+          startedAt
+        }
+        TeamEvents {
+          nextToken
+          startedAt
+        }
+        TeamProjects {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
       createdAt
       updatedAt
       _version
@@ -952,7 +2788,7 @@ export const deleteTask = /* GraphQL */ `
   ) {
     deleteTask(input: $input, condition: $condition) {
       id
-      teamId
+      teamID
       name
       searchName
       description
@@ -962,10 +2798,10 @@ export const deleteTask = /* GraphQL */ `
       priority
       completedByUsername
       completedDate
-      comments {
+      TaskComments {
         items {
           id
-          taskId
+          taskID
           createdAt
           updatedAt
           _version
@@ -977,6 +2813,48 @@ export const deleteTask = /* GraphQL */ `
       }
       ownerUsername
       startDate
+      Team {
+        id
+        name
+        searchName
+        visibility
+        teamType
+        customTeamType
+        description
+        TeamMembers {
+          nextToken
+          startedAt
+        }
+        TeamInvitations {
+          nextToken
+          startedAt
+        }
+        Tasks {
+          nextToken
+          startedAt
+        }
+        TeamImages {
+          nextToken
+          startedAt
+        }
+        TeamContacts {
+          nextToken
+          startedAt
+        }
+        TeamEvents {
+          nextToken
+          startedAt
+        }
+        TeamProjects {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
       createdAt
       updatedAt
       _version
@@ -992,11 +2870,49 @@ export const createTaskComment = /* GraphQL */ `
   ) {
     createTaskComment(input: $input, condition: $condition) {
       id
-      taskId
+      taskID
       comment {
         comment
         searchComment
         postedByUsername
+      }
+      Task {
+        id
+        teamID
+        name
+        searchName
+        description
+        searchDescription
+        dueDate
+        status
+        priority
+        completedByUsername
+        completedDate
+        TaskComments {
+          nextToken
+          startedAt
+        }
+        ownerUsername
+        startDate
+        Team {
+          id
+          name
+          searchName
+          visibility
+          teamType
+          customTeamType
+          description
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       createdAt
       updatedAt
@@ -1013,11 +2929,49 @@ export const updateTaskComment = /* GraphQL */ `
   ) {
     updateTaskComment(input: $input, condition: $condition) {
       id
-      taskId
+      taskID
       comment {
         comment
         searchComment
         postedByUsername
+      }
+      Task {
+        id
+        teamID
+        name
+        searchName
+        description
+        searchDescription
+        dueDate
+        status
+        priority
+        completedByUsername
+        completedDate
+        TaskComments {
+          nextToken
+          startedAt
+        }
+        ownerUsername
+        startDate
+        Team {
+          id
+          name
+          searchName
+          visibility
+          teamType
+          customTeamType
+          description
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       createdAt
       updatedAt
@@ -1034,12 +2988,2753 @@ export const deleteTaskComment = /* GraphQL */ `
   ) {
     deleteTaskComment(input: $input, condition: $condition) {
       id
-      taskId
+      taskID
       comment {
         comment
         searchComment
         postedByUsername
       }
+      Task {
+        id
+        teamID
+        name
+        searchName
+        description
+        searchDescription
+        dueDate
+        status
+        priority
+        completedByUsername
+        completedDate
+        TaskComments {
+          nextToken
+          startedAt
+        }
+        ownerUsername
+        startDate
+        Team {
+          id
+          name
+          searchName
+          visibility
+          teamType
+          customTeamType
+          description
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const createVenue = /* GraphQL */ `
+  mutation CreateVenue(
+    $input: CreateVenueInput!
+    $condition: ModelVenueConditionInput
+  ) {
+    createVenue(input: $input, condition: $condition) {
+      id
+      name
+      searchName
+      address {
+        addressLine1
+        addressLine2
+        city
+        stateProvince
+        country
+        postalCode
+      }
+      website
+      phone
+      email
+      VenueContacts {
+        items {
+          id
+          venueID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const updateVenue = /* GraphQL */ `
+  mutation UpdateVenue(
+    $input: UpdateVenueInput!
+    $condition: ModelVenueConditionInput
+  ) {
+    updateVenue(input: $input, condition: $condition) {
+      id
+      name
+      searchName
+      address {
+        addressLine1
+        addressLine2
+        city
+        stateProvince
+        country
+        postalCode
+      }
+      website
+      phone
+      email
+      VenueContacts {
+        items {
+          id
+          venueID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const deleteVenue = /* GraphQL */ `
+  mutation DeleteVenue(
+    $input: DeleteVenueInput!
+    $condition: ModelVenueConditionInput
+  ) {
+    deleteVenue(input: $input, condition: $condition) {
+      id
+      name
+      searchName
+      address {
+        addressLine1
+        addressLine2
+        city
+        stateProvince
+        country
+        postalCode
+      }
+      website
+      phone
+      email
+      VenueContacts {
+        items {
+          id
+          venueID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const createVenueContact = /* GraphQL */ `
+  mutation CreateVenueContact(
+    $input: CreateVenueContactInput!
+    $condition: ModelVenueContactConditionInput
+  ) {
+    createVenueContact(input: $input, condition: $condition) {
+      id
+      venueID
+      contact {
+        name
+        searchString
+        email
+        phone
+        address {
+          addressLine1
+          addressLine2
+          city
+          stateProvince
+          country
+          postalCode
+        }
+        notes
+        searchNotes
+      }
+      Venue {
+        id
+        name
+        searchName
+        address {
+          addressLine1
+          addressLine2
+          city
+          stateProvince
+          country
+          postalCode
+        }
+        website
+        phone
+        email
+        VenueContacts {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const updateVenueContact = /* GraphQL */ `
+  mutation UpdateVenueContact(
+    $input: UpdateVenueContactInput!
+    $condition: ModelVenueContactConditionInput
+  ) {
+    updateVenueContact(input: $input, condition: $condition) {
+      id
+      venueID
+      contact {
+        name
+        searchString
+        email
+        phone
+        address {
+          addressLine1
+          addressLine2
+          city
+          stateProvince
+          country
+          postalCode
+        }
+        notes
+        searchNotes
+      }
+      Venue {
+        id
+        name
+        searchName
+        address {
+          addressLine1
+          addressLine2
+          city
+          stateProvince
+          country
+          postalCode
+        }
+        website
+        phone
+        email
+        VenueContacts {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const deleteVenueContact = /* GraphQL */ `
+  mutation DeleteVenueContact(
+    $input: DeleteVenueContactInput!
+    $condition: ModelVenueContactConditionInput
+  ) {
+    deleteVenueContact(input: $input, condition: $condition) {
+      id
+      venueID
+      contact {
+        name
+        searchString
+        email
+        phone
+        address {
+          addressLine1
+          addressLine2
+          city
+          stateProvince
+          country
+          postalCode
+        }
+        notes
+        searchNotes
+      }
+      Venue {
+        id
+        name
+        searchName
+        address {
+          addressLine1
+          addressLine2
+          city
+          stateProvince
+          country
+          postalCode
+        }
+        website
+        phone
+        email
+        VenueContacts {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const createEvent = /* GraphQL */ `
+  mutation CreateEvent(
+    $input: CreateEventInput!
+    $condition: ModelEventConditionInput
+  ) {
+    createEvent(input: $input, condition: $condition) {
+      id
+      name
+      searchName
+      venue {
+        id
+        name
+        searchName
+        address {
+          addressLine1
+          addressLine2
+          city
+          stateProvince
+          country
+          postalCode
+        }
+        website
+        phone
+        email
+        VenueContacts {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      date
+      time
+      description
+      searchDescription
+      website
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      eventVenueId
+    }
+  }
+`;
+export const updateEvent = /* GraphQL */ `
+  mutation UpdateEvent(
+    $input: UpdateEventInput!
+    $condition: ModelEventConditionInput
+  ) {
+    updateEvent(input: $input, condition: $condition) {
+      id
+      name
+      searchName
+      venue {
+        id
+        name
+        searchName
+        address {
+          addressLine1
+          addressLine2
+          city
+          stateProvince
+          country
+          postalCode
+        }
+        website
+        phone
+        email
+        VenueContacts {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      date
+      time
+      description
+      searchDescription
+      website
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      eventVenueId
+    }
+  }
+`;
+export const deleteEvent = /* GraphQL */ `
+  mutation DeleteEvent(
+    $input: DeleteEventInput!
+    $condition: ModelEventConditionInput
+  ) {
+    deleteEvent(input: $input, condition: $condition) {
+      id
+      name
+      searchName
+      venue {
+        id
+        name
+        searchName
+        address {
+          addressLine1
+          addressLine2
+          city
+          stateProvince
+          country
+          postalCode
+        }
+        website
+        phone
+        email
+        VenueContacts {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      date
+      time
+      description
+      searchDescription
+      website
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      eventVenueId
+    }
+  }
+`;
+export const createTeamEvent = /* GraphQL */ `
+  mutation CreateTeamEvent(
+    $input: CreateTeamEventInput!
+    $condition: ModelTeamEventConditionInput
+  ) {
+    createTeamEvent(input: $input, condition: $condition) {
+      id
+      teamID
+      name
+      searchName
+      description
+      searchDescription
+      event {
+        id
+        name
+        searchName
+        venue {
+          id
+          name
+          searchName
+          website
+          phone
+          email
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        date
+        time
+        description
+        searchDescription
+        website
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        eventVenueId
+      }
+      Team {
+        id
+        name
+        searchName
+        visibility
+        teamType
+        customTeamType
+        description
+        TeamMembers {
+          nextToken
+          startedAt
+        }
+        TeamInvitations {
+          nextToken
+          startedAt
+        }
+        Tasks {
+          nextToken
+          startedAt
+        }
+        TeamImages {
+          nextToken
+          startedAt
+        }
+        TeamContacts {
+          nextToken
+          startedAt
+        }
+        TeamEvents {
+          nextToken
+          startedAt
+        }
+        TeamProjects {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      TeamEventImages {
+        items {
+          id
+          teameventID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          teamEventImageTeamImageId
+        }
+        nextToken
+        startedAt
+      }
+      TeamEventComments {
+        items {
+          id
+          teameventID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      TeamEventContacts {
+        items {
+          id
+          teameventID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      teamEventEventId
+    }
+  }
+`;
+export const updateTeamEvent = /* GraphQL */ `
+  mutation UpdateTeamEvent(
+    $input: UpdateTeamEventInput!
+    $condition: ModelTeamEventConditionInput
+  ) {
+    updateTeamEvent(input: $input, condition: $condition) {
+      id
+      teamID
+      name
+      searchName
+      description
+      searchDescription
+      event {
+        id
+        name
+        searchName
+        venue {
+          id
+          name
+          searchName
+          website
+          phone
+          email
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        date
+        time
+        description
+        searchDescription
+        website
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        eventVenueId
+      }
+      Team {
+        id
+        name
+        searchName
+        visibility
+        teamType
+        customTeamType
+        description
+        TeamMembers {
+          nextToken
+          startedAt
+        }
+        TeamInvitations {
+          nextToken
+          startedAt
+        }
+        Tasks {
+          nextToken
+          startedAt
+        }
+        TeamImages {
+          nextToken
+          startedAt
+        }
+        TeamContacts {
+          nextToken
+          startedAt
+        }
+        TeamEvents {
+          nextToken
+          startedAt
+        }
+        TeamProjects {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      TeamEventImages {
+        items {
+          id
+          teameventID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          teamEventImageTeamImageId
+        }
+        nextToken
+        startedAt
+      }
+      TeamEventComments {
+        items {
+          id
+          teameventID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      TeamEventContacts {
+        items {
+          id
+          teameventID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      teamEventEventId
+    }
+  }
+`;
+export const deleteTeamEvent = /* GraphQL */ `
+  mutation DeleteTeamEvent(
+    $input: DeleteTeamEventInput!
+    $condition: ModelTeamEventConditionInput
+  ) {
+    deleteTeamEvent(input: $input, condition: $condition) {
+      id
+      teamID
+      name
+      searchName
+      description
+      searchDescription
+      event {
+        id
+        name
+        searchName
+        venue {
+          id
+          name
+          searchName
+          website
+          phone
+          email
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        date
+        time
+        description
+        searchDescription
+        website
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        eventVenueId
+      }
+      Team {
+        id
+        name
+        searchName
+        visibility
+        teamType
+        customTeamType
+        description
+        TeamMembers {
+          nextToken
+          startedAt
+        }
+        TeamInvitations {
+          nextToken
+          startedAt
+        }
+        Tasks {
+          nextToken
+          startedAt
+        }
+        TeamImages {
+          nextToken
+          startedAt
+        }
+        TeamContacts {
+          nextToken
+          startedAt
+        }
+        TeamEvents {
+          nextToken
+          startedAt
+        }
+        TeamProjects {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      TeamEventImages {
+        items {
+          id
+          teameventID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          teamEventImageTeamImageId
+        }
+        nextToken
+        startedAt
+      }
+      TeamEventComments {
+        items {
+          id
+          teameventID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      TeamEventContacts {
+        items {
+          id
+          teameventID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      teamEventEventId
+    }
+  }
+`;
+export const createTeamEventImage = /* GraphQL */ `
+  mutation CreateTeamEventImage(
+    $input: CreateTeamEventImageInput!
+    $condition: ModelTeamEventImageConditionInput
+  ) {
+    createTeamEventImage(input: $input, condition: $condition) {
+      id
+      teameventID
+      teamImage {
+        id
+        teamID
+        image {
+          storageKey
+          alt
+          searchAlt
+          caption
+          searchCaption
+          detail
+          searchDetail
+        }
+        Team {
+          id
+          name
+          searchName
+          visibility
+          teamType
+          customTeamType
+          description
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        TeamEvent {
+          id
+          teamID
+          name
+          searchName
+          description
+          searchDescription
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          teamEventEventId
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        teamImageTeamEventId
+      }
+      TeamEvent {
+        id
+        teamID
+        name
+        searchName
+        description
+        searchDescription
+        event {
+          id
+          name
+          searchName
+          date
+          time
+          description
+          searchDescription
+          website
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          eventVenueId
+        }
+        Team {
+          id
+          name
+          searchName
+          visibility
+          teamType
+          customTeamType
+          description
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        TeamEventImages {
+          nextToken
+          startedAt
+        }
+        TeamEventComments {
+          nextToken
+          startedAt
+        }
+        TeamEventContacts {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        teamEventEventId
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      teamEventImageTeamImageId
+    }
+  }
+`;
+export const updateTeamEventImage = /* GraphQL */ `
+  mutation UpdateTeamEventImage(
+    $input: UpdateTeamEventImageInput!
+    $condition: ModelTeamEventImageConditionInput
+  ) {
+    updateTeamEventImage(input: $input, condition: $condition) {
+      id
+      teameventID
+      teamImage {
+        id
+        teamID
+        image {
+          storageKey
+          alt
+          searchAlt
+          caption
+          searchCaption
+          detail
+          searchDetail
+        }
+        Team {
+          id
+          name
+          searchName
+          visibility
+          teamType
+          customTeamType
+          description
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        TeamEvent {
+          id
+          teamID
+          name
+          searchName
+          description
+          searchDescription
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          teamEventEventId
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        teamImageTeamEventId
+      }
+      TeamEvent {
+        id
+        teamID
+        name
+        searchName
+        description
+        searchDescription
+        event {
+          id
+          name
+          searchName
+          date
+          time
+          description
+          searchDescription
+          website
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          eventVenueId
+        }
+        Team {
+          id
+          name
+          searchName
+          visibility
+          teamType
+          customTeamType
+          description
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        TeamEventImages {
+          nextToken
+          startedAt
+        }
+        TeamEventComments {
+          nextToken
+          startedAt
+        }
+        TeamEventContacts {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        teamEventEventId
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      teamEventImageTeamImageId
+    }
+  }
+`;
+export const deleteTeamEventImage = /* GraphQL */ `
+  mutation DeleteTeamEventImage(
+    $input: DeleteTeamEventImageInput!
+    $condition: ModelTeamEventImageConditionInput
+  ) {
+    deleteTeamEventImage(input: $input, condition: $condition) {
+      id
+      teameventID
+      teamImage {
+        id
+        teamID
+        image {
+          storageKey
+          alt
+          searchAlt
+          caption
+          searchCaption
+          detail
+          searchDetail
+        }
+        Team {
+          id
+          name
+          searchName
+          visibility
+          teamType
+          customTeamType
+          description
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        TeamEvent {
+          id
+          teamID
+          name
+          searchName
+          description
+          searchDescription
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          teamEventEventId
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        teamImageTeamEventId
+      }
+      TeamEvent {
+        id
+        teamID
+        name
+        searchName
+        description
+        searchDescription
+        event {
+          id
+          name
+          searchName
+          date
+          time
+          description
+          searchDescription
+          website
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          eventVenueId
+        }
+        Team {
+          id
+          name
+          searchName
+          visibility
+          teamType
+          customTeamType
+          description
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        TeamEventImages {
+          nextToken
+          startedAt
+        }
+        TeamEventComments {
+          nextToken
+          startedAt
+        }
+        TeamEventContacts {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        teamEventEventId
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      teamEventImageTeamImageId
+    }
+  }
+`;
+export const createTeamEventComment = /* GraphQL */ `
+  mutation CreateTeamEventComment(
+    $input: CreateTeamEventCommentInput!
+    $condition: ModelTeamEventCommentConditionInput
+  ) {
+    createTeamEventComment(input: $input, condition: $condition) {
+      id
+      teameventID
+      comment {
+        comment
+        searchComment
+        postedByUsername
+      }
+      TeamEvent {
+        id
+        teamID
+        name
+        searchName
+        description
+        searchDescription
+        event {
+          id
+          name
+          searchName
+          date
+          time
+          description
+          searchDescription
+          website
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          eventVenueId
+        }
+        Team {
+          id
+          name
+          searchName
+          visibility
+          teamType
+          customTeamType
+          description
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        TeamEventImages {
+          nextToken
+          startedAt
+        }
+        TeamEventComments {
+          nextToken
+          startedAt
+        }
+        TeamEventContacts {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        teamEventEventId
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const updateTeamEventComment = /* GraphQL */ `
+  mutation UpdateTeamEventComment(
+    $input: UpdateTeamEventCommentInput!
+    $condition: ModelTeamEventCommentConditionInput
+  ) {
+    updateTeamEventComment(input: $input, condition: $condition) {
+      id
+      teameventID
+      comment {
+        comment
+        searchComment
+        postedByUsername
+      }
+      TeamEvent {
+        id
+        teamID
+        name
+        searchName
+        description
+        searchDescription
+        event {
+          id
+          name
+          searchName
+          date
+          time
+          description
+          searchDescription
+          website
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          eventVenueId
+        }
+        Team {
+          id
+          name
+          searchName
+          visibility
+          teamType
+          customTeamType
+          description
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        TeamEventImages {
+          nextToken
+          startedAt
+        }
+        TeamEventComments {
+          nextToken
+          startedAt
+        }
+        TeamEventContacts {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        teamEventEventId
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const deleteTeamEventComment = /* GraphQL */ `
+  mutation DeleteTeamEventComment(
+    $input: DeleteTeamEventCommentInput!
+    $condition: ModelTeamEventCommentConditionInput
+  ) {
+    deleteTeamEventComment(input: $input, condition: $condition) {
+      id
+      teameventID
+      comment {
+        comment
+        searchComment
+        postedByUsername
+      }
+      TeamEvent {
+        id
+        teamID
+        name
+        searchName
+        description
+        searchDescription
+        event {
+          id
+          name
+          searchName
+          date
+          time
+          description
+          searchDescription
+          website
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          eventVenueId
+        }
+        Team {
+          id
+          name
+          searchName
+          visibility
+          teamType
+          customTeamType
+          description
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        TeamEventImages {
+          nextToken
+          startedAt
+        }
+        TeamEventComments {
+          nextToken
+          startedAt
+        }
+        TeamEventContacts {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        teamEventEventId
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const createTeamEventContact = /* GraphQL */ `
+  mutation CreateTeamEventContact(
+    $input: CreateTeamEventContactInput!
+    $condition: ModelTeamEventContactConditionInput
+  ) {
+    createTeamEventContact(input: $input, condition: $condition) {
+      id
+      teameventID
+      contact {
+        name
+        searchString
+        email
+        phone
+        address {
+          addressLine1
+          addressLine2
+          city
+          stateProvince
+          country
+          postalCode
+        }
+        notes
+        searchNotes
+      }
+      TeamEvent {
+        id
+        teamID
+        name
+        searchName
+        description
+        searchDescription
+        event {
+          id
+          name
+          searchName
+          date
+          time
+          description
+          searchDescription
+          website
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          eventVenueId
+        }
+        Team {
+          id
+          name
+          searchName
+          visibility
+          teamType
+          customTeamType
+          description
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        TeamEventImages {
+          nextToken
+          startedAt
+        }
+        TeamEventComments {
+          nextToken
+          startedAt
+        }
+        TeamEventContacts {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        teamEventEventId
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const updateTeamEventContact = /* GraphQL */ `
+  mutation UpdateTeamEventContact(
+    $input: UpdateTeamEventContactInput!
+    $condition: ModelTeamEventContactConditionInput
+  ) {
+    updateTeamEventContact(input: $input, condition: $condition) {
+      id
+      teameventID
+      contact {
+        name
+        searchString
+        email
+        phone
+        address {
+          addressLine1
+          addressLine2
+          city
+          stateProvince
+          country
+          postalCode
+        }
+        notes
+        searchNotes
+      }
+      TeamEvent {
+        id
+        teamID
+        name
+        searchName
+        description
+        searchDescription
+        event {
+          id
+          name
+          searchName
+          date
+          time
+          description
+          searchDescription
+          website
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          eventVenueId
+        }
+        Team {
+          id
+          name
+          searchName
+          visibility
+          teamType
+          customTeamType
+          description
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        TeamEventImages {
+          nextToken
+          startedAt
+        }
+        TeamEventComments {
+          nextToken
+          startedAt
+        }
+        TeamEventContacts {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        teamEventEventId
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const deleteTeamEventContact = /* GraphQL */ `
+  mutation DeleteTeamEventContact(
+    $input: DeleteTeamEventContactInput!
+    $condition: ModelTeamEventContactConditionInput
+  ) {
+    deleteTeamEventContact(input: $input, condition: $condition) {
+      id
+      teameventID
+      contact {
+        name
+        searchString
+        email
+        phone
+        address {
+          addressLine1
+          addressLine2
+          city
+          stateProvince
+          country
+          postalCode
+        }
+        notes
+        searchNotes
+      }
+      TeamEvent {
+        id
+        teamID
+        name
+        searchName
+        description
+        searchDescription
+        event {
+          id
+          name
+          searchName
+          date
+          time
+          description
+          searchDescription
+          website
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+          eventVenueId
+        }
+        Team {
+          id
+          name
+          searchName
+          visibility
+          teamType
+          customTeamType
+          description
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        TeamEventImages {
+          nextToken
+          startedAt
+        }
+        TeamEventComments {
+          nextToken
+          startedAt
+        }
+        TeamEventContacts {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        teamEventEventId
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const createTeamProject = /* GraphQL */ `
+  mutation CreateTeamProject(
+    $input: CreateTeamProjectInput!
+    $condition: ModelTeamProjectConditionInput
+  ) {
+    createTeamProject(input: $input, condition: $condition) {
+      id
+      teamID
+      name
+      searchName
+      description
+      searchDescription
+      status
+      startDate
+      endDate
+      Team {
+        id
+        name
+        searchName
+        visibility
+        teamType
+        customTeamType
+        description
+        TeamMembers {
+          nextToken
+          startedAt
+        }
+        TeamInvitations {
+          nextToken
+          startedAt
+        }
+        Tasks {
+          nextToken
+          startedAt
+        }
+        TeamImages {
+          nextToken
+          startedAt
+        }
+        TeamContacts {
+          nextToken
+          startedAt
+        }
+        TeamEvents {
+          nextToken
+          startedAt
+        }
+        TeamProjects {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      TeamProjectMilestones {
+        items {
+          id
+          teamprojectID
+          name
+          searchName
+          description
+          searchDescription
+          status
+          date
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      TeamProjectComments {
+        items {
+          id
+          teamprojectID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const updateTeamProject = /* GraphQL */ `
+  mutation UpdateTeamProject(
+    $input: UpdateTeamProjectInput!
+    $condition: ModelTeamProjectConditionInput
+  ) {
+    updateTeamProject(input: $input, condition: $condition) {
+      id
+      teamID
+      name
+      searchName
+      description
+      searchDescription
+      status
+      startDate
+      endDate
+      Team {
+        id
+        name
+        searchName
+        visibility
+        teamType
+        customTeamType
+        description
+        TeamMembers {
+          nextToken
+          startedAt
+        }
+        TeamInvitations {
+          nextToken
+          startedAt
+        }
+        Tasks {
+          nextToken
+          startedAt
+        }
+        TeamImages {
+          nextToken
+          startedAt
+        }
+        TeamContacts {
+          nextToken
+          startedAt
+        }
+        TeamEvents {
+          nextToken
+          startedAt
+        }
+        TeamProjects {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      TeamProjectMilestones {
+        items {
+          id
+          teamprojectID
+          name
+          searchName
+          description
+          searchDescription
+          status
+          date
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      TeamProjectComments {
+        items {
+          id
+          teamprojectID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const deleteTeamProject = /* GraphQL */ `
+  mutation DeleteTeamProject(
+    $input: DeleteTeamProjectInput!
+    $condition: ModelTeamProjectConditionInput
+  ) {
+    deleteTeamProject(input: $input, condition: $condition) {
+      id
+      teamID
+      name
+      searchName
+      description
+      searchDescription
+      status
+      startDate
+      endDate
+      Team {
+        id
+        name
+        searchName
+        visibility
+        teamType
+        customTeamType
+        description
+        TeamMembers {
+          nextToken
+          startedAt
+        }
+        TeamInvitations {
+          nextToken
+          startedAt
+        }
+        Tasks {
+          nextToken
+          startedAt
+        }
+        TeamImages {
+          nextToken
+          startedAt
+        }
+        TeamContacts {
+          nextToken
+          startedAt
+        }
+        TeamEvents {
+          nextToken
+          startedAt
+        }
+        TeamProjects {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      TeamProjectMilestones {
+        items {
+          id
+          teamprojectID
+          name
+          searchName
+          description
+          searchDescription
+          status
+          date
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      TeamProjectComments {
+        items {
+          id
+          teamprojectID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const createTeamProjectComment = /* GraphQL */ `
+  mutation CreateTeamProjectComment(
+    $input: CreateTeamProjectCommentInput!
+    $condition: ModelTeamProjectCommentConditionInput
+  ) {
+    createTeamProjectComment(input: $input, condition: $condition) {
+      id
+      teamprojectID
+      comment {
+        comment
+        searchComment
+        postedByUsername
+      }
+      TeamProject {
+        id
+        teamID
+        name
+        searchName
+        description
+        searchDescription
+        status
+        startDate
+        endDate
+        Team {
+          id
+          name
+          searchName
+          visibility
+          teamType
+          customTeamType
+          description
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        TeamProjectMilestones {
+          nextToken
+          startedAt
+        }
+        TeamProjectComments {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const updateTeamProjectComment = /* GraphQL */ `
+  mutation UpdateTeamProjectComment(
+    $input: UpdateTeamProjectCommentInput!
+    $condition: ModelTeamProjectCommentConditionInput
+  ) {
+    updateTeamProjectComment(input: $input, condition: $condition) {
+      id
+      teamprojectID
+      comment {
+        comment
+        searchComment
+        postedByUsername
+      }
+      TeamProject {
+        id
+        teamID
+        name
+        searchName
+        description
+        searchDescription
+        status
+        startDate
+        endDate
+        Team {
+          id
+          name
+          searchName
+          visibility
+          teamType
+          customTeamType
+          description
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        TeamProjectMilestones {
+          nextToken
+          startedAt
+        }
+        TeamProjectComments {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const deleteTeamProjectComment = /* GraphQL */ `
+  mutation DeleteTeamProjectComment(
+    $input: DeleteTeamProjectCommentInput!
+    $condition: ModelTeamProjectCommentConditionInput
+  ) {
+    deleteTeamProjectComment(input: $input, condition: $condition) {
+      id
+      teamprojectID
+      comment {
+        comment
+        searchComment
+        postedByUsername
+      }
+      TeamProject {
+        id
+        teamID
+        name
+        searchName
+        description
+        searchDescription
+        status
+        startDate
+        endDate
+        Team {
+          id
+          name
+          searchName
+          visibility
+          teamType
+          customTeamType
+          description
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        TeamProjectMilestones {
+          nextToken
+          startedAt
+        }
+        TeamProjectComments {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const createTeamProjectMilestone = /* GraphQL */ `
+  mutation CreateTeamProjectMilestone(
+    $input: CreateTeamProjectMilestoneInput!
+    $condition: ModelTeamProjectMilestoneConditionInput
+  ) {
+    createTeamProjectMilestone(input: $input, condition: $condition) {
+      id
+      teamprojectID
+      name
+      searchName
+      description
+      searchDescription
+      status
+      date
+      TeamProject {
+        id
+        teamID
+        name
+        searchName
+        description
+        searchDescription
+        status
+        startDate
+        endDate
+        Team {
+          id
+          name
+          searchName
+          visibility
+          teamType
+          customTeamType
+          description
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        TeamProjectMilestones {
+          nextToken
+          startedAt
+        }
+        TeamProjectComments {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      TeamProjectMilestoneComments {
+        items {
+          id
+          teamprojectmilestoneID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const updateTeamProjectMilestone = /* GraphQL */ `
+  mutation UpdateTeamProjectMilestone(
+    $input: UpdateTeamProjectMilestoneInput!
+    $condition: ModelTeamProjectMilestoneConditionInput
+  ) {
+    updateTeamProjectMilestone(input: $input, condition: $condition) {
+      id
+      teamprojectID
+      name
+      searchName
+      description
+      searchDescription
+      status
+      date
+      TeamProject {
+        id
+        teamID
+        name
+        searchName
+        description
+        searchDescription
+        status
+        startDate
+        endDate
+        Team {
+          id
+          name
+          searchName
+          visibility
+          teamType
+          customTeamType
+          description
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        TeamProjectMilestones {
+          nextToken
+          startedAt
+        }
+        TeamProjectComments {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      TeamProjectMilestoneComments {
+        items {
+          id
+          teamprojectmilestoneID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const deleteTeamProjectMilestone = /* GraphQL */ `
+  mutation DeleteTeamProjectMilestone(
+    $input: DeleteTeamProjectMilestoneInput!
+    $condition: ModelTeamProjectMilestoneConditionInput
+  ) {
+    deleteTeamProjectMilestone(input: $input, condition: $condition) {
+      id
+      teamprojectID
+      name
+      searchName
+      description
+      searchDescription
+      status
+      date
+      TeamProject {
+        id
+        teamID
+        name
+        searchName
+        description
+        searchDescription
+        status
+        startDate
+        endDate
+        Team {
+          id
+          name
+          searchName
+          visibility
+          teamType
+          customTeamType
+          description
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        TeamProjectMilestones {
+          nextToken
+          startedAt
+        }
+        TeamProjectComments {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      TeamProjectMilestoneComments {
+        items {
+          id
+          teamprojectmilestoneID
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        nextToken
+        startedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const createTeamProjectMilestoneComment = /* GraphQL */ `
+  mutation CreateTeamProjectMilestoneComment(
+    $input: CreateTeamProjectMilestoneCommentInput!
+    $condition: ModelTeamProjectMilestoneCommentConditionInput
+  ) {
+    createTeamProjectMilestoneComment(input: $input, condition: $condition) {
+      id
+      teamprojectmilestoneID
+      comment {
+        comment
+        searchComment
+        postedByUsername
+      }
+      TeamProjectMilestone {
+        id
+        teamprojectID
+        name
+        searchName
+        description
+        searchDescription
+        status
+        date
+        TeamProject {
+          id
+          teamID
+          name
+          searchName
+          description
+          searchDescription
+          status
+          startDate
+          endDate
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        TeamProjectMilestoneComments {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const updateTeamProjectMilestoneComment = /* GraphQL */ `
+  mutation UpdateTeamProjectMilestoneComment(
+    $input: UpdateTeamProjectMilestoneCommentInput!
+    $condition: ModelTeamProjectMilestoneCommentConditionInput
+  ) {
+    updateTeamProjectMilestoneComment(input: $input, condition: $condition) {
+      id
+      teamprojectmilestoneID
+      comment {
+        comment
+        searchComment
+        postedByUsername
+      }
+      TeamProjectMilestone {
+        id
+        teamprojectID
+        name
+        searchName
+        description
+        searchDescription
+        status
+        date
+        TeamProject {
+          id
+          teamID
+          name
+          searchName
+          description
+          searchDescription
+          status
+          startDate
+          endDate
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        TeamProjectMilestoneComments {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const deleteTeamProjectMilestoneComment = /* GraphQL */ `
+  mutation DeleteTeamProjectMilestoneComment(
+    $input: DeleteTeamProjectMilestoneCommentInput!
+    $condition: ModelTeamProjectMilestoneCommentConditionInput
+  ) {
+    deleteTeamProjectMilestoneComment(input: $input, condition: $condition) {
+      id
+      teamprojectmilestoneID
+      comment {
+        comment
+        searchComment
+        postedByUsername
+      }
+      TeamProjectMilestone {
+        id
+        teamprojectID
+        name
+        searchName
+        description
+        searchDescription
+        status
+        date
+        TeamProject {
+          id
+          teamID
+          name
+          searchName
+          description
+          searchDescription
+          status
+          startDate
+          endDate
+          createdAt
+          updatedAt
+          _version
+          _deleted
+          _lastChangedAt
+        }
+        TeamProjectMilestoneComments {
+          nextToken
+          startedAt
+        }
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const createAsset = /* GraphQL */ `
+  mutation CreateAsset(
+    $input: CreateAssetInput!
+    $condition: ModelAssetConditionInput
+  ) {
+    createAsset(input: $input, condition: $condition) {
+      id
+      name
+      searchName
+      description
+      searchDescription
+      notes
+      searchNotes
+      product {
+        id
+        name
+        searchString
+        description
+        searchDescription
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      assetProductId
+    }
+  }
+`;
+export const updateAsset = /* GraphQL */ `
+  mutation UpdateAsset(
+    $input: UpdateAssetInput!
+    $condition: ModelAssetConditionInput
+  ) {
+    updateAsset(input: $input, condition: $condition) {
+      id
+      name
+      searchName
+      description
+      searchDescription
+      notes
+      searchNotes
+      product {
+        id
+        name
+        searchString
+        description
+        searchDescription
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      assetProductId
+    }
+  }
+`;
+export const deleteAsset = /* GraphQL */ `
+  mutation DeleteAsset(
+    $input: DeleteAssetInput!
+    $condition: ModelAssetConditionInput
+  ) {
+    deleteAsset(input: $input, condition: $condition) {
+      id
+      name
+      searchName
+      description
+      searchDescription
+      notes
+      searchNotes
+      product {
+        id
+        name
+        searchString
+        description
+        searchDescription
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      assetProductId
+    }
+  }
+`;
+export const createProduct = /* GraphQL */ `
+  mutation CreateProduct(
+    $input: CreateProductInput!
+    $condition: ModelProductConditionInput
+  ) {
+    createProduct(input: $input, condition: $condition) {
+      id
+      name
+      searchString
+      description
+      searchDescription
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const updateProduct = /* GraphQL */ `
+  mutation UpdateProduct(
+    $input: UpdateProductInput!
+    $condition: ModelProductConditionInput
+  ) {
+    updateProduct(input: $input, condition: $condition) {
+      id
+      name
+      searchString
+      description
+      searchDescription
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const deleteProduct = /* GraphQL */ `
+  mutation DeleteProduct(
+    $input: DeleteProductInput!
+    $condition: ModelProductConditionInput
+  ) {
+    deleteProduct(input: $input, condition: $condition) {
+      id
+      name
+      searchString
+      description
+      searchDescription
       createdAt
       updatedAt
       _version

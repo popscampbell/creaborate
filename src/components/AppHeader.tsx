@@ -1,13 +1,67 @@
-import { AppBar, Toolbar, useTheme } from "@mui/material"
+import { useAppSelector } from "@/state/hooks"
+import { Flex, useAuthenticator } from "@aws-amplify/ui-react"
+import CloseIcon from "@mui/icons-material/Close"
+import MenuIcon from "@mui/icons-material/Menu"
+import {
+  AppBar,
+  Drawer,
+  IconButton,
+  Toolbar,
+  Typography,
+  useMediaQuery,
+  useTheme
+} from "@mui/material"
+import React from "react"
 import Creaborate from "./Creaborate"
 
 export default function AppHeader() {
   const theme = useTheme()
+  const isPhone = useMediaQuery(theme.breakpoints.down("sm"))
+  const userData = useAppSelector((state) => state.user)
+  const { user } = useAuthenticator()
+
+  const [menuOpen, setMenuOpen] = React.useState(false)
+
+  function openDrawer() {
+    setMenuOpen(true)
+  }
+
+  function closeDrawer() {
+    setMenuOpen(false)
+  }
 
   return (
-    <AppBar position="sticky">
+    <AppBar position="sticky" color="secondary">
       <Toolbar>
+        {isPhone && (
+          <Flex>
+            <IconButton onClick={openDrawer}>
+              <MenuIcon />
+            </IconButton>
+            <Drawer anchor="left" open={menuOpen} onClose={closeDrawer}>
+              <Flex direction="column" minWidth={200}>
+                <Flex padding={12} paddingInlineEnd={6}>
+                  <Flex grow={1}>
+                    <Typography variant="h6">Drawer</Typography>
+                  </Flex>
+                  <Flex>
+                    <IconButton size="small" onClick={closeDrawer}>
+                      <CloseIcon fontSize="small" />
+                    </IconButton>
+                  </Flex>
+                </Flex>
+              </Flex>
+            </Drawer>
+          </Flex>
+        )}
+
         <Creaborate variant="header" />
+
+        <Flex grow={1}></Flex>
+
+        <Flex>
+          <Typography>{userData?.username || "sign in"}</Typography>
+        </Flex>
       </Toolbar>
     </AppBar>
   )
