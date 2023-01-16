@@ -1,7 +1,99 @@
+# This "input" configures a global authorization rule to enable public access to
+# all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
+input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONLY!
+type UserProfile @model @auth(rules: [{ allow: public }]) {
+  id: ID!
+  username: String!
+  visibility: UserProfileVisibility!
+  name: String!
+  searchName: String!
+  profileImage: Image
+  tagline: String
+  about: String
+  interests: [UserInterest] @hasMany(indexName: "byUserProfile", fields: ["id"])
+  skills: [UserSkill] @hasMany(indexName: "byUserProfile", fields: ["id"])
+}
+
 enum UserProfileVisibility {
   PRIVATE
   PUBLIC
   ARCHIVED
+}
+
+type UserImage @model @auth(rules: [{ allow: public }]) {
+  id: ID!
+  username: String!
+  image: Image!
+}
+
+type Image {
+  storageKey: String!
+  alt: String!
+  searchAlt: String!
+  caption: String
+  searchCaption: String
+  detail: String
+  searchDetail: String
+}
+
+type UserSkill @model @auth(rules: [{ allow: public }]) {
+  id: ID!
+  userProfileId: ID! @index(name: "byUserProfile")
+  skill: Skill! @hasOne
+}
+
+type Skill @model @auth(rules: [{ allow: public }]) {
+  id: ID!
+  name: String!
+  searchName: String!
+}
+
+type UserInterest @model @auth(rules: [{ allow: public }]) {
+  id: ID!
+  userProfileId: ID! @index(name: "byUserProfile")
+  interest: Interest! @hasOne
+}
+
+type Interest @model @auth(rules: [{ allow: public }]) {
+  id: ID!
+  name: String!
+  searchName: String!
+}
+
+type UserNotification @model @auth(rules: [{ allow: public }]) {
+  id: ID!
+  username: String!
+  message: String!
+  level: UserNotificationLevel!
+  displayedAt: AWSDateTime
+  heading: String
+}
+
+enum UserNotificationLevel {
+  NORMAL
+  INFO
+  SUCCESS
+  WARNING
+  ERROR
+}
+
+type Team @model @auth(rules: [{ allow: public }]) {
+  id: ID!
+  name: String!
+  searchName: String!
+  visibility: TeamVisibility!
+  teamType: TeamType!
+  customTeamType: String
+  description: String!
+  teamMembers: [TeamMember!] @hasMany(indexName: "byTeam", fields: ["id"])
+  invitations: [TeamInvitation] @hasMany(indexName: "byTeam", fields: ["id"])
+}
+
+enum TeamType {
+  TEAM
+  BAND
+  GROUP
+  CUSTOM
 }
 
 enum TeamVisibility {
@@ -10,11 +102,11 @@ enum TeamVisibility {
   ARCHIVED
 }
 
-enum TeamMemberStatus {
-  INVITED
-  CONFIRMED
-  DECLINED
-  DEPARTED
+type TeamMember @model @auth(rules: [{ allow: public }]) {
+  id: ID!
+  teamId: ID! @index(name: "byTeam")
+  username: String!
+  role: TeamMemberRole!
 }
 
 enum TeamMemberRole {
@@ -22,45 +114,62 @@ enum TeamMemberRole {
   MEMBER
 }
 
-type TeamMember @model @auth(rules: [{allow: public}]) {
+type TeamInvitation @model @auth(rules: [{ allow: public }]) {
   id: ID!
-  Team: ID! @index(name: "byTeam")
-  UserProfile: ID! @index(name: "byUserProfile")
-  Role: TeamMemberRole!
-  Status: TeamMemberStatus!
-  InvitedDateTime: AWSDateTime!
-  InvitedByUserProfile: String!
-  ConfirmedDateTime: AWSDateTime
-  DeclinedDateTime: AWSDateTime
-  DepartedDateTime: AWSDateTime
-  DepartedComment: String
+  teamId: ID! @index(name: "byTeam")
+  role: TeamMemberRole!
+  status: TeamInvitationStatus!
+  username: String!
+  externalEmail: AWSEmail
+  invitedByUsername: String
+  responseDateTime: AWSDateTime
+  responseComment: String
 }
 
-enum TeamType {
-  TEAM
-  BAND
-  GROUP
+enum TeamInvitationStatus {
+  SENT
+  ACCEPTED
+  DECLINED
+  EXPIRED
 }
 
-type Team @model @auth(rules: [{allow: public}]) {
+type Task @model @auth(rules: [{ allow: public }]) {
   id: ID!
-  Name: String!
-  TeamType: TeamType!
-  TeamMembers: [TeamMember!] @hasMany(indexName: "byTeam", fields: ["id"])
-  Visibility: TeamVisibility!
-  Description: String!
+  teamId: ID! @index(name: "byTeam")
+  name: String!
+  searchName: String!
+  description: String
+  searchDescription: String
+  dueDate: AWSDate
+  status: TaskStatus!
+  priority: TaskPriority!
+  completedByUsername: String
+  completedDate: AWSDate
+  comments: [TaskComment] @hasMany(indexName: "byTask", fields: ["id"])
+  ownerUsername: String
+  startDate: AWSDate
 }
 
-type UserProfile @model @auth(rules: [{allow: public}]) {
-  Visibility: UserProfileVisibility!
-  Username: String!
-  Name: String!
-  Tagline: String
-  Skills: [String]!
-  Interests: [String]!
-  About: String
-  Location: String
-  TeamMembers: [TeamMember!] @hasMany(indexName: "byUserProfile", fields: ["id"])
-  id: ID!
+enum TaskStatus {
+  ACTIVE
+  CLOSED
+  ARCHIVED
 }
- 
+
+enum TaskPriority {
+  HIGH
+  MEDIUM
+  LOW
+}
+
+type TaskComment @model @auth(rules: [{ allow: public }]) {
+  id: ID!
+  taskId: ID! @index(name: "byTask")
+  comment: Comment!
+}
+
+type Comment {
+  comment: String!
+  searchComment: String!
+  postedByUsername: String!
+}

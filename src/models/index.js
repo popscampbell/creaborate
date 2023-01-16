@@ -8,17 +8,25 @@ const UserProfileVisibility = {
   "ARCHIVED": "ARCHIVED"
 };
 
+const UserNotificationLevel = {
+  "NORMAL": "NORMAL",
+  "INFO": "INFO",
+  "SUCCESS": "SUCCESS",
+  "WARNING": "WARNING",
+  "ERROR": "ERROR"
+};
+
 const TeamVisibility = {
   "PRIVATE": "PRIVATE",
   "PUBLIC": "PUBLIC",
   "ARCHIVED": "ARCHIVED"
 };
 
-const TeamMemberStatus = {
-  "INVITED": "INVITED",
-  "CONFIRMED": "CONFIRMED",
-  "DECLINED": "DECLINED",
-  "DEPARTED": "DEPARTED"
+const TeamType = {
+  "TEAM": "TEAM",
+  "BAND": "BAND",
+  "GROUP": "GROUP",
+  "CUSTOM": "CUSTOM"
 };
 
 const TeamMemberRole = {
@@ -26,21 +34,48 @@ const TeamMemberRole = {
   "MEMBER": "MEMBER"
 };
 
-const TeamType = {
-  "TEAM": "TEAM",
-  "BAND": "BAND",
-  "GROUP": "GROUP"
+const TeamInvitationStatus = {
+  "SENT": "SENT",
+  "ACCEPTED": "ACCEPTED",
+  "DECLINED": "DECLINED",
+  "EXPIRED": "EXPIRED"
 };
 
-const { TeamMember, Team, UserProfile } = initSchema(schema);
+const TaskStatus = {
+  "ACTIVE": "ACTIVE",
+  "CLOSED": "CLOSED",
+  "ARCHIVED": "ARCHIVED"
+};
+
+const TaskPriority = {
+  "HIGH": "HIGH",
+  "MEDIUM": "MEDIUM",
+  "LOW": "LOW"
+};
+
+const { UserProfile, UserInterest, Interest, UserSkill, Skill, UserImage, UserNotification, Team, TeamMember, TeamInvitation, Task, TaskComment, Image, Comment } = initSchema(schema);
 
 export {
-  TeamMember,
-  Team,
   UserProfile,
+  UserInterest,
+  Interest,
+  UserSkill,
+  Skill,
+  UserImage,
+  UserNotification,
+  Team,
+  TeamMember,
+  TeamInvitation,
+  Task,
+  TaskComment,
   UserProfileVisibility,
+  UserNotificationLevel,
   TeamVisibility,
-  TeamMemberStatus,
+  TeamType,
   TeamMemberRole,
-  TeamType
+  TeamInvitationStatus,
+  TaskStatus,
+  TaskPriority,
+  Image,
+  Comment
 };
