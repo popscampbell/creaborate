@@ -1,5 +1,5 @@
 import { useAppSelector } from "@/state/hooks"
-import { Flex, useAuthenticator } from "@aws-amplify/ui-react"
+import { Flex } from "@aws-amplify/ui-react"
 import CloseIcon from "@mui/icons-material/Close"
 import MenuIcon from "@mui/icons-material/Menu"
 import {
@@ -8,17 +8,17 @@ import {
   IconButton,
   Toolbar,
   Typography,
-  useMediaQuery,
   useTheme
 } from "@mui/material"
+import Link from "next/link"
 import React from "react"
+import AppNavigator from "./AppNavigator"
 import Creaborate from "./Creaborate"
 
 export default function AppHeader() {
   const theme = useTheme()
-  const isPhone = useMediaQuery(theme.breakpoints.down("sm"))
+  const { screenSize } = useAppSelector((state) => state.app)
   const userData = useAppSelector((state) => state.user)
-  const { user } = useAuthenticator()
 
   const [menuOpen, setMenuOpen] = React.useState(false)
 
@@ -33,7 +33,7 @@ export default function AppHeader() {
   return (
     <AppBar position="sticky" color="secondary">
       <Toolbar>
-        {isPhone && (
+        {screenSize === "Phone" && (
           <Flex>
             <IconButton onClick={openDrawer}>
               <MenuIcon />
@@ -50,17 +50,20 @@ export default function AppHeader() {
                     </IconButton>
                   </Flex>
                 </Flex>
+                <AppNavigator />
               </Flex>
             </Drawer>
           </Flex>
         )}
 
-        <Creaborate variant="header" />
+        <Link href="/">
+          <Creaborate variant="header" />
+        </Link>
 
         <Flex grow={1}></Flex>
 
         <Flex>
-          <Typography>{userData?.username || "sign in"}</Typography>
+          <Typography>{userData.username || "sign in"}</Typography>
         </Flex>
       </Toolbar>
     </AppBar>

@@ -1,11 +1,29 @@
+import { setScreenSize } from "@/state/globalSlice"
+import { useAppDispatch } from "@/state/hooks"
+import { ScreenSize } from "@/state/types"
 import { Authenticator, Flex } from "@aws-amplify/ui-react"
 import { Typography, useMediaQuery, useTheme } from "@mui/material"
+import { useEffect } from "react"
 import AppFooter from "./AppFooter"
 import AppHeader from "./AppHeader"
+import AppNavigator from "./AppNavigator"
 
 export default function Layout(props: { children: any }) {
   const theme = useTheme()
   const isPhone = useMediaQuery(theme.breakpoints.down("sm"))
+  const isTablet = useMediaQuery(
+    theme.breakpoints.up("sm") && theme.breakpoints.down("lg")
+  )
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    const screenSize: ScreenSize = isPhone
+      ? "Phone"
+      : isTablet
+      ? "Tablet"
+      : "Desktop"
+    dispatch(setScreenSize(screenSize))
+  }, [isPhone, isTablet])
 
   return (
     <Flex
@@ -13,29 +31,26 @@ export default function Layout(props: { children: any }) {
       backgroundColor={theme.palette.background.default}
       color={theme.palette.text.primary}
       minHeight="100vh"
-      rowGap={0}
+      rowGap={1}
     >
       <AppHeader />
 
-      <Flex direction="column" grow={1}>
+      <Flex className="middle" direction="column" grow={1}>
         <Authenticator>
           {({ signOut, user }) => (
             <Flex grow={1}>
               {!isPhone && (
                 <Flex
+                  as="nav"
                   direction="column"
-                  backgroundColor={theme.palette.primary.dark}
-                  color={theme.palette.grey[100]}
-                  minWidth={200}
-                  paddingInline={12}
-                  paddingBlock={12}
+                  marginBlockEnd={41}
+                  boxShadow={theme.shadows[1]}
+                  backgroundImage="linear-gradient(rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.09))"
                 >
-                  <Flex grow={1}>
-                    <Typography>Menu</Typography>
-                  </Flex>
+                  <AppNavigator />
                 </Flex>
               )}
-              <Flex>{props.children}</Flex>
+              <Flex as="main">{props.children}</Flex>
             </Flex>
           )}
         </Authenticator>

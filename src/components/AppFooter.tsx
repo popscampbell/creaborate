@@ -4,12 +4,14 @@ import Copyright from "./Copyright"
 
 export default function AppFooter() {
   return (
-    <AppBar position="fixed" color="primary" sx={{ top: "auto", bottom: 0 }}>
-      <Toolbar>
-        <Flex grow={1} justifyContent="end">
-          <Copyright variant="footer" />
-        </Flex>
-      </Toolbar>
+    <AppBar
+      role="contentinfo"
+      position="fixed"
+      sx={{ top: "auto", bottom: 0, height: 40, padding: 0 }}
+    >
+      <Flex grow={1} justifyContent="end" padding={12}>
+        <Copyright variant="footer" />
+      </Flex>
     </AppBar>
   )
 }

@@ -34,7 +34,7 @@ const teamSlice = createSlice({
       if (!payload) {
         state = initialState
       } else {
-        if (!_.isEqual(payload, state.team)) {
+        if (payload !== state.team) {
           state.team = payload
         }
       }

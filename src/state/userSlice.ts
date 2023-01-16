@@ -29,7 +29,7 @@ const userSlice = createSlice({
   reducers: {
     setUsername(state, action: PayloadAction<string>) {
       const { payload } = action
-      if (!_.isEqual(payload, state.username)) {
+      if (payload !== state.username) {
         state.username = payload
       }
     },
