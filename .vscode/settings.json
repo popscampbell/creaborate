@@ -14,6 +14,7 @@
     "amplify/backend/amplify-meta.json": true,
     "amplify/backend/awscloudformation": true,
     ".yarn": true,
+    ".next": true,
     "src/aws-exports.js": true
   },
   "css.completion.completePropertyWithSemicolon": false,
