@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import _ from "lodash"
-import { Task, TeamContact, TeamEvent, TeamImage, TeamInvitation, TeamProject } from "@/models"
+import { Task, TeamContact, TeamEvent, TeamImage, TeamInvitation, TeamProject } from "models"
 import { TeamMemberWithName, TeamWithUserRole } from "./types"
 
 interface TeamSliceState {

@@ -1,7 +1,7 @@
-import Layout from "@/components/Layout"
-import PageSection from "@/components/PageSection"
-import UserPage from "@/components/UserPage"
-import { useAppSelector } from "@/state/hooks"
+import Layout from "components/Layout"
+import PageSection from "components/PageSection"
+import UserPage from "components/UserPage"
+import { useAppSelector } from "state/hooks"
 
 export default function UserImagesPage() {
   const { images } = useAppSelector((state) => state.user)

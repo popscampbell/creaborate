@@ -1,4 +1,4 @@
-import { useAppDispatch } from "@/state/hooks"
+import { useAppDispatch } from "state/hooks"
 import {
   setUserContacts,
   setUserImages,
@@ -7,7 +7,7 @@ import {
   setUserProfile,
   setUserTasks,
   setUserTeams
-} from "@/state/userSlice"
+} from "state/userSlice"
 import { useAuthenticator } from "@aws-amplify/ui-react"
 import { DataStore } from "aws-amplify"
 import React from "react"
@@ -18,7 +18,7 @@ import {
   UserContact,
   UserImage,
   UserProfile
-} from "@/models"
+} from "models"
 import { getTeamWithUserRole, removeNullsFromArray } from "./utils"
 
 export function UserDataLoader(props: { children: any }) {

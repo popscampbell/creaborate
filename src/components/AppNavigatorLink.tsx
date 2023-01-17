@@ -1,5 +1,5 @@
-import { useAppSelector } from "@/state/hooks"
-import { NavigatorLink } from "@/state/types"
+import { useAppSelector } from "state/hooks"
+import { NavigatorLink } from "state/types"
 import { Flex } from "@aws-amplify/ui-react"
 import { Badge, Typography } from "@mui/material"
 import Link from "next/link"

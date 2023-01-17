@@ -1,4 +1,4 @@
-import { useAppDispatch } from "@/state/hooks"
+import { useAppDispatch } from "state/hooks"
 import {
   setTeam,
   setTeamContacts,
@@ -8,7 +8,7 @@ import {
   setTeamMembers,
   setTeamProjects,
   setTeamTasks
-} from "@/state/teamSlice"
+} from "state/teamSlice"
 import { Auth, DataStore } from "aws-amplify"
 import React from "react"
 import {
@@ -20,7 +20,7 @@ import {
   TeamInvitation,
   TeamMember,
   TeamProject
-} from "@/models"
+} from "models"
 import { getTeamMemberWithName, getTeamWithUserRole } from "./utils"
 
 export function TeamDataLoader(props: { children: any; teamID: string }) {

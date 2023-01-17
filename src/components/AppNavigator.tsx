@@ -1,5 +1,5 @@
-import { toggleIsNavigatorCollapsed } from "@/state/globalSlice"
-import { useAppDispatch, useAppSelector } from "@/state/hooks"
+import { toggleIsNavigatorCollapsed } from "state/globalSlice"
+import { useAppDispatch, useAppSelector } from "state/hooks"
 import { Flex } from "@aws-amplify/ui-react"
 import MenuIcon from "@mui/icons-material/Menu"
 import { IconButton } from "@mui/material"

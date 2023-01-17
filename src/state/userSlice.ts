@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import _ from "lodash"
-import { Task, TeamInvitation, UserContact, UserImage, UserProfile } from "@/models"
+import { Task, TeamInvitation, UserContact, UserImage, UserProfile } from "models"
 import { TeamWithUserRole } from "./types"
 
 interface UserSliceState {
