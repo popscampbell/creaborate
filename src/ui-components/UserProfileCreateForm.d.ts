@@ -5,41 +5,38 @@
  **************************************************************************/
 
 import * as React from "react";
+import { GridProps, SelectFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
 import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
-import { GridProps, TextFieldProps } from "@aws-amplify/ui-react";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type UserProfileCreateFormInputValues = {
-    Username?: string;
-    Name?: string;
-    Tagline?: string;
-    Skills?: string[];
-    Interests?: string[];
-    About?: string;
-    Location?: string;
+    username?: string;
+    visibility?: string;
+    name?: string;
+    searchName?: string;
+    tagline?: string;
+    about?: string;
 };
 export declare type UserProfileCreateFormValidationValues = {
-    Username?: ValidationFunction<string>;
-    Name?: ValidationFunction<string>;
-    Tagline?: ValidationFunction<string>;
-    Skills?: ValidationFunction<string>;
-    Interests?: ValidationFunction<string>;
-    About?: ValidationFunction<string>;
-    Location?: ValidationFunction<string>;
+    username?: ValidationFunction<string>;
+    visibility?: ValidationFunction<string>;
+    name?: ValidationFunction<string>;
+    searchName?: ValidationFunction<string>;
+    tagline?: ValidationFunction<string>;
+    about?: ValidationFunction<string>;
 };
-export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type UserProfileCreateFormOverridesProps = {
-    UserProfileCreateFormGrid?: FormProps<GridProps>;
-    Username?: FormProps<TextFieldProps>;
-    Name?: FormProps<TextFieldProps>;
-    Tagline?: FormProps<TextFieldProps>;
-    Skills?: FormProps<TextFieldProps>;
-    Interests?: FormProps<TextFieldProps>;
-    About?: FormProps<TextFieldProps>;
-    Location?: FormProps<TextFieldProps>;
+    UserProfileCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
+    username?: PrimitiveOverrideProps<TextFieldProps>;
+    visibility?: PrimitiveOverrideProps<SelectFieldProps>;
+    name?: PrimitiveOverrideProps<TextFieldProps>;
+    searchName?: PrimitiveOverrideProps<TextFieldProps>;
+    tagline?: PrimitiveOverrideProps<TextFieldProps>;
+    about?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type UserProfileCreateFormProps = React.PropsWithChildren<{
     overrides?: UserProfileCreateFormOverridesProps | undefined | null;
@@ -48,7 +45,6 @@ export declare type UserProfileCreateFormProps = React.PropsWithChildren<{
     onSubmit?: (fields: UserProfileCreateFormInputValues) => UserProfileCreateFormInputValues;
     onSuccess?: (fields: UserProfileCreateFormInputValues) => void;
     onError?: (fields: UserProfileCreateFormInputValues, errorMessage: string) => void;
-    onCancel?: () => void;
     onChange?: (fields: UserProfileCreateFormInputValues) => UserProfileCreateFormInputValues;
     onValidate?: UserProfileCreateFormValidationValues;
 } & React.CSSProperties>;

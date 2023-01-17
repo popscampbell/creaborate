@@ -6,209 +6,68 @@
 
 /* eslint-disable */
 import * as React from "react";
-import { fetchByPath, validateField } from "./utils";
-import { UserProfile } from "../models";
-import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import {
-  Badge,
   Button,
-  Divider,
   Flex,
   Grid,
-  Icon,
-  ScrollView,
-  Text,
+  SelectField,
   TextField,
-  useTheme,
 } from "@aws-amplify/ui-react";
+import { getOverrideProps } from "@aws-amplify/ui-react/internal";
+import { UserProfile } from "../models";
+import { fetchByPath, validateField } from "./utils";
 import { DataStore } from "aws-amplify";
-function ArrayField({
-  items = [],
-  onChange,
-  label,
-  inputFieldRef,
-  children,
-  hasError,
-  setFieldValue,
-  currentFieldValue,
-  defaultFieldValue,
-}) {
-  const { tokens } = useTheme();
-  const [selectedBadgeIndex, setSelectedBadgeIndex] = React.useState();
-  const [isEditing, setIsEditing] = React.useState();
-  React.useEffect(() => {
-    if (isEditing) {
-      inputFieldRef?.current?.focus();
-    }
-  }, [isEditing]);
-  const removeItem = async (removeIndex) => {
-    const newItems = items.filter((value, index) => index !== removeIndex);
-    await onChange(newItems);
-    setSelectedBadgeIndex(undefined);
-  };
-  const addItem = async () => {
-    if (
-      (currentFieldValue !== undefined ||
-        currentFieldValue !== null ||
-        currentFieldValue !== "") &&
-      !hasError
-    ) {
-      const newItems = [...items];
-      if (selectedBadgeIndex !== undefined) {
-        newItems[selectedBadgeIndex] = currentFieldValue;
-        setSelectedBadgeIndex(undefined);
-      } else {
-        newItems.push(currentFieldValue);
-      }
-      await onChange(newItems);
-      setIsEditing(false);
-    }
-  };
-  return (
-    <React.Fragment>
-      {isEditing && children}
-      {!isEditing ? (
-        <>
-          <Text>{label}</Text>
-          <Button
-            onClick={() => {
-              setIsEditing(true);
-            }}
-          >
-            Add item
-          </Button>
-        </>
-      ) : (
-        <Flex justifyContent="flex-end">
-          {(currentFieldValue || isEditing) && (
-            <Button
-              children="Cancel"
-              type="button"
-              size="small"
-              onClick={() => {
-                setFieldValue(defaultFieldValue);
-                setIsEditing(false);
-                setSelectedBadgeIndex(undefined);
-              }}
-            ></Button>
-          )}
-          <Button
-            size="small"
-            variation="link"
-            color={tokens.colors.brand.primary[80]}
-            isDisabled={hasError}
-            onClick={addItem}
-          >
-            {selectedBadgeIndex !== undefined ? "Save" : "Add"}
-          </Button>
-        </Flex>
-      )}
-      {!!items?.length && (
-        <ScrollView height="inherit" width="inherit" maxHeight={"7rem"}>
-          {items.map((value, index) => {
-            return (
-              <Badge
-                key={index}
-                style={{
-                  cursor: "pointer",
-                  alignItems: "center",
-                  marginRight: 3,
-                  marginTop: 3,
-                  backgroundColor:
-                    index === selectedBadgeIndex ? "#B8CEF9" : "",
-                }}
-                onClick={() => {
-                  setSelectedBadgeIndex(index);
-                  setFieldValue(items[index]);
-                  setIsEditing(true);
-                }}
-              >
-                {value.toString()}
-                <Icon
-                  style={{
-                    cursor: "pointer",
-                    paddingLeft: 3,
-                    width: 20,
-                    height: 20,
-                  }}
-                  viewBox={{ width: 20, height: 20 }}
-                  paths={[
-                    {
-                      d: "M10 10l5.09-5.09L10 10l5.09 5.09L10 10zm0 0L4.91 4.91 10 10l-5.09 5.09L10 10z",
-                      stroke: "black",
-                    },
-                  ]}
-                  ariaLabel="button"
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    removeItem(index);
-                  }}
-                />
-              </Badge>
-            );
-          })}
-        </ScrollView>
-      )}
-      <Divider orientation="horizontal" marginTop={5} />
-    </React.Fragment>
-  );
-}
 export default function UserProfileCreateForm(props) {
   const {
     clearOnSuccess = true,
     onSuccess,
     onError,
     onSubmit,
-    onCancel,
     onValidate,
     onChange,
     overrides,
     ...rest
   } = props;
   const initialValues = {
-    Username: undefined,
-    Name: undefined,
-    Tagline: undefined,
-    Skills: [],
-    Interests: [],
-    About: undefined,
-    Location: undefined,
+    username: "",
+    visibility: undefined,
+    name: "",
+    searchName: "",
+    tagline: "",
+    about: "",
   };
-  const [Username, setUsername] = React.useState(initialValues.Username);
-  const [Name, setName] = React.useState(initialValues.Name);
-  const [Tagline, setTagline] = React.useState(initialValues.Tagline);
-  const [Skills, setSkills] = React.useState(initialValues.Skills);
-  const [Interests, setInterests] = React.useState(initialValues.Interests);
-  const [About, setAbout] = React.useState(initialValues.About);
-  const [Location, setLocation] = React.useState(initialValues.Location);
+  const [username, setUsername] = React.useState(initialValues.username);
+  const [visibility, setVisibility] = React.useState(initialValues.visibility);
+  const [name, setName] = React.useState(initialValues.name);
+  const [searchName, setSearchName] = React.useState(initialValues.searchName);
+  const [tagline, setTagline] = React.useState(initialValues.tagline);
+  const [about, setAbout] = React.useState(initialValues.about);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    setUsername(initialValues.Username);
-    setName(initialValues.Name);
-    setTagline(initialValues.Tagline);
-    setSkills(initialValues.Skills);
-    setCurrentSkillsValue(undefined);
-    setInterests(initialValues.Interests);
-    setCurrentInterestsValue(undefined);
-    setAbout(initialValues.About);
-    setLocation(initialValues.Location);
+    setUsername(initialValues.username);
+    setVisibility(initialValues.visibility);
+    setName(initialValues.name);
+    setSearchName(initialValues.searchName);
+    setTagline(initialValues.tagline);
+    setAbout(initialValues.about);
     setErrors({});
   };
-  const [currentSkillsValue, setCurrentSkillsValue] = React.useState(undefined);
-  const SkillsRef = React.createRef();
-  const [currentInterestsValue, setCurrentInterestsValue] =
-    React.useState(undefined);
-  const InterestsRef = React.createRef();
   const validations = {
-    Username: [{ type: "Required" }],
-    Name: [{ type: "Required" }],
-    Tagline: [],
-    Skills: [],
-    Interests: [],
-    About: [],
-    Location: [],
+    username: [{ type: "Required" }],
+    visibility: [{ type: "Required" }],
+    name: [{ type: "Required" }],
+    searchName: [{ type: "Required" }],
+    tagline: [],
+    about: [],
   };
-  const runValidationTasks = async (fieldName, value) => {
+  const runValidationTasks = async (
+    fieldName,
+    currentValue,
+    getDisplayValue
+  ) => {
+    const value = getDisplayValue
+      ? getDisplayValue(currentValue)
+      : currentValue;
     let validationResponse = validateField(value, validations[fieldName]);
     const customValidator = fetchByPath(onValidate, fieldName);
     if (customValidator) {
@@ -226,13 +85,12 @@ export default function UserProfileCreateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          Username,
-          Name,
-          Tagline,
-          Skills,
-          Interests,
-          About,
-          Location,
+          username,
+          visibility,
+          name,
+          searchName,
+          tagline,
+          about,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -257,6 +115,11 @@ export default function UserProfileCreateForm(props) {
           modelFields = onSubmit(modelFields);
         }
         try {
+          Object.entries(modelFields).forEach(([key, value]) => {
+            if (typeof value === "string" && value.trim() === "") {
+              modelFields[key] = undefined;
+            }
+          });
           await DataStore.save(new UserProfile(modelFields));
           if (onSuccess) {
             onSuccess(modelFields);
@@ -270,245 +133,198 @@ export default function UserProfileCreateForm(props) {
           }
         }
       }}
-      {...rest}
       {...getOverrideProps(overrides, "UserProfileCreateForm")}
+      {...rest}
     >
       <TextField
         label="Username"
         isRequired={true}
         isReadOnly={false}
+        value={username}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              Username: value,
-              Name,
-              Tagline,
-              Skills,
-              Interests,
-              About,
-              Location,
+              username: value,
+              visibility,
+              name,
+              searchName,
+              tagline,
+              about,
             };
             const result = onChange(modelFields);
-            value = result?.Username ?? value;
+            value = result?.username ?? value;
           }
-          if (errors.Username?.hasError) {
-            runValidationTasks("Username", value);
+          if (errors.username?.hasError) {
+            runValidationTasks("username", value);
           }
           setUsername(value);
         }}
-        onBlur={() => runValidationTasks("Username", Username)}
-        errorMessage={errors.Username?.errorMessage}
-        hasError={errors.Username?.hasError}
-        {...getOverrideProps(overrides, "Username")}
+        onBlur={() => runValidationTasks("username", username)}
+        errorMessage={errors.username?.errorMessage}
+        hasError={errors.username?.hasError}
+        {...getOverrideProps(overrides, "username")}
       ></TextField>
+      <SelectField
+        label="Visibility"
+        placeholder="Please select an option"
+        isDisabled={false}
+        value={visibility}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              username,
+              visibility: value,
+              name,
+              searchName,
+              tagline,
+              about,
+            };
+            const result = onChange(modelFields);
+            value = result?.visibility ?? value;
+          }
+          if (errors.visibility?.hasError) {
+            runValidationTasks("visibility", value);
+          }
+          setVisibility(value);
+        }}
+        onBlur={() => runValidationTasks("visibility", visibility)}
+        errorMessage={errors.visibility?.errorMessage}
+        hasError={errors.visibility?.hasError}
+        {...getOverrideProps(overrides, "visibility")}
+      >
+        <option
+          children="Private"
+          value="PRIVATE"
+          {...getOverrideProps(overrides, "visibilityoption0")}
+        ></option>
+        <option
+          children="Public"
+          value="PUBLIC"
+          {...getOverrideProps(overrides, "visibilityoption1")}
+        ></option>
+        <option
+          children="Archived"
+          value="ARCHIVED"
+          {...getOverrideProps(overrides, "visibilityoption2")}
+        ></option>
+      </SelectField>
       <TextField
         label="Name"
         isRequired={true}
         isReadOnly={false}
+        value={name}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              Username,
-              Name: value,
-              Tagline,
-              Skills,
-              Interests,
-              About,
-              Location,
+              username,
+              visibility,
+              name: value,
+              searchName,
+              tagline,
+              about,
             };
             const result = onChange(modelFields);
-            value = result?.Name ?? value;
+            value = result?.name ?? value;
           }
-          if (errors.Name?.hasError) {
-            runValidationTasks("Name", value);
+          if (errors.name?.hasError) {
+            runValidationTasks("name", value);
           }
           setName(value);
         }}
-        onBlur={() => runValidationTasks("Name", Name)}
-        errorMessage={errors.Name?.errorMessage}
-        hasError={errors.Name?.hasError}
-        {...getOverrideProps(overrides, "Name")}
+        onBlur={() => runValidationTasks("name", name)}
+        errorMessage={errors.name?.errorMessage}
+        hasError={errors.name?.hasError}
+        {...getOverrideProps(overrides, "name")}
+      ></TextField>
+      <TextField
+        label="Search name"
+        isRequired={true}
+        isReadOnly={false}
+        value={searchName}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              username,
+              visibility,
+              name,
+              searchName: value,
+              tagline,
+              about,
+            };
+            const result = onChange(modelFields);
+            value = result?.searchName ?? value;
+          }
+          if (errors.searchName?.hasError) {
+            runValidationTasks("searchName", value);
+          }
+          setSearchName(value);
+        }}
+        onBlur={() => runValidationTasks("searchName", searchName)}
+        errorMessage={errors.searchName?.errorMessage}
+        hasError={errors.searchName?.hasError}
+        {...getOverrideProps(overrides, "searchName")}
       ></TextField>
       <TextField
         label="Tagline"
         isRequired={false}
         isReadOnly={false}
+        value={tagline}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              Username,
-              Name,
-              Tagline: value,
-              Skills,
-              Interests,
-              About,
-              Location,
+              username,
+              visibility,
+              name,
+              searchName,
+              tagline: value,
+              about,
             };
             const result = onChange(modelFields);
-            value = result?.Tagline ?? value;
+            value = result?.tagline ?? value;
           }
-          if (errors.Tagline?.hasError) {
-            runValidationTasks("Tagline", value);
+          if (errors.tagline?.hasError) {
+            runValidationTasks("tagline", value);
           }
           setTagline(value);
         }}
-        onBlur={() => runValidationTasks("Tagline", Tagline)}
-        errorMessage={errors.Tagline?.errorMessage}
-        hasError={errors.Tagline?.hasError}
-        {...getOverrideProps(overrides, "Tagline")}
+        onBlur={() => runValidationTasks("tagline", tagline)}
+        errorMessage={errors.tagline?.errorMessage}
+        hasError={errors.tagline?.hasError}
+        {...getOverrideProps(overrides, "tagline")}
       ></TextField>
-      <ArrayField
-        onChange={async (items) => {
-          let values = items;
-          if (onChange) {
-            const modelFields = {
-              Username,
-              Name,
-              Tagline,
-              Skills: values,
-              Interests,
-              About,
-              Location,
-            };
-            const result = onChange(modelFields);
-            values = result?.Skills ?? values;
-          }
-          setSkills(values);
-          setCurrentSkillsValue(undefined);
-        }}
-        currentFieldValue={currentSkillsValue}
-        label={"Skills"}
-        items={Skills}
-        hasError={errors.Skills?.hasError}
-        setFieldValue={setCurrentSkillsValue}
-        inputFieldRef={SkillsRef}
-        defaultFieldValue={undefined}
-      >
-        <TextField
-          label="Skills"
-          isRequired={false}
-          isReadOnly={false}
-          value={currentSkillsValue}
-          onChange={(e) => {
-            let { value } = e.target;
-            if (errors.Skills?.hasError) {
-              runValidationTasks("Skills", value);
-            }
-            setCurrentSkillsValue(value);
-          }}
-          onBlur={() => runValidationTasks("Skills", currentSkillsValue)}
-          errorMessage={errors.Skills?.errorMessage}
-          hasError={errors.Skills?.hasError}
-          ref={SkillsRef}
-          {...getOverrideProps(overrides, "Skills")}
-        ></TextField>
-      </ArrayField>
-      <ArrayField
-        onChange={async (items) => {
-          let values = items;
-          if (onChange) {
-            const modelFields = {
-              Username,
-              Name,
-              Tagline,
-              Skills,
-              Interests: values,
-              About,
-              Location,
-            };
-            const result = onChange(modelFields);
-            values = result?.Interests ?? values;
-          }
-          setInterests(values);
-          setCurrentInterestsValue(undefined);
-        }}
-        currentFieldValue={currentInterestsValue}
-        label={"Interests"}
-        items={Interests}
-        hasError={errors.Interests?.hasError}
-        setFieldValue={setCurrentInterestsValue}
-        inputFieldRef={InterestsRef}
-        defaultFieldValue={undefined}
-      >
-        <TextField
-          label="Interests"
-          isRequired={false}
-          isReadOnly={false}
-          value={currentInterestsValue}
-          onChange={(e) => {
-            let { value } = e.target;
-            if (errors.Interests?.hasError) {
-              runValidationTasks("Interests", value);
-            }
-            setCurrentInterestsValue(value);
-          }}
-          onBlur={() => runValidationTasks("Interests", currentInterestsValue)}
-          errorMessage={errors.Interests?.errorMessage}
-          hasError={errors.Interests?.hasError}
-          ref={InterestsRef}
-          {...getOverrideProps(overrides, "Interests")}
-        ></TextField>
-      </ArrayField>
       <TextField
         label="About"
         isRequired={false}
         isReadOnly={false}
+        value={about}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              Username,
-              Name,
-              Tagline,
-              Skills,
-              Interests,
-              About: value,
-              Location,
+              username,
+              visibility,
+              name,
+              searchName,
+              tagline,
+              about: value,
             };
             const result = onChange(modelFields);
-            value = result?.About ?? value;
+            value = result?.about ?? value;
           }
-          if (errors.About?.hasError) {
-            runValidationTasks("About", value);
+          if (errors.about?.hasError) {
+            runValidationTasks("about", value);
           }
           setAbout(value);
         }}
-        onBlur={() => runValidationTasks("About", About)}
-        errorMessage={errors.About?.errorMessage}
-        hasError={errors.About?.hasError}
-        {...getOverrideProps(overrides, "About")}
-      ></TextField>
-      <TextField
-        label="Location"
-        isRequired={false}
-        isReadOnly={false}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              Username,
-              Name,
-              Tagline,
-              Skills,
-              Interests,
-              About,
-              Location: value,
-            };
-            const result = onChange(modelFields);
-            value = result?.Location ?? value;
-          }
-          if (errors.Location?.hasError) {
-            runValidationTasks("Location", value);
-          }
-          setLocation(value);
-        }}
-        onBlur={() => runValidationTasks("Location", Location)}
-        errorMessage={errors.Location?.errorMessage}
-        hasError={errors.Location?.hasError}
-        {...getOverrideProps(overrides, "Location")}
+        onBlur={() => runValidationTasks("about", about)}
+        errorMessage={errors.about?.errorMessage}
+        hasError={errors.about?.hasError}
+        {...getOverrideProps(overrides, "about")}
       ></TextField>
       <Flex
         justifyContent="space-between"
@@ -517,21 +333,16 @@ export default function UserProfileCreateForm(props) {
         <Button
           children="Clear"
           type="reset"
-          onClick={resetStateValues}
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
           {...getOverrideProps(overrides, "ClearButton")}
         ></Button>
         <Flex
           gap="15px"
           {...getOverrideProps(overrides, "RightAlignCTASubFlex")}
         >
-          <Button
-            children="Cancel"
-            type="button"
-            onClick={() => {
-              onCancel && onCancel();
-            }}
-            {...getOverrideProps(overrides, "CancelButton")}
-          ></Button>
           <Button
             children="Submit"
             type="submit"
