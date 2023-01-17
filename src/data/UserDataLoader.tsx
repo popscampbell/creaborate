@@ -1,4 +1,4 @@
-import { useAppDispatch } from "@/state/hooks"
+import { useAppDispatch } from "src/state/hooks"
 import {
   setUserContacts,
   setUserImages,
@@ -7,7 +7,7 @@ import {
   setUserProfile,
   setUserTasks,
   setUserTeams
-} from "@/state/userSlice"
+} from "src/state/userSlice"
 import { useAuthenticator } from "@aws-amplify/ui-react"
 import { DataStore } from "aws-amplify"
 import React from "react"

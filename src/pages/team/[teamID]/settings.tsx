@@ -1,6 +1,6 @@
-import Layout from "@/components/Layout"
-import TeamPage from "@/components/TeamPage"
-import { useAppSelector } from "@/state/hooks"
+import Layout from "src/components/Layout"
+import TeamPage from "src/components/TeamPage"
+import { useAppSelector } from "src/state/hooks"
 
 export default function TeamSettingsPage() {
   return (

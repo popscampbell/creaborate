@@ -1,4 +1,4 @@
-import { Team, TeamMemberRole } from "@/models"
+import { Team, TeamMemberRole } from "src/models"
 import { BadgeProps } from "@mui/material"
 import { TeamMember } from "src/models"
 

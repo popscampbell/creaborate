@@ -1,7 +1,7 @@
-import Layout from "@/components/Layout"
-import PageSection from "@/components/PageSection"
-import TeamPage from "@/components/TeamPage"
-import { useAppSelector } from "@/state/hooks"
+import Layout from "src/components/Layout"
+import PageSection from "src/components/PageSection"
+import TeamPage from "src/components/TeamPage"
+import { useAppSelector } from "src/state/hooks"
 import { Flex } from "@aws-amplify/ui-react"
 import { Typography } from "@mui/material"
 
