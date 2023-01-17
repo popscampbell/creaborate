@@ -5,42 +5,39 @@
  **************************************************************************/
 
 import * as React from "react";
-import { UserProfile } from "../models";
+import { GridProps, SelectFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
 import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
-import { GridProps, TextFieldProps } from "@aws-amplify/ui-react";
+import { UserProfile } from "../models";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
 export declare type UserProfileUpdateFormInputValues = {
-    Username?: string;
-    Name?: string;
-    Tagline?: string;
-    Skills?: string[];
-    Interests?: string[];
-    About?: string;
-    Location?: string;
+    username?: string;
+    visibility?: string;
+    name?: string;
+    searchName?: string;
+    tagline?: string;
+    about?: string;
 };
 export declare type UserProfileUpdateFormValidationValues = {
-    Username?: ValidationFunction<string>;
-    Name?: ValidationFunction<string>;
-    Tagline?: ValidationFunction<string>;
-    Skills?: ValidationFunction<string>;
-    Interests?: ValidationFunction<string>;
-    About?: ValidationFunction<string>;
-    Location?: ValidationFunction<string>;
+    username?: ValidationFunction<string>;
+    visibility?: ValidationFunction<string>;
+    name?: ValidationFunction<string>;
+    searchName?: ValidationFunction<string>;
+    tagline?: ValidationFunction<string>;
+    about?: ValidationFunction<string>;
 };
-export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type UserProfileUpdateFormOverridesProps = {
-    UserProfileUpdateFormGrid?: FormProps<GridProps>;
-    Username?: FormProps<TextFieldProps>;
-    Name?: FormProps<TextFieldProps>;
-    Tagline?: FormProps<TextFieldProps>;
-    Skills?: FormProps<TextFieldProps>;
-    Interests?: FormProps<TextFieldProps>;
-    About?: FormProps<TextFieldProps>;
-    Location?: FormProps<TextFieldProps>;
+    UserProfileUpdateFormGrid?: PrimitiveOverrideProps<GridProps>;
+    username?: PrimitiveOverrideProps<TextFieldProps>;
+    visibility?: PrimitiveOverrideProps<SelectFieldProps>;
+    name?: PrimitiveOverrideProps<TextFieldProps>;
+    searchName?: PrimitiveOverrideProps<TextFieldProps>;
+    tagline?: PrimitiveOverrideProps<TextFieldProps>;
+    about?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type UserProfileUpdateFormProps = React.PropsWithChildren<{
     overrides?: UserProfileUpdateFormOverridesProps | undefined | null;
@@ -50,7 +47,6 @@ export declare type UserProfileUpdateFormProps = React.PropsWithChildren<{
     onSubmit?: (fields: UserProfileUpdateFormInputValues) => UserProfileUpdateFormInputValues;
     onSuccess?: (fields: UserProfileUpdateFormInputValues) => void;
     onError?: (fields: UserProfileUpdateFormInputValues, errorMessage: string) => void;
-    onCancel?: () => void;
     onChange?: (fields: UserProfileUpdateFormInputValues) => UserProfileUpdateFormInputValues;
     onValidate?: UserProfileUpdateFormValidationValues;
 } & React.CSSProperties>;
