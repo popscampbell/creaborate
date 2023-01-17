@@ -1,4 +1,4 @@
-import Layout from "@/components/layout"
+import Layout from "@/components/Layout"
 import UserPage from "@/components/UserPage"
 import { Typography } from "@mui/material"
 

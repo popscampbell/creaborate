@@ -1,4 +1,4 @@
-import Layout from "@/components/layout"
+import Layout from "@/components/Layout"
 import PageSection from "@/components/PageSection"
 import UserPage from "@/components/UserPage"
 import { useAppSelector } from "@/state/hooks"
@@ -12,10 +12,11 @@ export default function UserTeamsPage() {
 
   return (
     <Layout>
-      <UserPage title="Teams">
+      <UserPage subtitle="Teams">
         <PageSection
           items={teams}
-          renderTitle={(team) => (
+          renderLabel={(team) => team.name}
+          renderContent={(team) => (
             <Link href={`/team/${team.id}`}>
               <Flex>
                 {team.role === "ADMINISTRATOR" && <AdminIcon />}

@@ -56,11 +56,11 @@ export default function AppHeader() {
           </Flex>
         )}
 
-        <Link href="/">
-          <Creaborate variant="header" />
-        </Link>
-
-        <Flex grow={1}></Flex>
+        <Flex grow={1}>
+          <Link href="/">
+            <Creaborate variant="header" />
+          </Link>
+        </Flex>
 
         <Flex>
           <Typography>{userData.username || "sign in"}</Typography>

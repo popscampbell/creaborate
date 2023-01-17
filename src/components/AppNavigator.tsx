@@ -29,7 +29,7 @@ export default function AppNavigator() {
       )}
 
       {navigatorSections.map((section, key) => (
-        <AppNavigatorLink {...section} />
+        <AppNavigatorLink key={key} {...section} />
       ))}
     </Flex>
   )

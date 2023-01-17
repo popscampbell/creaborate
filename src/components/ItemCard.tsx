@@ -1,16 +1,26 @@
-import { Card, CardContent, CardHeader, Typography } from "@mui/material"
+import { Card, CardContent, Typography } from "@mui/material"
+import Link from "next/link"
+import { ItemProps } from "./Types"
 
-export interface ItemCardProps<T> {
-  item: T
-  renderTitle: (item: T) => any
-}
+export default function ItemCard<T>(props: ItemProps<T>) {
+  const { item, renderLabel, renderContent, linkTo } = props
 
-export default function ItemCard<T>(props: ItemCardProps<T>) {
-  const { item, renderTitle } = props
+  function TheCard() {
+    return (
+      <Card>
+        <CardContent>
+          <Typography>{renderLabel(item)}</Typography>
+          {renderContent && renderContent(item)}
+        </CardContent>
+      </Card>
+    )
+  }
 
-  return (
-    <Card>
-      <CardContent>{renderTitle(item)}</CardContent>
-    </Card>
+  return linkTo ? (
+    <Link href={linkTo(item)}>
+      <TheCard />
+    </Link>
+  ) : (
+    <TheCard />
   )
 }

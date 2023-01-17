@@ -1,55 +1,50 @@
+import { TeamDataLoader } from "@/data/TeamDataLoader"
 import { setNavigatorSections } from "@/state/globalSlice"
 import { useAppDispatch, useAppSelector } from "@/state/hooks"
-import { NavigatorLink } from "@/state/types"
 import AssignmentIcon from "@mui/icons-material/Assignment"
 import ContactsIcon from "@mui/icons-material/Contacts"
 import DashboardIcon from "@mui/icons-material/Dashboard"
 import GroupIcon from "@mui/icons-material/Group"
 import ImageIcon from "@mui/icons-material/Image"
 import SettingsIcon from "@mui/icons-material/Settings"
-import RsvpIcon from "@mui/icons-material/Rsvp"
-import React, { useEffect } from "react"
-import Page from "./Page"
+import EventIcon from "@mui/icons-material/Theaters"
 import { useRouter } from "next/router"
-import { TeamDataLoader } from "@/data/TeamDataLoader"
+import { useEffect } from "react"
+import Page, { PageProps } from "./Page"
 
-function TeamContent(props: { children: any }) {
-  const { children } = props
-
+function TeamContent(props: Omit<PageProps, "title">) {
+  const { team } = useAppSelector((state) => state.team)
   const dispatch = useAppDispatch()
-  const { team, invitations } = useAppSelector((state) => state.team)
 
   useEffect(() => {
-    const navigatorSections: NavigatorLink[] = [
-      { to: "/user", label: "Dashboard", icon: <DashboardIcon /> },
-      { to: "/", label: "Settings", icon: <SettingsIcon /> },
-      { to: "/user/teams", label: "Teams", icon: <GroupIcon /> },
-      { to: "/", label: "Tasks", icon: <AssignmentIcon /> },
-      { to: "/", label: "Images", icon: <ImageIcon /> },
-      { to: "/", label: "Contacts", icon: <ContactsIcon /> },
-      {
-        to: "/",
-        label: "Invitations",
-        icon: <RsvpIcon />,
-        badgeContent: invitations.length,
-        title: `${invitations} new invitations`
-      }
-    ]
-    dispatch(setNavigatorSections(navigatorSections))
-  }, [])
+    function getUrl(page?: string) {
+      return `/team/${team?.id}${page && `/${page}`}`
+    }
 
-  return <Page title={team?.name}>{children}</Page>
+    team &&
+      dispatch(
+        setNavigatorSections([
+          { to: getUrl(), label: "Dashboard", icon: <DashboardIcon /> },
+          { to: getUrl("settings"), label: "Settings", icon: <SettingsIcon /> },
+          { to: getUrl("members"), label: "Members", icon: <GroupIcon /> },
+          { to: getUrl("tasks"), label: "Tasks", icon: <AssignmentIcon /> },
+          { to: getUrl("images"), label: "Images", icon: <ImageIcon /> },
+          { to: getUrl("contacts"), label: "Contacts", icon: <ContactsIcon /> },
+          { to: getUrl("events"), label: "Events", icon: <EventIcon /> }
+        ])
+      )
+  }, [team])
+
+  return <Page title={team?.name} {...props} />
 }
 
-export default function TeamPage(props: { children?: any }) {
-  const { children } = props
-
+export default function TeamPage(props: Omit<PageProps, "title">) {
   const { query } = useRouter()
   const teamID = Array.isArray(query.teamID) ? query.teamID?.[0] : query.teamID
 
   return teamID ? (
     <TeamDataLoader teamID={teamID}>
-      <TeamContent>{children}</TeamContent>
+      <TeamContent {...props} />
     </TeamDataLoader>
   ) : (
     <></>

@@ -18,15 +18,6 @@ export default function App({ Component, pageProps }: AppProps) {
   const darkTheme = createTheme({
     palette: {
       mode: "dark"
-      // primary: {
-      //   main: grey[700],
-      //   dark: grey[800],
-      //   light: grey[300],
-      //   contrastText: grey[100]
-      // },
-      // background: {
-      //   default: grey[900]
-      // }
     }
   })
 

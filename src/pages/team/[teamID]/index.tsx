@@ -1,23 +1,25 @@
 import Layout from "@/components/Layout"
 import PageSection from "@/components/PageSection"
-import UserPage from "@/components/UserPage"
+import TeamPage from "@/components/TeamPage"
 import { useAppSelector } from "@/state/hooks"
 import { Flex } from "@aws-amplify/ui-react"
 import { Typography } from "@mui/material"
 
-export default function UserDashboard() {
-  const { invitations, tasks, teams } = useAppSelector((state) => state.user)
+export default function TeamDefaultPage() {
+  const { team, members, tasks } = useAppSelector((state) => state.team)
 
   return (
     <Layout>
-      <UserPage subtitle="Dashboard">
+      <TeamPage subtitle={team?.description}>
         <PageSection
-          title="Invitations"
-          items={invitations}
-          renderLabel={(invitation) => invitation.teamID}
+          variant="avatar"
+          title="Members"
+          items={members}
+          renderLabel={(teamMember) => teamMember.name}
         />
 
         <PageSection
+          variant="card"
           title="Tasks"
           items={tasks}
           renderLabel={(task) => task.name}
@@ -27,14 +29,7 @@ export default function UserDashboard() {
             </Flex>
           )}
         />
-
-        <PageSection
-          title="Teams"
-          items={teams}
-          renderLabel={(team) => team.name}
-          linkTo={(team) => `/team/${team.id}`}
-        />
-      </UserPage>
+      </TeamPage>
     </Layout>
   )
 }
