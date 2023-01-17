@@ -1,5 +1,9 @@
 name: Build test branch
 
+on:
+  pull_request:
+    branches: ["test"]
+
 jobs:
   build:
     runs-on: ubuntu-latest
