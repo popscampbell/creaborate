@@ -1,5 +1,5 @@
-import { setNavigatorSections } from "src/state/globalSlice"
-import { useAppDispatch, useAppSelector } from "src/state/hooks"
+import { setNavigatorSections } from "@/state/globalSlice"
+import { useAppDispatch, useAppSelector } from "@/state/hooks"
 import AssignmentIcon from "@mui/icons-material/Assignment"
 import ContactsIcon from "@mui/icons-material/Contacts"
 import DashboardIcon from "@mui/icons-material/Dashboard"

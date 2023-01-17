@@ -1,7 +1,7 @@
-import Layout from "src/components/Layout"
-import PageSection from "src/components/PageSection"
-import UserPage from "src/components/UserPage"
-import { useAppSelector } from "src/state/hooks"
+import Layout from "@/components/Layout"
+import PageSection from "@/components/PageSection"
+import UserPage from "@/components/UserPage"
+import { useAppSelector } from "@/state/hooks"
 
 export default function UserTasksPage() {
   const { tasks } = useAppSelector((state) => state.user)
