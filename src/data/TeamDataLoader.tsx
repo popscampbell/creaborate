@@ -1,4 +1,4 @@
-import { useAppDispatch } from "@/state/hooks"
+import { useAppDispatch } from "src/state/hooks"
 import {
   setTeam,
   setTeamContacts,
@@ -8,7 +8,7 @@ import {
   setTeamMembers,
   setTeamProjects,
   setTeamTasks
-} from "@/state/teamSlice"
+} from "src/state/teamSlice"
 import { Auth, DataStore } from "aws-amplify"
 import React from "react"
 import {

@@ -1,4 +1,4 @@
-import { useAppSelector } from "@/state/hooks"
+import { useAppSelector } from "src/state/hooks"
 import { Flex } from "@aws-amplify/ui-react"
 import CloseIcon from "@mui/icons-material/Close"
 import MenuIcon from "@mui/icons-material/Menu"
