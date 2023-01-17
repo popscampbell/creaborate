@@ -63,7 +63,9 @@ export default function AppHeader() {
         </Flex>
 
         <Flex>
-          <Typography>{userData.username || "sign in"}</Typography>
+          <Link href="/user/profile">
+            <Typography>{userData.username || "sign in"}</Typography>
+          </Link>
         </Flex>
       </Toolbar>
     </AppBar>
