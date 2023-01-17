@@ -8,7 +8,7 @@ import ImageIcon from "@mui/icons-material/Image"
 import PersonIcon from "@mui/icons-material/Person"
 import RsvpIcon from "@mui/icons-material/Rsvp"
 import { useEffect } from "react"
-import Page, { PageProps } from "./Page"
+import Page, { PageProps } from "../app/Page"
 
 export default function UserPage(props: Omit<PageProps, "title">) {
   const dispatch = useAppDispatch()
@@ -37,5 +37,5 @@ export default function UserPage(props: Omit<PageProps, "title">) {
     )
   }, [])
 
-  return <Page title={profile?.name ?? username} {...props} />
+  return <Page context={profile?.name ?? username} {...props} />
 }

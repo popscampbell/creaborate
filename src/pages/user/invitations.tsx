@@ -1,6 +1,6 @@
-import Layout from "components/Layout"
-import PageSection from "components/PageSection"
-import UserPage from "components/UserPage"
+import Layout from "@/components/app/Layout"
+import PageSection from "@/components/app/PageSection"
+import UserPage from "@/components/user/UserPage"
 import { useAppSelector } from "state/hooks"
 
 export default function UserInvitationsPage() {
@@ -8,7 +8,7 @@ export default function UserInvitationsPage() {
 
   return (
     <Layout>
-      <UserPage subtitle="Invitations">
+      <UserPage title="Invitations">
         <PageSection
           items={invitations}
           renderLabel={(invitation) => invitation.id}

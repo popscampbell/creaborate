@@ -1,9 +1,9 @@
 import { Flex } from "@aws-amplify/ui-react"
 import Typography from "@mui/material/Typography"
-import ItemAvatar from "./ItemAvatar"
-import ItemCard from "./ItemCard"
-import ItemPill from "./ItemPill"
-import { ItemProps, PageSectionVariant } from "./Types"
+import ItemAvatar from "../ItemAvatar"
+import ItemCard from "../ItemCard"
+import ItemPill from "../ItemPill"
+import { ItemProps, PageSectionVariant } from "../Types"
 
 export default function PageSection<T>(
   props: {

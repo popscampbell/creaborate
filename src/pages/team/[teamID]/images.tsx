@@ -1,6 +1,6 @@
-import Layout from "components/Layout"
-import PageSection from "components/PageSection"
-import TeamPage from "components/TeamPage"
+import Layout from "@/components/app/Layout"
+import PageSection from "@/components/app/PageSection"
+import TeamPage from "@/components/team/TeamPage"
 import { useAppSelector } from "state/hooks"
 
 export default function TeamImages() {
@@ -8,7 +8,7 @@ export default function TeamImages() {
 
   return (
     <Layout>
-      <TeamPage subtitle="Images">
+      <TeamPage title="Images">
         <PageSection items={images} renderLabel={(image) => image.id} />
       </TeamPage>
     </Layout>

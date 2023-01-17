@@ -1,6 +1,6 @@
-import Layout from "components/Layout"
-import PageSection from "components/PageSection"
-import UserPage from "components/UserPage"
+import Layout from "@/components/app/Layout"
+import PageSection from "@/components/app/PageSection"
+import UserPage from "@/components/user/UserPage"
 import { useAppSelector } from "state/hooks"
 import { Flex } from "@aws-amplify/ui-react"
 import { Typography } from "@mui/material"
@@ -12,7 +12,7 @@ export default function UserTeamsPage() {
 
   return (
     <Layout>
-      <UserPage subtitle="Teams">
+      <UserPage title="Teams">
         <PageSection
           items={teams}
           renderLabel={(team) => team.name}

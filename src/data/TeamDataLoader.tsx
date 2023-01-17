@@ -1,6 +1,7 @@
 import { useAppDispatch } from "state/hooks"
 import {
   setTeam,
+  setUserRole,
   setTeamContacts,
   setTeamEvents,
   setTeamImages,
@@ -30,11 +31,16 @@ export function TeamDataLoader(props: { children: any; teamID: string }) {
 
   React.useEffect(() => {
     Auth.currentAuthenticatedUser().then((currentUser) => {
-      DataStore.query(Team, teamID)
-        .then((team) =>
-          team ? getTeamWithUserRole(currentUser.username, team) : null
-        )
-        .then((team) => team && dispatch(setTeam(team)))
+      DataStore.query(Team, teamID).then(async (team) => {
+        if (team) {
+          const role = await getTeamWithUserRole(
+            currentUser.username,
+            team
+          ).then((twur) => twur?.role)
+          dispatch(setTeam(team))
+          dispatch(setUserRole(role))
+        }
+      })
 
       DataStore.query(TeamMember, (member) => member.teamID.eq(teamID))
         .then(

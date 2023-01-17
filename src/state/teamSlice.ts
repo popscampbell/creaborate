@@ -1,10 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import _ from "lodash"
-import { Task, TeamContact, TeamEvent, TeamImage, TeamInvitation, TeamProject } from "models"
+import { Task, Team, TeamContact, TeamEvent, TeamImage, TeamInvitation, TeamMember, TeamMemberRole, TeamProject } from "models"
 import { TeamMemberWithName, TeamWithUserRole } from "./types"
 
 interface TeamSliceState {
-  team?: TeamWithUserRole
+  team?: Team
+  userRole?: TeamMemberRole
   members: TeamMemberWithName[]
   tasks: Task[]
   projects: TeamProject[]
@@ -15,7 +16,6 @@ interface TeamSliceState {
 }
 
 const initialState: TeamSliceState = {
-  team: undefined,
   members: [],
   tasks: [],
   projects: [],
@@ -29,14 +29,21 @@ const teamSlice = createSlice({
   name: "team",
   initialState,
   reducers: {
-    setTeam(state, action: PayloadAction<TeamWithUserRole | undefined>) {
+    setTeam(state, action: PayloadAction<Team | undefined>) {
       const { payload } = action
       if (!payload) {
         state = initialState
       } else {
         if (payload !== state.team) {
           state.team = payload
+
         }
+      }
+    },
+    setUserRole(state, action: PayloadAction<TeamMemberRole | undefined>) {
+      const { payload } = action
+      if (payload !== state.userRole) {
+        state.userRole = payload
       }
     },
     setTeamMembers(state, action: PayloadAction<TeamMemberWithName[]>) {
@@ -86,6 +93,7 @@ const teamSlice = createSlice({
 
 export const {
   setTeam,
+  setUserRole,
   setTeamMembers,
   setTeamTasks,
   setTeamProjects,

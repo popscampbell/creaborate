@@ -1,6 +1,6 @@
-import Layout from "components/Layout"
-import PageSection from "components/PageSection"
-import TeamPage from "components/TeamPage"
+import Layout from "@/components/app/Layout"
+import PageSection from "@/components/app/PageSection"
+import TeamPage from "@/components/team/TeamPage"
 import { useAppSelector } from "state/hooks"
 import { Flex } from "@aws-amplify/ui-react"
 import { Typography } from "@mui/material"
@@ -10,7 +10,7 @@ export default function TeamDefaultPage() {
 
   return (
     <Layout>
-      <TeamPage subtitle={team?.description}>
+      <TeamPage title={team?.description}>
         <PageSection
           variant="avatar"
           title="Members"

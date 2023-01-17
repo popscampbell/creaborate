@@ -1,10 +1,10 @@
-import Layout from "components/Layout"
-import UserPage from "components/UserPage"
+import Layout from "@/components/app/Layout"
+import UserPage from "@/components/user/UserPage"
 
 export default function UserProfilePage() {
   return (
     <Layout>
-      <UserPage subtitle="Profile"></UserPage>
+      <UserPage title="Profile"></UserPage>
     </Layout>
   )
 }

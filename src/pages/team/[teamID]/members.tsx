@@ -1,6 +1,6 @@
-import Layout from "components/Layout"
-import PageSection from "components/PageSection"
-import TeamPage from "components/TeamPage"
+import Layout from "@/components/app/Layout"
+import PageSection from "@/components/app/PageSection"
+import TeamPage from "@/components/team/TeamPage"
 import { useAppSelector } from "state/hooks"
 
 export default function TeamMembersPage() {
@@ -8,7 +8,7 @@ export default function TeamMembersPage() {
 
   return (
     <Layout>
-      <TeamPage subtitle="Members">
+      <TeamPage title="Members">
         <PageSection
           variant="avatar"
           items={members}

@@ -10,9 +10,11 @@ import SettingsIcon from "@mui/icons-material/Settings"
 import EventIcon from "@mui/icons-material/Theaters"
 import { useRouter } from "next/router"
 import { useEffect } from "react"
-import Page, { PageProps } from "./Page"
+import Page, { PageProps } from "../app/Page"
 
-function TeamContent(props: Omit<PageProps, "title">) {
+type TeamPageProps = Omit<PageProps, "context">
+
+function TeamContent(props: TeamPageProps) {
   const { team } = useAppSelector((state) => state.team)
   const dispatch = useAppDispatch()
 
@@ -35,10 +37,10 @@ function TeamContent(props: Omit<PageProps, "title">) {
       )
   }, [team])
 
-  return <Page title={team?.name} {...props} />
+  return <Page context={team?.name} {...props} />
 }
 
-export default function TeamPage(props: Omit<PageProps, "title">) {
+export default function TeamPage(props: TeamPageProps) {
   const { query } = useRouter()
   const teamID = Array.isArray(query.teamID) ? query.teamID?.[0] : query.teamID
 

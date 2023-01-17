@@ -1,6 +1,6 @@
-import Layout from "components/Layout"
-import PageSection from "components/PageSection"
-import UserPage from "components/UserPage"
+import Layout from "@/components/app/Layout"
+import PageSection from "@/components/app/PageSection"
+import UserPage from "@/components/user/UserPage"
 import { useAppSelector } from "state/hooks"
 
 export default function UserImagesPage() {
@@ -8,7 +8,7 @@ export default function UserImagesPage() {
 
   return (
     <Layout>
-      <UserPage subtitle="Images">
+      <UserPage title="Images">
         <PageSection items={images} renderLabel={(image) => image.id} />
       </UserPage>
     </Layout>

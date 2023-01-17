@@ -31,26 +31,27 @@ export default function Layout(props: { children: any }) {
       backgroundColor={theme.palette.background.default}
       color={theme.palette.text.primary}
       minHeight="100vh"
-      rowGap={1}
+      gap={1}
     >
       <AppHeader />
 
       <Flex className="middle" direction="column" grow={1}>
         <Authenticator>
           {({ signOut, user }) => (
-            <Flex grow={1}>
+            <Flex grow={1} gap={0} marginBottom={41}>
               {!isPhone && (
                 <Flex
                   as="nav"
                   direction="column"
-                  marginBlockEnd={41}
                   boxShadow={theme.shadows[1]}
                   backgroundImage="linear-gradient(rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.09))"
                 >
                   <AppNavigator />
                 </Flex>
               )}
-              <Flex as="main">{props.children}</Flex>
+              <Flex grow={1} as="main">
+                {props.children}
+              </Flex>
             </Flex>
           )}
         </Authenticator>

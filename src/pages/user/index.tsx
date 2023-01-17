@@ -1,6 +1,6 @@
-import Layout from "components/Layout"
-import PageSection from "components/PageSection"
-import UserPage from "components/UserPage"
+import Layout from "@/components/app/Layout"
+import PageSection from "@/components/app/PageSection"
+import UserPage from "@/components/user/UserPage"
 import { useAppSelector } from "state/hooks"
 import { Flex } from "@aws-amplify/ui-react"
 import { Typography } from "@mui/material"
@@ -10,7 +10,7 @@ export default function UserDashboard() {
 
   return (
     <Layout>
-      <UserPage subtitle="Dashboard">
+      <UserPage title="Dashboard">
         <PageSection
           title="Invitations"
           items={invitations}
