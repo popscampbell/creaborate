@@ -1,5 +1,5 @@
-import { TeamMember, UserProfile, Team, TeamMemberRole } from "src/models"
-import { TeamMemberWithName, TeamWithUserRole } from "src/state/types"
+import { TeamMember, UserProfile, Team, TeamMemberRole } from "@/models"
+import { TeamMemberWithName, TeamWithUserRole } from "@/state/types"
 import { DataStore } from "aws-amplify"
 
 export function removeNullsFromArray<T>(arr: (T | null)[]): T[] {

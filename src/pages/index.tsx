@@ -1,5 +1,5 @@
-import Layout from "src/components/Layout"
-import UserPage from "src/components/UserPage"
+import Layout from "@/components/Layout"
+import UserPage from "@/components/UserPage"
 import { Typography } from "@mui/material"
 
 export default function Home() {
