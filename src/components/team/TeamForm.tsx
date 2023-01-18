@@ -1,5 +1,5 @@
 import { loadUserTeams } from "@/data/utils"
-import { Team } from "@/models"
+import { Team, TeamVisibility } from "@/models"
 import { useAppDispatch, useAppSelector } from "@/state/hooks"
 import { clearTeamData, setTeam } from "@/state/teamSlice"
 import { DataStore } from "@aws-amplify/datastore"
@@ -15,7 +15,11 @@ export default function TeamForm(props: { team: Team }) {
   const router = useRouter()
 
   function handleDelete() {
-    DataStore.delete(team).then(() => {
+    DataStore.save(
+      Team.copyOf(team, (copy) => {
+        copy.visibility = TeamVisibility.ARCHIVED
+      })
+    ).then(() => {
       clearTeamData()
       loadUserTeams(username, dispatch)
       router.push("/user/teams")
@@ -23,19 +27,17 @@ export default function TeamForm(props: { team: Team }) {
   }
 
   function handleSave(inputValues: Team) {
-    if (team) {
-      DataStore.save(
-        Team.copyOf(team, (copy) => {
-          copy.searchName = (copy.name = inputValues.name).toLowerCase()
-          copy.description = inputValues.description
-          copy.teamType = inputValues.teamType
-          copy.customTeamType = inputValues.customTeamType
-          copy.visibility = inputValues.visibility
-        })
-      ).then((updatedTeam) => {
-        dispatch(setTeam(updatedTeam))
+    DataStore.save(
+      Team.copyOf(team, (copy) => {
+        copy.searchName = (copy.name = inputValues.name).toLowerCase()
+        copy.description = inputValues.description
+        copy.teamType = inputValues.teamType
+        copy.customTeamType = inputValues.customTeamType
+        copy.visibility = inputValues.visibility
       })
-    }
+    ).then((updatedTeam) => {
+      dispatch(setTeam(updatedTeam))
+    })
   }
 
   return (

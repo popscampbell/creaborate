@@ -1,7 +1,7 @@
 import { AppDispatch } from "@/state/store"
 import { setUserProfile, setUserTeams } from "@/state/userSlice"
 import { DataStore } from "aws-amplify"
-import { Team, TeamMember, TeamMemberRole, UserProfile } from "models"
+import { Team, TeamMember, TeamMemberRole, TeamVisibility, UserProfile } from "models"
 import { TeamMemberWithName, TeamWithUserRole } from "state/types"
 
 export function removeNullsFromArray<T>(arr: (T | null)[]): T[] {
@@ -34,7 +34,10 @@ export async function getTeamWithUserRole(
 }
 
 export async function loadUserTeams(username: string, dispatch: AppDispatch) {
-  return DataStore.query(Team, (team) => team.TeamMembers.username.eq(username))
+  return DataStore.query(Team, (team) => team.and(team => [
+    team.TeamMembers.username.eq(username),
+    team.visibility.ne(TeamVisibility.ARCHIVED)
+  ]))
     .then(
       async (teams) =>
         await Promise.all(
