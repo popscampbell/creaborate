@@ -1,13 +1,18 @@
 import Typography from "@mui/material/Typography"
 
-export default function Copyright(props: { variant?: "footer" | "body" }) {
+export enum CopyrightVariant {
+  FOOTER = "footer",
+  BODY = "body"
+}
+
+export default function Copyright(props: { variant?: CopyrightVariant }) {
   const { variant } = props
 
   const year = new Date().getFullYear()
 
   function getVariant() {
     switch (variant) {
-      case "footer":
+      case CopyrightVariant.FOOTER:
         return "caption"
       default:
         return "body1"

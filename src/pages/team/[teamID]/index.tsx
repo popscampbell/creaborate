@@ -1,5 +1,5 @@
 import Layout from "@/components/app/Layout"
-import PageSection from "@/components/app/PageSection"
+import PageSection, { PageSectionVariant } from "@/components/app/PageSection"
 import TeamPage from "@/components/team/TeamPage"
 import { useAppSelector } from "state/hooks"
 import { Flex } from "@aws-amplify/ui-react"
@@ -12,14 +12,14 @@ export default function TeamDefaultPage() {
     <Layout>
       <TeamPage title={team?.description}>
         <PageSection
-          variant="avatar"
+          variant={PageSectionVariant.AVATAR}
           title="Members"
           items={members}
           renderLabel={(teamMember) => teamMember.name}
         />
 
         <PageSection
-          variant="card"
+          variant={PageSectionVariant.CARD}
           title="Tasks"
           items={tasks}
           renderLabel={(task) => task.name}

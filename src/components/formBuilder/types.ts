@@ -1,9 +1,14 @@
-export type ItemFormFieldType = "text" | "longText" | "choice" | "toggle"
+export enum FormBuilderFieldType {
+  TEXT = "TEXT",
+  LONGTEXT = "LONGTEXT",
+  CHOICE = "CHOICE",
+  TOGGLE = "TOGGLE",
+}
 
 export interface FormBuilderFieldProps {
   label: string
   name: string
-  type: ItemFormFieldType
+  type: FormBuilderFieldType
   required?: boolean
   options?: {
     value: string

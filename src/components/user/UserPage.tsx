@@ -10,7 +10,7 @@ import RsvpIcon from "@mui/icons-material/Rsvp"
 import { useEffect } from "react"
 import Page, { PageProps } from "../app/Page"
 
-export default function UserPage(props: Omit<PageProps, "title">) {
+export default function UserPage(props: Omit<PageProps, "context">) {
   const dispatch = useAppDispatch()
 
   const { username, profile, invitations } = useAppSelector(
@@ -35,7 +35,7 @@ export default function UserPage(props: Omit<PageProps, "title">) {
         }
       ])
     )
-  }, [])
+  }, [invitations])
 
   return <Page context={profile?.name ?? username} {...props} />
 }

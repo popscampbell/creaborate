@@ -5,6 +5,8 @@ import EditIcon from "@mui/icons-material/Edit"
 import SaveIcon from "@mui/icons-material/Save"
 import { Button, FormControl, Toolbar, useTheme } from "@mui/material"
 import React from "react"
+import CancelSaveDialog from "../CancelSaveDialog"
+import ConfirmationDialog from "../ConfirmationDialog"
 import FormBuilderField from "./FormBuilderField"
 import { FormBuilderFieldProps } from "./types"
 
@@ -12,13 +14,17 @@ export default function FormBuilder<T>(props: {
   item: T
   fields: FormBuilderFieldProps[]
   onSave: (inputValues: any) => void
-  onDelete: () => void
+  onCancel?: () => void
+  onDelete?: () => void
+  dialog?: boolean
 }) {
-  const { item, fields, onSave, onDelete } = props
+  const { item, fields, onSave, onCancel, onDelete, dialog } = props
 
   const theme = useTheme()
 
-  const [isEditing, setIsEditing] = React.useState(false)
+  const [isEditing, setIsEditing] = React.useState(dialog ?? false)
+  const [confirmationOpen, setConfirmationOpen] = React.useState(false)
+
   const changes: any = {}
 
   function handleEdit() {
@@ -31,16 +37,26 @@ export default function FormBuilder<T>(props: {
 
   function handleCancel() {
     setIsEditing(false)
+    onCancel?.()
   }
 
-  function handleSubmit(e: React.MouseEvent<HTMLButtonElement>) {
-    e.preventDefault()
+  function handleSubmit(e?: React.MouseEvent<HTMLButtonElement>) {
+    e?.preventDefault()
     setIsEditing(false)
-    onSave({ ...item, ...changes })
+    onSave?.({ ...item, ...changes })
   }
 
-  return (
-    <Flex as="form" direction="column" marginTop={theme.spacing(2)}>
+  function handleDelete() {
+    setConfirmationOpen(true)
+  }
+
+  function handleConfirmDelete() {
+    setConfirmationOpen(false)
+    onDelete?.()
+  }
+
+  function FormFields() {
+    return (
       <Flex className="fields" direction="column" rowGap={theme.spacing(4)}>
         {fields.map((field, key) => (
           <FormControl key={key} disabled={!isEditing}>
@@ -53,48 +69,65 @@ export default function FormBuilder<T>(props: {
           </FormControl>
         ))}
       </Flex>
+    )
+  }
+
+  return dialog ? (
+    <CancelSaveDialog onCancel={handleCancel} onSave={handleSubmit}>
+      <FormFields />
+    </CancelSaveDialog>
+  ) : (
+    <Flex as="form" direction="column" marginTop={theme.spacing(2)}>
+      <FormFields />
       <Flex className="toolbar" role="toolbar" justifyContent="end">
-        <Toolbar variant="dense">
-          <Button
-            sx={{ display: isEditing ? "none" : undefined }}
-            variant="outlined"
-            title="edit"
-            startIcon={<EditIcon />}
-            onClick={handleEdit}
-          >
-            Edit
-          </Button>
-          <Button
-            sx={{ display: isEditing ? undefined : "none" }}
-            type="submit"
-            variant="outlined"
-            title="save"
-            startIcon={<SaveIcon />}
-            onClick={handleSubmit}
-          >
-            Save
-          </Button>
-          <Button
-            sx={{ display: isEditing ? undefined : "none" }}
-            type="reset"
-            variant="outlined"
-            title="cancel"
-            startIcon={<CancelIcon />}
-            onClick={handleCancel}
-          >
-            Cancel
-          </Button>
-          <Button
-            sx={{ display: isEditing ? "none" : undefined }}
-            variant="outlined"
-            title="delete"
-            startIcon={<DeleteIcon />}
-            onClick={onDelete}
-          >
-            Delete
-          </Button>
-        </Toolbar>
+        {isEditing && (
+          <Toolbar variant="dense">
+            <Button
+              type="submit"
+              variant="outlined"
+              title="Save"
+              startIcon={<SaveIcon />}
+              onClick={handleSubmit}
+            >
+              Save
+            </Button>
+            <Button
+              type="reset"
+              variant="outlined"
+              title="Cancel"
+              startIcon={<CancelIcon />}
+              onClick={handleCancel}
+            >
+              Cancel
+            </Button>
+          </Toolbar>
+        )}
+        {!isEditing && (
+          <Toolbar variant="dense">
+            <Button
+              variant="outlined"
+              title="Edit"
+              startIcon={<EditIcon />}
+              onClick={handleEdit}
+            >
+              Edit
+            </Button>
+            <Button
+              variant="outlined"
+              title="Delete"
+              startIcon={<DeleteIcon />}
+              onClick={handleDelete}
+            >
+              Delete
+            </Button>
+          </Toolbar>
+        )}
       </Flex>
+      <ConfirmationDialog
+        open={confirmationOpen}
+        onCancel={() => setConfirmationOpen(false)}
+        onConfirm={handleConfirmDelete}
+      />
     </Flex>
   )
 }

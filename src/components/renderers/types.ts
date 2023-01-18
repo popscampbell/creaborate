@@ -4,5 +4,3 @@ export interface ItemProps<T> {
   renderContent?: (item: T) => any
   linkTo?: (item: T) => string
 }
-
-export type PageSectionVariant = "card" | "pill" | "avatar"

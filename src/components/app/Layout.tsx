@@ -18,10 +18,10 @@ export default function Layout(props: { children: any }) {
 
   useEffect(() => {
     const screenSize: ScreenSize = isPhone
-      ? "Phone"
+      ? ScreenSize.PHONE
       : isTablet
-      ? "Tablet"
-      : "Desktop"
+      ? ScreenSize.TABLET
+      : ScreenSize.DESKTOP
     dispatch(setScreenSize(screenSize))
   }, [isPhone, isTablet])
 

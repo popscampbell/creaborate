@@ -1,9 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import _ from "lodash"
-import { AuthenticationStatus, ContextArea, ScreenSize, NavigatorLink } from "./types"
+import { AuthenticationStatus, ScreenSize, NavigatorLink } from "./types"
 
 interface ContextSliceState {
-  area: ContextArea
   screenSize: ScreenSize
   authStatus: AuthenticationStatus
   isNavigatorCollapsed: boolean
@@ -11,9 +10,8 @@ interface ContextSliceState {
 }
 
 const initialState: ContextSliceState = {
-  area: "Home",
-  screenSize: "Phone",
-  authStatus: "unauthenticated",
+  screenSize: ScreenSize.PHONE,
+  authStatus: AuthenticationStatus.UNAUTHENTICATED,
   isNavigatorCollapsed: false,
   navigatorSections: [],
 }
@@ -22,12 +20,6 @@ const globalSlice = createSlice({
   name: "context",
   initialState,
   reducers: {
-    setContextArea(state, action: PayloadAction<ContextArea>) {
-      const { payload } = action
-      if (payload !== state.area) {
-        state.area = payload
-      }
-    },
     setScreenSize(state, action: PayloadAction<ScreenSize>) {
       const { payload } = action
       if (payload !== state.screenSize) {
@@ -59,7 +51,6 @@ const globalSlice = createSlice({
 })
 
 export const {
-  setContextArea,
   setScreenSize,
   setAuthStatus,
   setIsNavigatorCollapsed,

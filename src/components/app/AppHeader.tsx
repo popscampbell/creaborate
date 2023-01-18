@@ -1,4 +1,4 @@
-import { useAppSelector } from "state/hooks"
+import { ScreenSize } from "@/state/types"
 import { Flex } from "@aws-amplify/ui-react"
 import CloseIcon from "@mui/icons-material/Close"
 import MenuIcon from "@mui/icons-material/Menu"
@@ -12,11 +12,11 @@ import {
 } from "@mui/material"
 import Link from "next/link"
 import React from "react"
+import { useAppSelector } from "state/hooks"
 import AppNavigator from "./AppNavigator"
-import Creaborate from "./Creaborate"
+import Creaborate, { CreaborateVariant } from "./Creaborate"
 
 export default function AppHeader() {
-  const theme = useTheme()
   const { screenSize } = useAppSelector((state) => state.app)
   const userData = useAppSelector((state) => state.user)
 
@@ -33,7 +33,7 @@ export default function AppHeader() {
   return (
     <AppBar position="sticky" color="secondary">
       <Toolbar>
-        {screenSize === "Phone" && (
+        {screenSize === ScreenSize.PHONE && (
           <Flex>
             <IconButton onClick={openDrawer}>
               <MenuIcon />
@@ -58,7 +58,7 @@ export default function AppHeader() {
 
         <Flex grow={1}>
           <Link href="/">
-            <Creaborate variant="header" />
+            <Creaborate variant={CreaborateVariant.HEADER} />
           </Link>
         </Flex>
 

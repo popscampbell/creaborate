@@ -9,10 +9,11 @@ export interface PageProps {
   onDelete?: () => void
   onEdit?: () => void
   children?: any
+  actions?: any
 }
 
 export default function Page(props: PageProps) {
-  const { context, title, children, onDelete, onEdit } = props
+  const { context, title, children, onDelete, onEdit, actions } = props
   const theme = useTheme()
 
   return (
@@ -48,7 +49,7 @@ export default function Page(props: PageProps) {
             </Typography>
           )}
         </Flex>
-        {(onEdit || onDelete) && (
+        {(onEdit || onDelete || actions) && (
           <Flex className="toolbar" role="toolbar">
             <Toolbar variant="dense">
               {onEdit && (
@@ -69,6 +70,7 @@ export default function Page(props: PageProps) {
                   Delete
                 </Button>
               )}
+              {actions}
             </Toolbar>
           </Flex>
         )}

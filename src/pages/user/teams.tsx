@@ -6,13 +6,14 @@ import { Flex } from "@aws-amplify/ui-react"
 import { Typography } from "@mui/material"
 import AdminIcon from "@mui/icons-material/LocalPolice"
 import Link from "next/link"
+import { NewTeamDialog } from "@/components/team/NewTeamDialog"
 
 export default function UserTeamsPage() {
   const { teams } = useAppSelector((state) => state.user)
 
   return (
     <Layout>
-      <UserPage title="Teams">
+      <UserPage title="Teams" actions={<NewTeamDialog />}>
         <PageSection
           items={teams}
           renderLabel={(team) => team.name}

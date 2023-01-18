@@ -1,9 +1,15 @@
 import { Flex } from "@aws-amplify/ui-react"
 import Typography from "@mui/material/Typography"
-import ItemAvatar from "../ItemAvatar"
-import ItemCard from "../ItemCard"
-import ItemPill from "../ItemPill"
-import { ItemProps, PageSectionVariant } from "../Types"
+import ItemAvatar from "../renderers/ItemAvatar"
+import ItemCard from "../renderers/ItemCard"
+import ItemPill from "../renderers/ItemPill"
+import { ItemProps } from "../renderers/types"
+
+export enum PageSectionVariant {
+  CARD = "card",
+  PILL = "pill",
+  AVATAR = "avatar"
+}
 
 export default function PageSection<T>(
   props: {
@@ -20,9 +26,9 @@ export default function PageSection<T>(
       <Flex>
         {items &&
           items.map((item, key) =>
-            variant === "pill" ? (
+            variant === PageSectionVariant.PILL ? (
               <ItemPill key={key} item={item} {...itemProps} />
-            ) : variant === "avatar" ? (
+            ) : variant === PageSectionVariant.AVATAR ? (
               <ItemAvatar key={key} item={item} {...itemProps} />
             ) : (
               <ItemCard key={key} item={item} {...itemProps} />

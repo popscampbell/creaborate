@@ -1,3 +1,13 @@
+import { useAuthenticator } from "@aws-amplify/ui-react"
+import { DataStore } from "aws-amplify"
+import {
+  Task,
+  TeamInvitation,
+  UserContact,
+  UserImage,
+  UserProfile
+} from "models"
+import React from "react"
 import { useAppDispatch } from "state/hooks"
 import {
   setUserContacts,
@@ -5,21 +15,9 @@ import {
   setUserInvitations,
   setUsername,
   setUserProfile,
-  setUserTasks,
-  setUserTeams
+  setUserTasks
 } from "state/userSlice"
-import { useAuthenticator } from "@aws-amplify/ui-react"
-import { DataStore } from "aws-amplify"
-import React from "react"
-import {
-  Task,
-  Team,
-  TeamInvitation,
-  UserContact,
-  UserImage,
-  UserProfile
-} from "models"
-import { getTeamWithUserRole, removeNullsFromArray } from "./utils"
+import { loadUserTeams } from "./utils"
 
 export function UserDataLoader(props: { children: any }) {
   const { children } = props
@@ -41,15 +39,7 @@ export function UserDataLoader(props: { children: any }) {
             return profile
           })
 
-        DataStore.query(Team, (team) => team.TeamMembers.username.eq(username))
-          .then(
-            async (teams) =>
-              await Promise.all(
-                teams.map((team) => getTeamWithUserRole(username, team))
-              )
-          )
-          .then((result) => removeNullsFromArray(result))
-          .then((teams) => dispatch(setUserTeams(teams)))
+        loadUserTeams(username, dispatch)
 
         DataStore.query(Task, (task) => task.ownerUsername.eq(username)).then(
           (tasks) => dispatch(setUserTasks(tasks))

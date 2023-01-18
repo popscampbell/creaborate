@@ -1,5 +1,5 @@
 import { useAppSelector } from "state/hooks"
-import { NavigatorLink } from "state/types"
+import { NavigatorLink, ScreenSize } from "state/types"
 import { Flex } from "@aws-amplify/ui-react"
 import { Badge, Typography } from "@mui/material"
 import Link from "next/link"
@@ -19,7 +19,7 @@ export default function AppNavigatorLink(props: NavigatorLink) {
         paddingRight={isNavigatorCollapsed ? undefined : 12}
       >
         <Flex title={label}>{icon}</Flex>
-        {!(isNavigatorCollapsed && screenSize !== "Phone") && (
+        {!(isNavigatorCollapsed && screenSize !== ScreenSize.PHONE) && (
           <Typography>{label}</Typography>
         )}
         {<Badge {...badgeProps} color="primary" />}

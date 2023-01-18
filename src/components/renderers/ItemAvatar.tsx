@@ -1,5 +1,5 @@
 import { Avatar } from "@mui/material"
-import { ItemProps } from "./Types"
+import { ItemProps } from "./types"
 
 export default function ItemAvatar<T>(props: ItemProps<T>) {
   const { item, renderLabel: renderTitle } = props
@@ -8,7 +8,6 @@ export default function ItemAvatar<T>(props: ItemProps<T>) {
     let hash = 0
     let i
 
-    /* eslint-disable no-bitwise */
     for (i = 0; i < string.length; i += 1) {
       hash = string.charCodeAt(i) + ((hash << 7) - hash)
     }
@@ -19,7 +18,6 @@ export default function ItemAvatar<T>(props: ItemProps<T>) {
       const value = (hash >> (i * 8)) & 0xff
       color += `00${value.toString(16)}`.slice(-2)
     }
-    /* eslint-enable no-bitwise */
 
     return color
   }

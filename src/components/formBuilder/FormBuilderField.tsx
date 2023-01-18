@@ -7,7 +7,7 @@ import {
 } from "@mui/material"
 import React from "react"
 import FormBuilderSwitch from "./FormBuilderSwitch"
-import { FormBuilderFieldProps } from "./types"
+import { FormBuilderFieldProps, FormBuilderFieldType } from "./types"
 
 export default function FormBuilderField<T>(
   props: FormBuilderFieldProps & {
@@ -47,18 +47,20 @@ export default function FormBuilderField<T>(
   }
 
   switch (type) {
-    case "text":
-    case "longText":
+    case FormBuilderFieldType.TEXT:
+    case FormBuilderFieldType.LONGTEXT:
       return (
         <TextField
-          multiline={type === "longText"}
+          multiline={type === FormBuilderFieldType.LONGTEXT}
           rows={3}
           {...fieldProps}
-          sx={{ maxWidth: type === "text" ? 500 : undefined }}
+          sx={{
+            maxWidth: type === FormBuilderFieldType.TEXT ? 500 : undefined
+          }}
         />
       )
 
-    case "choice":
+    case FormBuilderFieldType.CHOICE:
       return options ? (
         <>
           <FormLabel id={`${name}-label`}>{label}</FormLabel>
@@ -77,7 +79,7 @@ export default function FormBuilderField<T>(
         <></>
       )
 
-    case "toggle":
+    case FormBuilderFieldType.TOGGLE:
       return (
         <FormControlLabel
           label={label}

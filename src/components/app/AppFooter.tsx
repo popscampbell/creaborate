@@ -1,6 +1,6 @@
 import { Flex } from "@aws-amplify/ui-react"
-import { AppBar, Toolbar } from "@mui/material"
-import Copyright from "./Copyright"
+import { AppBar } from "@mui/material"
+import Copyright, { CopyrightVariant } from "./Copyright"
 
 export default function AppFooter() {
   return (
@@ -10,7 +10,7 @@ export default function AppFooter() {
       sx={{ top: "auto", bottom: 0, height: 40, padding: 0 }}
     >
       <Flex grow={1} justifyContent="end" padding={12}>
-        <Copyright variant="footer" />
+        <Copyright variant={CopyrightVariant.FOOTER} />
       </Flex>
     </AppBar>
   )
