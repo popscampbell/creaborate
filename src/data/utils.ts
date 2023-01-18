@@ -1,5 +1,5 @@
 import { AppDispatch } from "@/state/store"
-import { setUserTeams } from "@/state/userSlice"
+import { setUserProfile, setUserTeams } from "@/state/userSlice"
 import { DataStore } from "aws-amplify"
 import { Team, TeamMember, TeamMemberRole, UserProfile } from "models"
 import { TeamMemberWithName, TeamWithUserRole } from "state/types"
@@ -44,4 +44,13 @@ export async function loadUserTeams(username: string, dispatch: AppDispatch) {
     .then((result) => removeNullsFromArray(result))
     .then((teams) => dispatch(setUserTeams(teams)))
 
+}
+
+export async function loadUserProfile(username: string, dispatch: AppDispatch) {
+  DataStore.query(UserProfile, (profile) => profile.username.eq(username))
+    .then((results) => results[0] ?? null)
+    .then((profile) => {
+      dispatch(setUserProfile(profile))
+      return profile
+    })
 }

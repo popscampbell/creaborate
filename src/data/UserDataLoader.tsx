@@ -1,12 +1,6 @@
 import { useAuthenticator } from "@aws-amplify/ui-react"
 import { DataStore } from "aws-amplify"
-import {
-  Task,
-  TeamInvitation,
-  UserContact,
-  UserImage,
-  UserProfile
-} from "models"
+import { Task, TeamInvitation, UserContact, UserImage } from "models"
 import React from "react"
 import { useAppDispatch } from "state/hooks"
 import {
@@ -14,10 +8,9 @@ import {
   setUserImages,
   setUserInvitations,
   setUsername,
-  setUserProfile,
   setUserTasks
 } from "state/userSlice"
-import { loadUserTeams } from "./utils"
+import { loadUserProfile, loadUserTeams } from "./utils"
 
 export function UserDataLoader(props: { children: any }) {
   const { children } = props
@@ -32,12 +25,7 @@ export function UserDataLoader(props: { children: any }) {
       if (username) {
         dispatch(setUsername(username))
 
-        DataStore.query(UserProfile, (profile) => profile.username.eq(username))
-          .then((results) => results[0] ?? null)
-          .then((profile) => {
-            dispatch(setUserProfile(profile))
-            return profile
-          })
+        loadUserProfile(username, dispatch)
 
         loadUserTeams(username, dispatch)
 

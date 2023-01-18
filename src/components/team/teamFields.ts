@@ -15,7 +15,7 @@ export const newTeamProps: teamProps = {
   searchName: "",
   visibility: TeamVisibility.PUBLIC,
   description: "",
-  teamType: TeamType.TEAM
+  teamType: TeamType.TEAM,
 }
 
 export const requiredTeamFields: FormBuilderFieldProps[] = [
@@ -24,14 +24,14 @@ export const requiredTeamFields: FormBuilderFieldProps[] = [
     name: "visibility",
     type: FormBuilderFieldType.TOGGLE,
     toggleOnValue: TeamVisibility.PUBLIC,
-    toggleOffValue: TeamVisibility.PRIVATE
+    toggleOffValue: TeamVisibility.PRIVATE,
   },
   { label: "Name", name: "name", type: FormBuilderFieldType.TEXT, required: true },
   {
     label: "Description",
     name: "description",
     type: FormBuilderFieldType.LONGTEXT,
-    required: true
+    required: true,
   },
   {
     label: "Team type",
@@ -41,7 +41,7 @@ export const requiredTeamFields: FormBuilderFieldProps[] = [
       { label: "Band", value: TeamType.BAND },
       { label: "Group", value: TeamType.GROUP },
       { label: "Team", value: TeamType.TEAM },
-      { label: "Custom", value: TeamType.CUSTOM }
+      { label: "Custom", value: TeamType.CUSTOM },
     ]
   },
 ]
@@ -50,6 +50,6 @@ export const teamFields = [...requiredTeamFields, ...[
   {
     label: "Custom team type",
     name: "customTeamType",
-    type: FormBuilderFieldType.TEXT
+    type: FormBuilderFieldType.TEXT,
   }
 ]]

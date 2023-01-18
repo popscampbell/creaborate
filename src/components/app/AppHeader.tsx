@@ -2,14 +2,7 @@ import { ScreenSize } from "@/state/types"
 import { Flex } from "@aws-amplify/ui-react"
 import CloseIcon from "@mui/icons-material/Close"
 import MenuIcon from "@mui/icons-material/Menu"
-import {
-  AppBar,
-  Drawer,
-  IconButton,
-  Toolbar,
-  Typography,
-  useTheme
-} from "@mui/material"
+import { AppBar, Drawer, IconButton, Toolbar, Typography } from "@mui/material"
 import Link from "next/link"
 import React from "react"
 import { useAppSelector } from "state/hooks"
@@ -18,7 +11,7 @@ import Creaborate, { CreaborateVariant } from "./Creaborate"
 
 export default function AppHeader() {
   const { screenSize } = useAppSelector((state) => state.app)
-  const userData = useAppSelector((state) => state.user)
+  const { username, profile } = useAppSelector((state) => state.user)
 
   const [menuOpen, setMenuOpen] = React.useState(false)
 
@@ -64,7 +57,7 @@ export default function AppHeader() {
 
         <Flex>
           <Link href="/user/profile">
-            <Typography>{userData.username || "sign in"}</Typography>
+            <Typography>{profile?.name ?? username ?? "sign in"}</Typography>
           </Link>
         </Flex>
       </Toolbar>

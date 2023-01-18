@@ -112,14 +112,16 @@ export default function FormBuilder<T>(props: {
             >
               Edit
             </Button>
-            <Button
-              variant="outlined"
-              title="Delete"
-              startIcon={<DeleteIcon />}
-              onClick={handleDelete}
-            >
-              Delete
-            </Button>
+            {onDelete && (
+              <Button
+                variant="outlined"
+                title="Delete"
+                startIcon={<DeleteIcon />}
+                onClick={handleDelete}
+              >
+                Delete
+              </Button>
+            )}
           </Toolbar>
         )}
       </Flex>
