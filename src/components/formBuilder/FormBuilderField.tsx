@@ -1,12 +1,8 @@
-import {
-  FormControlLabel,
-  FormLabel,
-  Radio,
-  RadioGroup,
-  TextField
-} from "@mui/material"
+import { FormControlLabel, FormLabel, Radio, RadioGroup } from "@mui/material"
+import _ from "lodash"
 import React from "react"
 import FormBuilderSwitch from "./FormBuilderSwitch"
+import FormBuilderTextField from "./FormBuilderTextField"
 import { FormBuilderFieldProps, FormBuilderFieldType } from "./types"
 
 export default function FormBuilderField<T>(
@@ -21,7 +17,6 @@ export default function FormBuilderField<T>(
     label,
     name,
     type,
-    isEditing,
     required,
     options,
     toggleOnValue,
@@ -38,7 +33,6 @@ export default function FormBuilderField<T>(
   }
 
   const fieldProps = {
-    disabled: !isEditing,
     label,
     name,
     required,
@@ -50,13 +44,12 @@ export default function FormBuilderField<T>(
     case FormBuilderFieldType.TEXT:
     case FormBuilderFieldType.LONGTEXT:
       return (
-        <TextField
+        <FormBuilderTextField
+          {..._.omit(fieldProps, "onChange")}
+          item={item}
+          type="text"
+          onChange={onChange}
           multiline={type === FormBuilderFieldType.LONGTEXT}
-          rows={3}
-          {...fieldProps}
-          sx={{
-            maxWidth: type === FormBuilderFieldType.TEXT ? 500 : undefined
-          }}
         />
       )
 

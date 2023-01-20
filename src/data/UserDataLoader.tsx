@@ -1,16 +1,15 @@
 import { useAuthenticator } from "@aws-amplify/ui-react"
-import { DataStore } from "aws-amplify"
-import { Task, TeamInvitation, UserContact, UserImage } from "models"
 import React from "react"
 import { useAppDispatch } from "state/hooks"
+import { setUsername } from "state/userSlice"
 import {
-  setUserContacts,
-  setUserImages,
-  setUserInvitations,
-  setUsername,
-  setUserTasks
-} from "state/userSlice"
-import { loadUserProfile, loadUserTeams } from "./utils"
+  loadUserContacts,
+  loadUserImages,
+  loadUserInvitations,
+  loadUserProfile,
+  loadUserTasks,
+  loadUserTeams
+} from "./userUtils"
 
 export function UserDataLoader(props: { children: any }) {
   const { children } = props
@@ -24,26 +23,12 @@ export function UserDataLoader(props: { children: any }) {
 
       if (username) {
         dispatch(setUsername(username))
-
         loadUserProfile(username, dispatch)
-
         loadUserTeams(username, dispatch)
-
-        DataStore.query(Task, (task) => task.ownerUsername.eq(username)).then(
-          (tasks) => dispatch(setUserTasks(tasks))
-        )
-
-        DataStore.query(UserImage, (image) => image.username.eq(username)).then(
-          (images) => dispatch(setUserImages(images))
-        )
-
-        DataStore.query(UserContact, (contact) =>
-          contact.username.eq(username)
-        ).then((contacts) => dispatch(setUserContacts(contacts)))
-
-        DataStore.query(TeamInvitation, (invitation) =>
-          invitation.username.eq(username)
-        ).then((invitations) => dispatch(setUserInvitations(invitations)))
+        loadUserTasks(username, dispatch)
+        loadUserImages(username, dispatch)
+        loadUserContacts(username, dispatch)
+        loadUserInvitations(username, dispatch)
       }
     }
   }, [user])

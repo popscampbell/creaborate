@@ -1,4 +1,4 @@
-import { loadUserTeams } from "@/data/utils"
+import { loadUserTeams } from "@/data/userUtils"
 import { Team, TeamVisibility } from "@/models"
 import { useAppDispatch, useAppSelector } from "@/state/hooks"
 import { clearTeamData, setTeam } from "@/state/teamSlice"

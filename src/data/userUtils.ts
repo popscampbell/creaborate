@@ -1,7 +1,7 @@
 import { AppDispatch } from "@/state/store"
-import { setUserProfile, setUserTeams } from "@/state/userSlice"
+import { setUserContacts, setUserImages, setUserInvitations, setUserProfile, setUserTasks, setUserTeams } from "@/state/userSlice"
 import { DataStore } from "aws-amplify"
-import { Team, TeamMember, TeamMemberRole, TeamVisibility, UserProfile } from "models"
+import { Task, Team, TeamInvitation, TeamMember, TeamMemberRole, TeamVisibility, UserContact, UserImage, UserProfile } from "models"
 import { TeamMemberWithName, TeamWithUserRole } from "state/types"
 
 export function removeNullsFromArray<T>(arr: (T | null)[]): T[] {
@@ -56,4 +56,32 @@ export async function loadUserProfile(username: string, dispatch: AppDispatch) {
       dispatch(setUserProfile(profile))
       return profile
     })
+}
+
+export async function loadUserTasks(username: string, dispatch: AppDispatch) {
+  DataStore.query(Task, (task) => task.ownerUsername.eq(username)).then(
+    (tasks) => dispatch(setUserTasks(tasks))
+  )
+
+}
+
+export async function loadUserImages(username: string, dispatch: AppDispatch) {
+  DataStore.query(UserImage, (image) => image.username.eq(username)).then(
+    (images) => dispatch(setUserImages(images))
+  )
+
+}
+
+export async function loadUserContacts(username: string, dispatch: AppDispatch) {
+  DataStore.query(UserContact, (contact) =>
+    contact.username.eq(username)
+  ).then((contacts) => dispatch(setUserContacts(contacts)))
+
+}
+
+export async function loadUserInvitations(username: string, dispatch: AppDispatch) {
+  DataStore.query(TeamInvitation, (invitation) =>
+    invitation.username.eq(username)
+  ).then((invitations) => dispatch(setUserInvitations(invitations)))
+
 }

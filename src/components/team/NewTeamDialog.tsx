@@ -1,4 +1,4 @@
-import { loadUserTeams } from "@/data/utils"
+import { loadUserTeams } from "@/data/userUtils"
 import { Team, TeamMember, TeamMemberRole } from "@/models"
 import { useAppDispatch, useAppSelector } from "@/state/hooks"
 import CreateIcon from "@mui/icons-material/GroupAdd"

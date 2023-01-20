@@ -22,7 +22,7 @@ import {
   TeamMember,
   TeamProject
 } from "models"
-import { getTeamMemberWithName, getTeamWithUserRole } from "./utils"
+import { getTeamMemberWithName, getTeamWithUserRole } from "./userUtils"
 
 export function TeamDataLoader(props: { children: any; teamID: string }) {
   const { children, teamID } = props

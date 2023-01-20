@@ -3,12 +3,23 @@ import CancelIcon from "@mui/icons-material/Cancel"
 import DeleteIcon from "@mui/icons-material/Delete"
 import EditIcon from "@mui/icons-material/Edit"
 import SaveIcon from "@mui/icons-material/Save"
-import { Button, FormControl, Toolbar, useTheme } from "@mui/material"
+import {
+  Button,
+  FormControl,
+  Toolbar,
+  Typography,
+  useTheme
+} from "@mui/material"
 import React from "react"
 import CancelSaveDialog from "../CancelSaveDialog"
 import ConfirmationDialog from "../ConfirmationDialog"
 import FormBuilderField from "./FormBuilderField"
-import { FormBuilderFieldProps } from "./types"
+import FormBuilderFieldGroup from "./FormBuilderFieldGroup"
+import {
+  FormBuilderFieldProps,
+  FormBuilderFieldType,
+  FormBuilderVariant
+} from "./types"
 
 export default function FormBuilder<T>(props: {
   item: T
@@ -17,8 +28,11 @@ export default function FormBuilder<T>(props: {
   onCancel?: () => void
   onDelete?: () => void
   dialog?: boolean
+  variant?: FormBuilderVariant
+  label?: string
 }) {
-  const { item, fields, onSave, onCancel, onDelete, dialog } = props
+  const { item, fields, onSave, onCancel, onDelete, dialog, variant, label } =
+    props
 
   const theme = useTheme()
 
@@ -58,26 +72,47 @@ export default function FormBuilder<T>(props: {
   function FormFields() {
     return (
       <Flex className="fields" direction="column" rowGap={theme.spacing(4)}>
-        {fields.map((field, key) => (
-          <FormControl key={key} disabled={!isEditing}>
-            <FormBuilderField
-              item={item}
-              isEditing={isEditing}
-              onChange={handleChange}
-              {...field}
-            />
-          </FormControl>
-        ))}
+        <fieldset
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "12px",
+            border: "none"
+          }}
+        >
+          {fields.map((field, key) =>
+            field.type === FormBuilderFieldType.SUBFORM ? (
+              <React.Fragment key={key}>{field.subform}</React.Fragment>
+            ) : field.type === FormBuilderFieldType.GROUP ? (
+              <FormBuilderFieldGroup label={field.label} form={field.subform} />
+            ) : (
+              <FormControl key={key} disabled={!isEditing}>
+                <FormBuilderField
+                  item={item}
+                  isEditing={isEditing}
+                  onChange={handleChange}
+                  {...field}
+                />
+              </FormControl>
+            )
+          )}
+        </fieldset>
       </Flex>
     )
   }
 
-  return dialog ? (
+  return dialog || variant === FormBuilderVariant.DIALOG ? (
     <CancelSaveDialog onCancel={handleCancel} onSave={handleSubmit}>
       <FormFields />
     </CancelSaveDialog>
+  ) : variant === FormBuilderVariant.SUBFORM ? (
+    <>
+      {label && <Typography>{label}</Typography>}
+      <FormFields />
+    </>
   ) : (
-    <Flex as="form" direction="column" marginTop={theme.spacing(2)}>
+    <Flex as="form" direction="column" marginTop={theme.spacing(2)} isDisabled>
+      {label && <Typography>{label}</Typography>}
       <FormFields />
       <Flex className="toolbar" role="toolbar" justifyContent="end">
         {isEditing && (

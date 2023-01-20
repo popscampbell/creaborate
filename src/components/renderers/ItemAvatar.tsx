@@ -27,7 +27,11 @@ export default function ItemAvatar<T>(props: ItemProps<T>) {
       sx: {
         bgcolor: stringToColor(name)
       },
-      children: `${name.split(" ")[0][0]}${name.split(" ")[1][0]}`
+      children: name
+        ? `${name.split(" ")?.[0]?.[0] ?? "f"}${
+            name.split(" ")?.[1]?.[0] ?? ""
+          }`
+        : "x"
     }
   }
 

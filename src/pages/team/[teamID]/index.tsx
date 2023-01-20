@@ -7,6 +7,7 @@ import { Typography } from "@mui/material"
 
 export default function TeamDefaultPage() {
   const { team, members, tasks } = useAppSelector((state) => state.team)
+  const { username } = useAppSelector((state) => state.user)
 
   return (
     <Layout>
@@ -15,7 +16,7 @@ export default function TeamDefaultPage() {
           variant={PageSectionVariant.AVATAR}
           title="Members"
           items={members}
-          renderLabel={(teamMember) => teamMember.name}
+          renderLabel={(teamMember) => teamMember.name ?? username}
         />
 
         <PageSection
