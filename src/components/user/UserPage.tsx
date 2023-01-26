@@ -1,5 +1,5 @@
-import { setNavigatorSections } from "state/globalSlice"
-import { useAppDispatch, useAppSelector } from "state/hooks"
+import { UserDataLoader } from "@/data/UserDataLoader"
+import { CreaborateContext } from "@/state/types"
 import AssignmentIcon from "@mui/icons-material/Assignment"
 import ContactsIcon from "@mui/icons-material/Contacts"
 import DashboardIcon from "@mui/icons-material/Dashboard"
@@ -8,6 +8,9 @@ import ImageIcon from "@mui/icons-material/Image"
 import PersonIcon from "@mui/icons-material/Person"
 import RsvpIcon from "@mui/icons-material/Rsvp"
 import { useEffect } from "react"
+import { setContext, setNavigatorSections } from "state/globalSlice"
+import { useAppDispatch, useAppSelector } from "state/hooks"
+import Chrome from "../app/Chrome"
 import Page, { PageProps } from "../app/Page"
 
 export default function UserPage(props: Omit<PageProps, "context">) {
@@ -18,6 +21,7 @@ export default function UserPage(props: Omit<PageProps, "context">) {
   )
 
   useEffect(() => {
+    dispatch(setContext(CreaborateContext.USER))
     dispatch(
       setNavigatorSections([
         { to: "/user", label: "Dashboard", icon: <DashboardIcon /> },
@@ -37,5 +41,11 @@ export default function UserPage(props: Omit<PageProps, "context">) {
     )
   }, [invitations])
 
-  return <Page context={profile?.name ?? username} {...props} />
+  return (
+    <Chrome>
+      <UserDataLoader>
+        <Page context={profile?.name ?? username} {...props} />
+      </UserDataLoader>
+    </Chrome>
+  )
 }

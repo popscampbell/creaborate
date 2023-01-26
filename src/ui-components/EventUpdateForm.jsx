@@ -73,7 +73,7 @@ export default function EventUpdateForm(props) {
     time: [],
     description: [],
     searchDescription: [],
-    website: [{ type: "URL" }],
+    website: [],
   };
   const runValidationTasks = async (
     fieldName,

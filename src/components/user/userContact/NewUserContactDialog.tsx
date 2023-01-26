@@ -24,21 +24,8 @@ export default function NewUserContactDialog() {
     setOpen(true)
   }
 
-  function handleSave(values: any) {
+  function handleSave() {
     setOpen(false)
-    console.log("changes:", values)
-    const newUserContact = {
-      username,
-      contact: {
-        ...values,
-        ...{ searchString: values.name.toLowerCase() }
-      }
-    }
-
-    DataStore.save(new UserContact(newUserContact)).then((newRecord) => {
-      console.log("newRecord:", newRecord)
-      loadUserContacts(username, dispatch)
-    })
   }
 
   function handleCancel() {

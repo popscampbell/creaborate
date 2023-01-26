@@ -8,7 +8,7 @@ import AppFooter from "./AppFooter"
 import AppHeader from "./AppHeader"
 import AppNavigator from "./AppNavigator"
 
-export default function Layout(props: { children: any }) {
+export default function Chrome(props: { children: any }) {
   const theme = useTheme()
   const isPhone = useMediaQuery(theme.breakpoints.down("sm"))
   const isTablet = useMediaQuery(

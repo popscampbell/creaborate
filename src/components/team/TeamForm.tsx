@@ -1,11 +1,14 @@
 import { loadUserTeams } from "@/data/userUtils"
-import { Team, TeamVisibility } from "@/models"
+import { Team, TeamType, TeamVisibility } from "@/models"
 import { useAppDispatch, useAppSelector } from "@/state/hooks"
 import { clearTeamData, setTeam } from "@/state/teamSlice"
 import { DataStore } from "@aws-amplify/datastore"
 import { useRouter } from "next/router"
-import FormBuilder from "../formBuilder/FormBuilder"
-import { teamFields } from "./teamFields"
+import React from "react"
+import CreaborateForm from "../forms/CreaborateForm"
+import CreaborateRadioField from "../forms/CreaborateRadioField"
+import CreaborateSwitchField from "../forms/CreaborateSwitchField"
+import CreaborateTextField from "../forms/CreaborateTextField"
 
 export default function TeamForm(props: { team: Team }) {
   const { team } = props
@@ -13,6 +16,10 @@ export default function TeamForm(props: { team: Team }) {
   const { username } = useAppSelector((state) => state.user)
   const dispatch = useAppDispatch()
   const router = useRouter()
+
+  const [hideCustomTeamType, setHideCustomTeamType] = React.useState(
+    team.teamType !== TeamType.CUSTOM
+  )
 
   function handleDelete() {
     DataStore.save(
@@ -41,11 +48,37 @@ export default function TeamForm(props: { team: Team }) {
   }
 
   return (
-    <FormBuilder
-      item={team}
-      fields={teamFields}
-      onSave={handleSave}
+    <CreaborateForm
+      source={{
+        name: team.name,
+        description: team.description,
+        customTeamType: team.customTeamType,
+        teamType: team.teamType,
+        visibility: team.visibility
+      }}
+      onSuccess={handleSave}
       onDelete={handleDelete}
-    />
+    >
+      <CreaborateSwitchField name="visibility" label="Public" />
+      <CreaborateTextField name="name" label="Name" />
+      <CreaborateTextField name="description" label="Description" multiline />
+      <CreaborateRadioField
+        name="teamType"
+        label="Type"
+        options={[
+          { id: TeamType.BAND, label: "Band" },
+          { id: TeamType.GROUP, label: "Group" },
+          { id: TeamType.TEAM, label: "Team" },
+          { id: TeamType.CUSTOM, label: "Custom" }
+        ]}
+        readonlyValue={team.teamType}
+        onChange={(value) => setHideCustomTeamType(value !== TeamType.CUSTOM)}
+      />
+      <CreaborateTextField
+        name="customTeamType"
+        label="Custom type"
+        hidden={hideCustomTeamType}
+      />
+    </CreaborateForm>
   )
 }

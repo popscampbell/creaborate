@@ -1,7 +1,10 @@
 import { Flex } from "@aws-amplify/ui-react"
-import { Button, Toolbar, Typography, useTheme } from "@mui/material"
+import { Box, Button, Toolbar, Typography, useTheme } from "@mui/material"
 import DeleteIcon from "@mui/icons-material/Delete"
 import EditIcon from "@mui/icons-material/Edit"
+import { ActionButtonProps } from "./types"
+import AppBreadcrumbs from "./AppBreadcrumbs"
+import ActionButton from "./ActionButton"
 
 export interface PageProps {
   context?: string
@@ -9,12 +12,30 @@ export interface PageProps {
   onDelete?: () => void
   onEdit?: () => void
   children?: any
-  actions?: any
+  actions?: ActionButtonProps[]
+  dismissable?: boolean
 }
 
 export default function Page(props: PageProps) {
-  const { context, title, children, onDelete, onEdit, actions } = props
+  const { context, title, children, onDelete, onEdit, actions, dismissable } =
+    props
   const theme = useTheme()
+
+  return (
+    <Box flexGrow={1} padding={3}>
+      <Box display="flex" justifyContent="space-between">
+        <Typography variant="h1">{title}</Typography>
+        {actions && (
+          <Toolbar>
+            {actions.map((action, key) => (
+              <ActionButton key={key} {...action} />
+            ))}
+          </Toolbar>
+        )}
+      </Box>
+      {children}
+    </Box>
+  )
 
   return (
     <Flex
@@ -52,25 +73,27 @@ export default function Page(props: PageProps) {
         {(onEdit || onDelete || actions) && (
           <Flex className="toolbar" role="toolbar">
             <Toolbar variant="dense">
-              {onEdit && (
-                <Button
-                  variant="outlined"
-                  title="edit"
-                  startIcon={<EditIcon />}
-                >
-                  Edit
-                </Button>
-              )}
-              {onDelete && (
-                <Button
-                  variant="outlined"
-                  title="delete"
-                  startIcon={<DeleteIcon />}
-                >
-                  Delete
-                </Button>
-              )}
-              {actions}
+              <>
+                {onEdit && (
+                  <Button
+                    variant="outlined"
+                    title="edit"
+                    startIcon={<EditIcon />}
+                  >
+                    Edit
+                  </Button>
+                )}
+                {onDelete && (
+                  <Button
+                    variant="outlined"
+                    title="delete"
+                    startIcon={<DeleteIcon />}
+                  >
+                    Delete
+                  </Button>
+                )}
+                {actions}
+              </>
             </Toolbar>
           </Flex>
         )}

@@ -1155,7 +1155,7 @@ export const schema = {
                 "externalEmail": {
                     "name": "externalEmail",
                     "isArray": false,
-                    "type": "AWSEmail",
+                    "type": "String",
                     "isRequired": false,
                     "attributes": []
                 },
@@ -1892,7 +1892,7 @@ export const schema = {
                 "website": {
                     "name": "website",
                     "isArray": false,
-                    "type": "AWSURL",
+                    "type": "String",
                     "isRequired": false,
                     "attributes": []
                 },
@@ -1981,21 +1981,21 @@ export const schema = {
                 "website": {
                     "name": "website",
                     "isArray": false,
-                    "type": "AWSURL",
+                    "type": "String",
                     "isRequired": false,
                     "attributes": []
                 },
                 "phone": {
                     "name": "phone",
                     "isArray": false,
-                    "type": "AWSPhone",
+                    "type": "String",
                     "isRequired": false,
                     "attributes": []
                 },
                 "email": {
                     "name": "email",
                     "isArray": false,
-                    "type": "AWSEmail",
+                    "type": "String",
                     "isRequired": false,
                     "attributes": []
                 },
@@ -3503,14 +3503,14 @@ export const schema = {
                 "email": {
                     "name": "email",
                     "isArray": false,
-                    "type": "AWSEmail",
+                    "type": "String",
                     "isRequired": false,
                     "attributes": []
                 },
                 "phone": {
                     "name": "phone",
                     "isArray": false,
-                    "type": "AWSPhone",
+                    "type": "String",
                     "isRequired": false,
                     "attributes": []
                 },
@@ -3761,5 +3761,5 @@ export const schema = {
         }
     },
     "codegenVersion": "3.3.4",
-    "version": "b324f1115dca23d20d4826b8946aeda0"
+    "version": "30029f3f72dc9da9ae6b43d198399563"
 };

@@ -60,7 +60,7 @@ export default function EventCreateForm(props) {
     time: [],
     description: [],
     searchDescription: [],
-    website: [{ type: "URL" }],
+    website: [],
   };
   const runValidationTasks = async (
     fieldName,

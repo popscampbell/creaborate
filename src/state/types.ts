@@ -14,6 +14,11 @@ export enum AuthenticationStatus {
   CONFIGURING = "configuring",
 }
 
+export enum CreaborateContext {
+  USER = "User",
+  TEAM = "Team",
+}
+
 export type TeamMemberWithName = TeamMember & { name: string }
 
 export type TeamWithUserRole = Team & { role: TeamMemberRole }

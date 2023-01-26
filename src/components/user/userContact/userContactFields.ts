@@ -1,3 +1,4 @@
+import { defaultContact } from "@/components/contact/ContactProps"
 import {
   FormBuilderFieldProps,
   FormBuilderFieldType
@@ -11,10 +12,7 @@ export interface UserContactProps {
 
 export const defaultUserContact: UserContactProps = {
   username: "",
-  contact: {
-    name: "",
-    searchString: ""
-  }
+  contact: defaultContact,
 }
 
 export const requiredUserContactFields: FormBuilderFieldProps[] = [

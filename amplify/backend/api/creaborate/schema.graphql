@@ -1,4 +1,4 @@
-type UserProfile @model @auth(rules: [{ allow: public }]) {
+type UserProfile @model @auth(rules: [{allow: public}]) {
   id: ID!
   username: String!
   visibility: UserProfileVisibility!
@@ -8,8 +8,7 @@ type UserProfile @model @auth(rules: [{ allow: public }]) {
   tagline: String
   about: String
   Location: Location @hasOne
-  UserInterests: [UserInterest]
-    @hasMany(indexName: "byUserProfile", fields: ["id"])
+  UserInterests: [UserInterest] @hasMany(indexName: "byUserProfile", fields: ["id"])
   UserSkills: [UserSkill] @hasMany(indexName: "byUserProfile", fields: ["id"])
 }
 
@@ -19,7 +18,7 @@ enum UserProfileVisibility {
   ARCHIVED
 }
 
-type UserImage @model @auth(rules: [{ allow: public }]) {
+type UserImage @model @auth(rules: [{allow: public}]) {
   id: ID!
   username: String!
   image: Image!
@@ -35,39 +34,39 @@ type Image {
   searchDetail: String
 }
 
-type Location @model @auth(rules: [{ allow: public }]) {
+type Location @model @auth(rules: [{allow: public}]) {
   id: ID!
   name: String!
   searchName: String!
 }
 
-type UserSkill @model @auth(rules: [{ allow: public }]) {
+type UserSkill @model @auth(rules: [{allow: public}]) {
   id: ID!
   userprofileID: ID! @index(name: "byUserProfile")
   Skill: Skill! @hasOne
   UserProfile: UserProfile @belongsTo(fields: ["userprofileID"])
 }
 
-type Skill @model @auth(rules: [{ allow: public }]) {
+type Skill @model @auth(rules: [{allow: public}]) {
   id: ID!
   name: String!
   searchName: String!
 }
 
-type UserInterest @model @auth(rules: [{ allow: public }]) {
+type UserInterest @model @auth(rules: [{allow: public}]) {
   id: ID!
   userprofileID: ID! @index(name: "byUserProfile")
   Interest: Interest! @hasOne
   UserProfile: UserProfile @belongsTo(fields: ["userprofileID"])
 }
 
-type Interest @model @auth(rules: [{ allow: public }]) {
+type Interest @model @auth(rules: [{allow: public}]) {
   id: ID!
   name: String!
   searchName: String!
 }
 
-type UserNotification @model @auth(rules: [{ allow: public }]) {
+type UserNotification @model @auth(rules: [{allow: public}]) {
   id: ID!
   username: String!
   message: String!
@@ -84,13 +83,13 @@ enum UserNotificationLevel {
   ERROR
 }
 
-type UserContact @model @auth(rules: [{ allow: public }]) {
+type UserContact @model @auth(rules: [{allow: public}]) {
   id: ID!
   username: ID!
   contact: Contact!
 }
 
-type Team @model @auth(rules: [{ allow: public }]) {
+type Team @model @auth(rules: [{allow: public}]) {
   id: ID!
   name: String!
   searchName: String!
@@ -99,8 +98,7 @@ type Team @model @auth(rules: [{ allow: public }]) {
   customTeamType: String
   description: String!
   TeamMembers: [TeamMember!] @hasMany(indexName: "byTeam", fields: ["id"])
-  TeamInvitations: [TeamInvitation]
-    @hasMany(indexName: "byTeam", fields: ["id"])
+  TeamInvitations: [TeamInvitation] @hasMany(indexName: "byTeam", fields: ["id"])
   Tasks: [Task] @hasMany(indexName: "byTeam", fields: ["id"])
   TeamImages: [TeamImage] @hasMany(indexName: "byTeam", fields: ["id"])
   TeamContacts: [TeamContact] @hasMany(indexName: "byTeam", fields: ["id"])
@@ -121,7 +119,7 @@ enum TeamVisibility {
   ARCHIVED
 }
 
-type TeamMember @model @auth(rules: [{ allow: public }]) {
+type TeamMember @model @auth(rules: [{allow: public}]) {
   id: ID!
   teamID: ID! @index(name: "byTeam")
   username: String!
@@ -134,13 +132,13 @@ enum TeamMemberRole {
   MEMBER
 }
 
-type TeamInvitation @model @auth(rules: [{ allow: public }]) {
+type TeamInvitation @model @auth(rules: [{allow: public}]) {
   id: ID!
   teamID: ID! @index(name: "byTeam")
   role: TeamMemberRole!
   status: TeamInvitationStatus!
   username: String!
-  externalEmail: AWSEmail
+  externalEmail: String
   invitedByUsername: String
   responseDateTime: AWSDateTime
   responseComment: String
@@ -154,7 +152,7 @@ enum TeamInvitationStatus {
   EXPIRED
 }
 
-type TeamImage @model @auth(rules: [{ allow: public }]) {
+type TeamImage @model @auth(rules: [{allow: public}]) {
   id: ID!
   teamID: ID! @index(name: "byTeam")
   image: Image!
@@ -162,16 +160,15 @@ type TeamImage @model @auth(rules: [{ allow: public }]) {
   TeamEvent: TeamEvent @hasOne
 }
 
-type TeamContact @model @auth(rules: [{ allow: public }]) {
+type TeamContact @model @auth(rules: [{allow: public}]) {
   id: ID!
   teamID: ID! @index(name: "byTeam")
   contact: Contact!
   Team: Team @belongsTo(fields: ["teamID"])
-  TeamContactComments: [TeamContactComment]
-    @hasMany(indexName: "byTeamContact", fields: ["id"])
+  TeamContactComments: [TeamContactComment] @hasMany(indexName: "byTeamContact", fields: ["id"])
 }
 
-type TeamContactComment @model @auth(rules: [{ allow: public }]) {
+type TeamContactComment @model @auth(rules: [{allow: public}]) {
   id: ID!
   teamContactID: ID! @index(name: "byTeamContact")
   comment: Comment!
@@ -181,14 +178,14 @@ type TeamContactComment @model @auth(rules: [{ allow: public }]) {
 type Contact {
   name: String!
   searchString: String!
-  email: AWSEmail
-  phone: AWSPhone
+  email: String
+  phone: String
   address: Address
   notes: String
   searchNotes: String
 }
 
-type Task @model @auth(rules: [{ allow: public }]) {
+type Task @model @auth(rules: [{allow: public}]) {
   id: ID!
   teamID: ID! @index(name: "byTeam")
   name: String!
@@ -218,7 +215,7 @@ enum TaskPriority {
   LOW
 }
 
-type TaskComment @model @auth(rules: [{ allow: public }]) {
+type TaskComment @model @auth(rules: [{allow: public}]) {
   id: ID!
   taskID: ID! @index(name: "byTask")
   comment: Comment!
@@ -231,14 +228,14 @@ type Comment {
   postedByUsername: String!
 }
 
-type Venue @model @auth(rules: [{ allow: public }]) {
+type Venue @model @auth(rules: [{allow: public}]) {
   id: ID!
   name: String!
   searchName: String!
   address: Address
-  website: AWSURL
-  phone: AWSPhone
-  email: AWSEmail
+  website: String
+  phone: String
+  email: String
   VenueContacts: [VenueContact] @hasMany(indexName: "byVenue", fields: ["id"])
 }
 
@@ -251,14 +248,14 @@ type Address {
   postalCode: String!
 }
 
-type VenueContact @model @auth(rules: [{ allow: public }]) {
+type VenueContact @model @auth(rules: [{allow: public}]) {
   id: ID!
   venueID: ID! @index(name: "byVenue")
   contact: Contact!
   Venue: Venue @belongsTo(fields: ["venueID"])
 }
 
-type Event @model @auth(rules: [{ allow: public }]) {
+type Event @model @auth(rules: [{allow: public}]) {
   id: ID!
   name: String!
   searchName: String!
@@ -267,10 +264,10 @@ type Event @model @auth(rules: [{ allow: public }]) {
   time: AWSTime
   description: String
   searchDescription: String
-  website: AWSURL
+  website: String
 }
 
-type TeamEvent @model @auth(rules: [{ allow: public }]) {
+type TeamEvent @model @auth(rules: [{allow: public}]) {
   id: ID!
   teamID: ID! @index(name: "byTeam")
   name: String!
@@ -279,36 +276,33 @@ type TeamEvent @model @auth(rules: [{ allow: public }]) {
   searchDescription: String
   event: Event @hasOne
   Team: Team @belongsTo(fields: ["teamID"])
-  TeamEventImages: [TeamEventImage]
-    @hasMany(indexName: "byTeamEvent", fields: ["id"])
-  TeamEventComments: [TeamEventComment]
-    @hasMany(indexName: "byTeamEvent", fields: ["id"])
-  TeamEventContacts: [TeamEventContact]
-    @hasMany(indexName: "byTeamEvent", fields: ["id"])
+  TeamEventImages: [TeamEventImage] @hasMany(indexName: "byTeamEvent", fields: ["id"])
+  TeamEventComments: [TeamEventComment] @hasMany(indexName: "byTeamEvent", fields: ["id"])
+  TeamEventContacts: [TeamEventContact] @hasMany(indexName: "byTeamEvent", fields: ["id"])
 }
 
-type TeamEventImage @model @auth(rules: [{ allow: public }]) {
+type TeamEventImage @model @auth(rules: [{allow: public}]) {
   id: ID!
   teameventID: ID! @index(name: "byTeamEvent")
   teamImage: TeamImage @hasOne
   TeamEvent: TeamEvent @belongsTo(fields: ["teameventID"])
 }
 
-type TeamEventComment @model @auth(rules: [{ allow: public }]) {
+type TeamEventComment @model @auth(rules: [{allow: public}]) {
   id: ID!
   teameventID: ID! @index(name: "byTeamEvent")
   comment: Comment!
   TeamEvent: TeamEvent @belongsTo(fields: ["teameventID"])
 }
 
-type TeamEventContact @model @auth(rules: [{ allow: public }]) {
+type TeamEventContact @model @auth(rules: [{allow: public}]) {
   id: ID!
   teameventID: ID! @index(name: "byTeamEvent")
   contact: Contact!
   TeamEvent: TeamEvent @belongsTo(fields: ["teameventID"])
 }
 
-type TeamProject @model @auth(rules: [{ allow: public }]) {
+type TeamProject @model @auth(rules: [{allow: public}]) {
   id: ID!
   teamID: ID! @index(name: "byTeam")
   name: String!
@@ -319,10 +313,8 @@ type TeamProject @model @auth(rules: [{ allow: public }]) {
   startDate: AWSDate
   endDate: AWSDate
   Team: Team @belongsTo(fields: ["teamID"])
-  TeamProjectMilestones: [TeamProjectMilestone]
-    @hasMany(indexName: "byTeamProject", fields: ["id"])
-  TeamProjectComments: [TeamProjectComment]
-    @hasMany(indexName: "byTeamProject", fields: ["id"])
+  TeamProjectMilestones: [TeamProjectMilestone] @hasMany(indexName: "byTeamProject", fields: ["id"])
+  TeamProjectComments: [TeamProjectComment] @hasMany(indexName: "byTeamProject", fields: ["id"])
 }
 
 enum ProjectStatus {
@@ -332,14 +324,14 @@ enum ProjectStatus {
   CANCELED
 }
 
-type TeamProjectComment @model @auth(rules: [{ allow: public }]) {
+type TeamProjectComment @model @auth(rules: [{allow: public}]) {
   id: ID!
   teamprojectID: ID! @index(name: "byTeamProject")
   comment: Comment!
   TeamProject: TeamProject @belongsTo(fields: ["teamprojectID"])
 }
 
-type TeamProjectMilestone @model @auth(rules: [{ allow: public }]) {
+type TeamProjectMilestone @model @auth(rules: [{allow: public}]) {
   id: ID!
   teamprojectID: ID! @index(name: "byTeamProject")
   name: String!
@@ -349,8 +341,7 @@ type TeamProjectMilestone @model @auth(rules: [{ allow: public }]) {
   status: ProjectMilestoneStatus!
   date: AWSDate
   TeamProject: TeamProject @belongsTo(fields: ["teamprojectID"])
-  TeamProjectMilestoneComments: [TeamProjectMilestoneComment]
-    @hasMany(indexName: "byTeamProjectMilestone", fields: ["id"])
+  TeamProjectMilestoneComments: [TeamProjectMilestoneComment] @hasMany(indexName: "byTeamProjectMilestone", fields: ["id"])
 }
 
 enum ProjectMilestoneStatus {
@@ -358,12 +349,11 @@ enum ProjectMilestoneStatus {
   CLOSED
 }
 
-type TeamProjectMilestoneComment @model @auth(rules: [{ allow: public }]) {
+type TeamProjectMilestoneComment @model @auth(rules: [{allow: public}]) {
   id: ID!
   teamprojectmilestoneID: ID! @index(name: "byTeamProjectMilestone")
   comment: Comment!
-  TeamProjectMilestone: TeamProjectMilestone
-    @belongsTo(fields: ["teamprojectmilestoneID"])
+  TeamProjectMilestone: TeamProjectMilestone @belongsTo(fields: ["teamprojectmilestoneID"])
 }
 
 type Expense {
@@ -398,7 +388,7 @@ enum RecurrenceFrequency {
   ANNUALLY
 }
 
-type Asset @model @auth(rules: [{ allow: public }]) {
+type Asset @model @auth(rules: [{allow: public}]) {
   id: ID!
   name: String!
   searchName: String!
@@ -409,10 +399,11 @@ type Asset @model @auth(rules: [{ allow: public }]) {
   product: Product @hasOne
 }
 
-type Product @model @auth(rules: [{ allow: public }]) {
+type Product @model @auth(rules: [{allow: public}]) {
   id: ID!
   name: String!
   searchString: String!
   description: String
   searchDescription: String
 }
+ 

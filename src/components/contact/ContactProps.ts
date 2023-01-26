@@ -1,16 +1,29 @@
+import { Address } from "@/models"
+import _ from "lodash"
 import { FormBuilderFieldProps, FormBuilderFieldType } from "../formBuilder/types"
 
 export interface ContactProps {
   name: string
-  searchString: string
-  email?: string
-  phone?: string
-  notes?: string
+  email: string
+  phone: string
+  notes: string
+  addressLine1: string
+  addressLine2: string
+  city: string
+  stateProvince: string
+  country: string
+  postalCode: string
 }
 
 export const defaultContact: ContactProps = {
   name: "",
-  searchString: "",
+  email: "",
+  phone: "",
+  notes: "",
+}
+
+export function mergeDefault<T>(source: T): T {
+  return _.mergeWith(source, defaultContact, (value, source) => "")
 }
 
 export const requiredContactFields: FormBuilderFieldProps[] = [

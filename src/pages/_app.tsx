@@ -1,13 +1,12 @@
-import awsexports from "aws-exports"
-import { UserDataLoader } from "data/UserDataLoader"
-import store from "state/store"
-import "styles/globals.css"
 import { Authenticator } from "@aws-amplify/ui-react"
 import "@aws-amplify/ui-react/styles.css"
 import { createTheme, ThemeProvider } from "@mui/material"
 import { Amplify, Auth, Storage } from "aws-amplify"
+import awsexports from "aws-exports"
 import type { AppProps } from "next/app"
-import { Provider } from "react-redux"
+import { Provider as ReduxProvider } from "react-redux"
+import store from "state/store"
+import "styles/globals.css"
 
 export default function App({ Component, pageProps }: AppProps) {
   Amplify.configure(awsexports)
@@ -23,11 +22,9 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <ThemeProvider theme={darkTheme}>
       <Authenticator.Provider>
-        <Provider store={store}>
-          <UserDataLoader>
-            <Component {...pageProps} />
-          </UserDataLoader>
-        </Provider>
+        <ReduxProvider store={store}>
+          <Component {...pageProps} />
+        </ReduxProvider>
       </Authenticator.Provider>
     </ThemeProvider>
   )

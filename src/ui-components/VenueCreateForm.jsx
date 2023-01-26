@@ -46,9 +46,9 @@ export default function VenueCreateForm(props) {
   const validations = {
     name: [{ type: "Required" }],
     searchName: [{ type: "Required" }],
-    website: [{ type: "URL" }],
-    phone: [{ type: "Phone" }],
-    email: [{ type: "Email" }],
+    website: [],
+    phone: [],
+    email: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -213,7 +213,6 @@ export default function VenueCreateForm(props) {
         label="Phone"
         isRequired={false}
         isReadOnly={false}
-        type="tel"
         value={phone}
         onChange={(e) => {
           let { value } = e.target;
