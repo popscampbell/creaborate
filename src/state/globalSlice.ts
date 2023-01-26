@@ -1,3 +1,4 @@
+import { AppNavigatorLinkProps } from "@/components/app/types"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import _ from "lodash"
 import { AuthenticationStatus, ScreenSize, NavigatorLink, CreaborateContext } from "./types"
@@ -47,7 +48,7 @@ const globalSlice = createSlice({
     toggleIsNavigatorCollapsed(state) {
       state.isNavigatorCollapsed = !state.isNavigatorCollapsed
     },
-    setNavigatorSections(state, action: PayloadAction<NavigatorLink[]>) {
+    setNavigatorSections(state, action: PayloadAction<AppNavigatorLinkProps[]>) {
       const { payload } = action
       if (!_.isEqual(payload, state.navigatorSections)) {
         state.navigatorSections = payload

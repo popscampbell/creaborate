@@ -24,18 +24,39 @@ export default function UserPage(props: Omit<PageProps, "context">) {
     dispatch(setContext(CreaborateContext.USER))
     dispatch(
       setNavigatorSections([
-        { to: "/user", label: "Dashboard", icon: <DashboardIcon /> },
+        {
+          to: "/user",
+          label: "Dashboard",
+          icon: <DashboardIcon />,
+          disabled: true
+        },
         { to: "/user/profile", label: "Profile", icon: <PersonIcon /> },
         { to: "/user/teams", label: "Teams", icon: <GroupIcon /> },
-        { to: "/user/tasks", label: "Tasks", icon: <AssignmentIcon /> },
-        { to: "/user/images", label: "Images", icon: <ImageIcon /> },
-        { to: "/user/contacts", label: "Contacts", icon: <ContactsIcon /> },
+        {
+          to: "/user/tasks",
+          label: "Tasks",
+          icon: <AssignmentIcon />,
+          disabled: true
+        },
+        {
+          to: "/user/images",
+          label: "Images",
+          icon: <ImageIcon />,
+          disabled: true
+        },
+        {
+          to: "/user/contacts",
+          label: "Contacts",
+          icon: <ContactsIcon />,
+          disabled: true
+        },
         {
           to: "/user/invitations",
           label: "Invitations",
           icon: <RsvpIcon />,
           badgeContent: invitations.length,
-          title: `${invitations} new invitations`
+          title: `${invitations} new invitations`,
+          disabled: true
         }
       ])
     )

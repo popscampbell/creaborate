@@ -1,3 +1,5 @@
+import { setContext } from "@/state/globalSlice"
+import { CreaborateContext } from "@/state/types"
 import { useAuthenticator } from "@aws-amplify/ui-react"
 import React from "react"
 import { useAppDispatch } from "state/hooks"
@@ -22,6 +24,7 @@ export function UserDataLoader(props: { children: any }) {
       const { username } = user
 
       if (username) {
+        dispatch(setContext(CreaborateContext.USER))
         dispatch(setUsername(username))
         loadUserProfile(username, dispatch)
         loadUserTeams(username, dispatch)

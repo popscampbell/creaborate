@@ -36,10 +36,6 @@ export default function AppNavigator() {
         </Flex>
       )}
 
-      {context === "team" && team && (
-        <Typography variant="subtitle1">team.name</Typography>
-      )}
-
       {navigatorSections.map((section, key) => (
         <AppNavigatorLink key={key} {...section} />
       ))}

@@ -1,3 +1,5 @@
+import { setContext } from "@/state/globalSlice"
+import { CreaborateContext } from "@/state/types"
 import { Auth, DataStore } from "aws-amplify"
 import {
   Task,
@@ -37,6 +39,7 @@ export function TeamDataLoader(props: { children: any; teamID: string }) {
               currentUser.username,
               team
             ).then((twur) => twur?.role)
+            dispatch(setContext(CreaborateContext.TEAM))
             dispatch(setTeam(team))
             dispatch(setUserRole(role))
             return team

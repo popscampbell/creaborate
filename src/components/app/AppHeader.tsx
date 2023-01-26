@@ -1,8 +1,15 @@
-import { ScreenSize } from "@/state/types"
-import { Flex } from "@aws-amplify/ui-react"
+import { CreaborateContext, ScreenSize } from "@/state/types"
+import PersonSharpIcon from "@mui/icons-material/PersonSharp"
 import CloseIcon from "@mui/icons-material/Close"
 import MenuIcon from "@mui/icons-material/Menu"
-import { AppBar, Drawer, IconButton, Toolbar, Typography } from "@mui/material"
+import {
+  AppBar,
+  Box,
+  Drawer,
+  IconButton,
+  Toolbar,
+  Typography
+} from "@mui/material"
 import Link from "next/link"
 import React from "react"
 import { useAppSelector } from "state/hooks"
@@ -10,8 +17,9 @@ import AppNavigator from "./AppNavigator"
 import Creaborate, { CreaborateVariant } from "./Creaborate"
 
 export default function AppHeader() {
-  const { screenSize } = useAppSelector((state) => state.app)
+  const { context, screenSize } = useAppSelector((state) => state.app)
   const { username, profile } = useAppSelector((state) => state.user)
+  const { team } = useAppSelector((state) => state.team)
 
   const [menuOpen, setMenuOpen] = React.useState(false)
 
@@ -25,41 +33,56 @@ export default function AppHeader() {
 
   return (
     <AppBar position="sticky" color="secondary">
-      <Toolbar>
+      <Toolbar sx={{ justifyContent: "space-between" }}>
         {screenSize === ScreenSize.PHONE && (
-          <Flex>
+          <Box>
             <IconButton onClick={openDrawer}>
               <MenuIcon />
             </IconButton>
             <Drawer anchor="left" open={menuOpen} onClose={closeDrawer}>
-              <Flex direction="column" minWidth={200}>
-                <Flex padding={12} paddingInlineEnd={6}>
-                  <Flex grow={1}>
+              <Box flexDirection="column" minWidth={200}>
+                <Box padding={12} paddingRight={6}>
+                  <Box flexGrow={1}>
                     <Typography variant="h6">Drawer</Typography>
-                  </Flex>
-                  <Flex>
+                  </Box>
+                  <Box>
                     <IconButton size="small" onClick={closeDrawer}>
                       <CloseIcon fontSize="small" />
                     </IconButton>
-                  </Flex>
-                </Flex>
+                  </Box>
+                </Box>
                 <AppNavigator />
-              </Flex>
+              </Box>
             </Drawer>
-          </Flex>
+          </Box>
         )}
 
-        <Flex grow={1}>
+        <Box>
           <Link href="/">
             <Creaborate variant={CreaborateVariant.HEADER} />
           </Link>
-        </Flex>
+        </Box>
 
-        <Flex>
+        {context === CreaborateContext.USER && profile && (
+          <Box>
+            <Typography>{profile.name}</Typography>
+          </Box>
+        )}
+
+        {context === CreaborateContext.TEAM && team && (
+          <Box>
+            <Typography>{team.name}</Typography>
+          </Box>
+        )}
+
+        <Box>
           <Link href="/user/profile">
-            <Typography>{profile?.name ?? username ?? "sign in"}</Typography>
+            {username && (
+              <PersonSharpIcon titleAccess={profile?.name ?? username} />
+            )}
+            {!username && <Typography>Sign in</Typography>}
           </Link>
-        </Flex>
+        </Box>
       </Toolbar>
     </AppBar>
   )

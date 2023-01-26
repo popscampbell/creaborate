@@ -1,4 +1,3 @@
-import NotFoundPage from "@/components/app/NotFoundPage"
 import TeamForm from "@/components/team/TeamForm"
 import TeamPage from "@/components/team/TeamPage"
 import { useAppSelector } from "@/state/hooks"

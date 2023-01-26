@@ -1,17 +1,20 @@
 import { useAppSelector } from "state/hooks"
-import { NavigatorLink, ScreenSize } from "state/types"
+import { ScreenSize } from "state/types"
 import { Flex } from "@aws-amplify/ui-react"
 import { Badge, Typography } from "@mui/material"
 import Link from "next/link"
+import { AppNavigatorLinkProps } from "./types"
 
-export default function AppNavigatorLink(props: NavigatorLink) {
-  const { to, label, icon, ...badgeProps } = props
+export default function AppNavigatorLink(props: AppNavigatorLinkProps) {
+  const { to, label, icon, disabled, ...badgeProps } = props
 
   const { isNavigatorCollapsed, screenSize } = useAppSelector(
     (state) => state.app
   )
 
-  return (
+  return disabled ? (
+    <></>
+  ) : (
     <Link href={to}>
       <Flex
         paddingInlineStart={8}

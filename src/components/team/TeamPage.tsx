@@ -33,21 +33,42 @@ export default function TeamPage(props: TeamPageProps) {
       team &&
         dispatch(
           setNavigatorSections([
-            { to: getUrl(), label: "Overview", icon: <DashboardIcon /> },
+            {
+              to: getUrl(),
+              label: "Overview",
+              icon: <DashboardIcon />,
+              disabled: true
+            },
             {
               to: getUrl("settings"),
               label: "Settings",
               icon: <SettingsIcon />
             },
             { to: getUrl("members"), label: "Members", icon: <GroupIcon /> },
-            { to: getUrl("tasks"), label: "Tasks", icon: <TaskIcon /> },
-            { to: getUrl("images"), label: "Images", icon: <ImageIcon /> },
+            {
+              to: getUrl("tasks"),
+              label: "Tasks",
+              icon: <TaskIcon />,
+              disabled: true
+            },
+            {
+              to: getUrl("images"),
+              label: "Images",
+              icon: <ImageIcon />,
+              disabled: true
+            },
             {
               to: getUrl("contacts"),
               label: "Contacts",
-              icon: <ContactsIcon />
+              icon: <ContactsIcon />,
+              disabled: true
             },
-            { to: getUrl("events"), label: "Events", icon: <EventIcon /> }
+            {
+              to: getUrl("events"),
+              label: "Events",
+              icon: <EventIcon />,
+              disabled: true
+            }
           ])
         )
     }, [team])
